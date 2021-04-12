@@ -1,21 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Router, Scene } from 'react-native-router-flux';
+import SplashScreen from './screens/SplashScreen';
+import StartedScreen from './screens/StartedScreen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+export default class App extends Component {
+    render() {
+        return (
+            <Router>
+                <Scene key='root'>
+                    <Scene key='splash' component={SplashScreen} initial={true} headerShown={false}></Scene>
+                    <Scene key="start" component={StartedScreen} headerShown={false}></Scene>
+                </Scene>
+            </Router>
+        );
+    }   
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
