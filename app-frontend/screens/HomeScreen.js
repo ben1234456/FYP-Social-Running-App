@@ -3,12 +3,12 @@ import { View, Image, Text, ScrollView, StyleSheet } from 'react-native';
 import Logo from '../images/logo.png';
 import Event from '../images/event.png';
 import Event2 from '../images/marathon.png';
+import UpcomingEvent from '../images/family_marathon.jpg';
 
 export default class HomeScreen extends Component {
     render() {
-
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
@@ -22,7 +22,7 @@ export default class HomeScreen extends Component {
                     </View>
                 </View>
 
-                <View style={styles.contentContainer2}>
+                <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
                         <View style={styles.cardView}>
                             <View style={styles.view1}>
@@ -45,7 +45,27 @@ export default class HomeScreen extends Component {
                         </View>
                     </ScrollView>
                 </View>
-            </View>
+                
+                <View style={styles.contentContainer1}>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.event}>Coming Soon</Text>
+                        <Text style={styles.more}>{"View More >"}</Text>
+                    </View>
+                </View>
+                <View>
+                    <ScrollView style={styles.scrollview} horizontal={true}>
+                        <View style={styles.cardView}>
+                            <View style={styles.view1}>
+                                <Image style={styles.image2} source={UpcomingEvent} />
+                            </View>
+                            <View style={styles.view2}>
+                                <Text style={styles.title}>Family Virtual Run</Text>
+                                <Text style={styles.venue}>Anywhere</Text>
+                            </View>
+                        </View>
+                    </ScrollView>
+                </View>
+            </ScrollView>
         );
     }
 }
@@ -53,7 +73,6 @@ export default class HomeScreen extends Component {
 export const styles = StyleSheet.create({
     container: {
         marginTop: 30,
-        flex: 1,
         backgroundColor: 'white',
     },
     contentContainer1: {
@@ -65,15 +84,11 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20,
     },
-    contentContainer2: {
-        marginTop: -30,
-    },
     scrollview: {
-        height: 226,
-        marginTop: 20,
+        height: 240,
     },
     cardView: {
-        height: 225,
+        height: 210,
         width: 250,
         marginLeft: 40,
         borderRadius: 15,

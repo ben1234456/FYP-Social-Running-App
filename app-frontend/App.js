@@ -4,7 +4,6 @@ import SplashScreen from './screens/SplashScreen';
 import StartedScreen from './screens/StartedScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import HomeScreen from './screens/HomeScreen';
 import AppNavigation from './screens/AppNavigation';
 
 export default class App extends Component {
@@ -16,7 +15,6 @@ export default class App extends Component {
                     <Scene key="start" component={StartedScreen} headerShown={false}></Scene>
                     <Scene key="login" component={LoginScreen} headerShown={false}></Scene>
                     <Scene key="register" component={SignUpScreen} headerShown={false}></Scene>
-                    <Scene key="home" component={HomeScreen} headerShown={false}></Scene>
                     <Scene key="app" component={AppNavigation} headerShown={false}></Scene>
                 </Scene>               
             </Router>

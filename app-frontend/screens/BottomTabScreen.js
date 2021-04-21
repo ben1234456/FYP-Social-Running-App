@@ -5,6 +5,9 @@ import Icon from 'react-native-vector-icons/Feather';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons'
 import HomeScreen from './HomeScreen';
+import ActivityScreen from './ActivityScreen';
+import ProgressScreen from './ProgressScreen';
+import ProfileScreen from './ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +34,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Activity"
-      component={HomeScreen}
+      component={ActivityScreen}
       options={{
         tabBarLabel: 'Activity',
         tabBarIcon: ({ color, size }) => (
@@ -42,7 +45,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Progress"
-      component={HomeScreen}
+      component={ProgressScreen}
       options={{
         tabBarLabel: 'Progress',
         tabBarIcon: ({ color, size }) => (
@@ -53,7 +56,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Profile"
-      component={HomeScreen}
+      component={ProfileScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: ({ color, size }) => (
