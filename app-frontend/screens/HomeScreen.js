@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import Logo from '../images/logo.png';
 import Event from '../images/event.png';
 import Event2 from '../images/marathon.png';
@@ -24,16 +25,17 @@ export default class HomeScreen extends Component {
 
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <View style={styles.cardView}>
-                            <View style={styles.view1}>
-                                <Image style={styles.image2} source={Event} />
+                        <TouchableOpacity onPress={Actions.eventDetails}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={Event} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Virtual Half Marathon</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
                             </View>
-                            <View style={styles.view2}>
-                                <Text style={styles.title}>Virtual Half Marathon</Text>
-                                <Text style={styles.venue}>Anywhere</Text>
-                            </View>
-                        </View>
-
+                        </TouchableOpacity>
                         <View style={styles.cardView}>
                             <View style={styles.view1}>
                                 <Image style={styles.image2} source={Event2} />
