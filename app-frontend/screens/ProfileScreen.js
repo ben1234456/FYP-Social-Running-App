@@ -23,36 +23,42 @@ export default class App extends Component {
                     </Button>
                 </View>
                 <View style={styles.cardView}>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoColumnTitle}>
-                            <Text style={styles.profileTitle}>Name:</Text>
+                    <View style={styles.proRow}>
+                        <View style={styles.proTitle}>
+                            <Text style={styles.proColumnName}>Name:</Text>
                         </View>
-                        <View style={styles.infoColumnInfo}>
-                            <Text style={styles.profileInfo}>Jun</Text>
-                        </View>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoColumnTitle}>
-                            <Text style={styles.profileTitle}>Gender:</Text>
-                        </View>
-                        <View style={styles.infoColumnInfo}>
-                            <Text style={styles.profileInfo}>Male</Text>
+                        <View style={styles.proInfo}>
+                            <Text style={styles.proDetails}>Jun</Text>
                         </View>
                     </View>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoColumnTitle}>
-                            <Text style={styles.profileTitle}>City:</Text>
+
+                    <View style={styles.proRow}>
+                        <View style={styles.proTitle}>
+                            <Text style={styles.proColumnName}>Gender:</Text>
                         </View>
-                        <View style={styles.infoColumnInfo}>
-                            <Text style={styles.profileInfo}>Kuching</Text>
+
+                        <View style={styles.proInfo}>
+                            <Text style={styles.proDetails}>Male</Text>
                         </View>
                     </View>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoColumnTitle}>
-                            <Text style={styles.profileTitle}>Date of Birth:</Text>
+
+                    <View style={styles.proRow}>
+                        <View style={styles.proTitle}>
+                            <Text style={styles.proColumnName}>City:</Text>
                         </View>
-                        <View style={styles.infoColumnInfo}>
-                            <Text style={styles.profileInfo}>2000-07-15</Text>
+
+                        <View style={styles.proInfo}>
+                            <Text style={styles.proDetails}>Kuching</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.proRow}>
+                        <View style={styles.proTitle}>
+                            <Text style={styles.proColumnName}>Date of Birth:</Text>
+                        </View>
+
+                        <View style={styles.proInfo}>
+                            <Text style={styles.proDetails}>2000-07-15</Text>
                         </View>
                     </View>
                 </View>
@@ -135,11 +141,9 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     cardView: {
-        width: "80%",
-        flex:1,
+        margin: 50,
         borderRadius: 15,
         backgroundColor: 'white',
-        margin:"10%",
 
         //ios
         shadowColor: '#000',
@@ -150,4 +154,23 @@ const styles = StyleSheet.create({
         //android
         elevation: 5,
     },
+    proRow: {
+        flexDirection: "row",
+    },
+    proTitle: {
+        flex: 1,
+        marginVertical: 15,
+        marginHorizontal: 20,
+    },
+    proInfo: {
+        marginVertical: 15,
+        marginHorizontal: 20
+    },
+    proColumnName: {
+        fontWeight: 'bold',
+        color: '#373737',
+    },
+    proDetails: {
+        color: '#8352F2',
+    }
 });
