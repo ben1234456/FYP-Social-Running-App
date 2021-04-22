@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTabScreen from './BottomTabScreen';
 
 const Drawer = createDrawerNavigator();
-export default class App extends Component {
+export default class AppNavigation extends Component {
     render() {
         return (
             <NavigationContainer>

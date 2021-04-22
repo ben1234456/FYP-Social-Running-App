@@ -17,7 +17,7 @@ export default class eventDetails extends Component {
                     
                     <View >
                         <View style={styles.top}>
-                            <Image style={styles.image} source={Event} />
+                            <Image style={styles.image} source={Event} />           
                         </View>
                         <View>
                             <Text style={styles.title}>Virtual Half Marathon</Text>
@@ -132,9 +132,7 @@ export const styles = StyleSheet.create({
     },
     infoRow:{
         flexDirection:"row",
-        marginTop:"5%",
-        marginLeft:"10%",
-        marginRight:"10%",
+        margin:"10%",
     },
     eventTitle:{
         textAlign:"left",
@@ -159,9 +157,7 @@ export const styles = StyleSheet.create({
     },
     about:{
         flex:1,
-        marginTop:"5%",
-        marginLeft:"5%",
-        marginRight:"5%",
+        margin:"5%",
     },
     aboutHeading:{
         fontWeight:"bold",
