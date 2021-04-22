@@ -10,8 +10,8 @@ export default class eventDetails extends Component {
        
     render() {
         return (
-            <ScrollView>
-                <View style={styles.container}>
+            <ScrollView style={styles.background}>
+                <View>
                     <View style={styles.top}>
                         <Image style={styles.image} source={Event} />
                     </View>
@@ -90,9 +90,7 @@ export default class eventDetails extends Component {
 }
 
 export const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flex: 1,
+    background: {
         backgroundColor: 'white',
     },
 
