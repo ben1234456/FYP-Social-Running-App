@@ -18,7 +18,7 @@ export default class App extends Component {
                     <Scene key="login" component={LoginScreen} headerShown={false}></Scene>
                     <Scene key="register" component={SignUpScreen} headerShown={false}></Scene>
                     <Scene key="app" component={AppNavigation}  initial={false} headerShown={false}></Scene>
-                    <Scene key="eventDetails" component={eventDetails} initial={false} headerShown={false}></Scene>
+                    <Scene key="eventDetails" component={eventDetails} headerShown={false}></Scene>
                     <Scene key="coupon" component={couponScreen}  initial={false} headerShown={false}></Scene>
                 </Scene>               
             </Router>
