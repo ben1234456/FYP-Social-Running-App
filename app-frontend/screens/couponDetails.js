@@ -1,0 +1,164 @@
+import React, { Component } from 'react';
+import { View, Image, Text, StyleSheet, ScrollView} from 'react-native';
+import { Button } from 'native-base'
+import { Actions } from 'react-native-router-flux';
+import Event from '../images/event.png';
+import Run from '../images/running.jpg';
+//import { createAppContainer } from "react-navigation";
+
+export default class couponDetails extends Component {
+       
+    render() {
+        return (
+            <ScrollView style={styles.background}>
+                <View>
+                    <View style={styles.top}>
+                        <Image style={styles.image} source={Event} />
+                    </View>
+                    <View>
+                        <Text style={styles.title}>Virtual Half Marathon</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.eventTitle}>Date</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.eventInfo}>7 July - 12 August 2021</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.eventTitle}>Run Submission:</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.eventInfo}>12 August 2021</Text>
+                        </View>
+                    </View>
+                    <View style={styles.spacing}/>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.userTitle}>Name</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.userInfo}>Jun</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.userTitle}>Progress</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.userInfo}>Ongoing</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.userTitle}>Coupon No.</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.userInfo}>RUN1928376</Text>
+                        </View>
+                    </View>
+                    <View>
+                        <Button block style={styles.stickyBtn}>
+                            <Text style={styles.btnText}>RUN</Text>
+                        </Button>
+                    </View>
+                    <View>
+                        <Text style={styles.submit}>Submit your run</Text>
+                    </View>
+                </View>
+            </ScrollView>
+        );
+    }
+}
+
+export const styles = StyleSheet.create({
+    background: {
+        backgroundColor: 'white',
+    },
+    
+    stickyBtn:{
+        alignSelf:"center",
+        borderRadius: 30,
+        bottom:10,
+        width:"40%",
+        flex:1,
+        marginTop:"10%",
+        backgroundColor:"#8100e3"
+    },
+    btnText:{
+        color:"#ffffff",
+        fontWeight:"bold",
+    },
+    submit:{
+        textDecorationLine:"underline",
+        alignSelf:"center",
+        marginBottom:"5%",
+    },
+    spacing:{
+        marginTop:"5%"
+    },
+    image: {
+        width: "100%",
+        height: 277,
+    },
+    infoColumnTitle:{
+        flex:1,
+    },
+    infoColumnInfo:{
+        flex:2,
+    },
+    infoRow:{
+        flexDirection:"row",
+        marginLeft:"10%",
+        marginRight:"10%",
+        marginTop:"5%",
+    },
+    eventTitle:{
+        textAlign:"left",
+        fontSize:20,
+        color:"#4d535c",
+    },
+    eventInfo:{
+        textAlign:"right",
+        fontSize:15,
+    },
+    userTitle:{
+        textAlign:"left",
+        fontSize:20,
+        color:"#4d535c",
+        fontWeight:"bold",
+    },
+    userInfo:{
+        textAlign:"right",
+        fontSize:15,
+    },
+    bottom: {
+        flex: 1,
+    },
+
+    title: {
+        fontSize: 20,
+        lineHeight: 40,
+        textAlign: 'center',
+        color: '#373737',
+        margin:"5%",
+        fontWeight:"bold",
+    },
+    about:{
+        flex:1,
+        margin:"5%",
+    },
+    aboutHeading:{
+        fontWeight:"bold",
+        fontSize:20,
+        color:"#4d535c",
+    },
+    aboutText:{
+        fontSize:15,
+        color:"#4d535c",
+    },
+});
+
+
