@@ -22,6 +22,17 @@ export default class SignUpScreen extends Component {
         citySelected: ''
     }
 
+    submit(){
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: 'React POST Request Example' })
+        };
+        fetch('http://192.168.0.192:8000/api/users')
+            .then(response => response.json())
+            .then(data => console.log(data));
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -85,7 +96,7 @@ export default class SignUpScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn}>
+                            <Button style={styles.submitBtn} onPress={Actions.start}>
                                 <Text style={styles.btnText}>SIGN UP</Text>
                             </Button>
                         </View>

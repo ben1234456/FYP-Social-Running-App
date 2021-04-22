@@ -19,7 +19,7 @@ export default class LoginScreen extends Component {
                     <View>
                         <Text style={styles.heading}>Welcome Back.</Text>
                         <View style={styles.input}>
-                            <TextInput placeholder="Username" autoFocus />
+                            <TextInput placeholder="Email" autoFocus />
                         </View>
                         <View style={styles.input}>
                             <TextInput placeholder="Password" secureTextEntry />
