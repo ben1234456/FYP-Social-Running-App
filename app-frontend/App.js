@@ -8,6 +8,7 @@ import AppNavigation from './screens/AppNavigation';
 import eventDetails from "./screens/eventDetails";
 import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen"
+import couponDetails from "./screens/couponDetails"
 
 export default class App extends Component {
     render() {
@@ -23,6 +24,7 @@ export default class App extends Component {
                     <Scene key="eventDetails" component={eventDetails} headerShown={false}></Scene>
                     <Scene key="coupon" component={couponScreen}  initial={false} headerShown={false}></Scene>
                     <Scene key="top" component={TopTabNavigator} headerShown={false}></Scene>
+                    <Scene key="couponDetails" component={couponDetails} initial={false} headerShown={false}></Scene>
                 </Scene>               
             </Router>
         );
