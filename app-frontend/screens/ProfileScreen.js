@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'native-base'
+import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../images/avatar.jpg';
 
@@ -11,7 +12,9 @@ export default class App extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.profile}>Profile</Text>
-                        <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
+                        <TouchableOpacity onPress={Actions.coupon}>
+                            <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.rowContainer2}>
