@@ -22,6 +22,40 @@ export default class App extends Component {
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
                 </View>
+                <View style={styles.cardView}>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.profileTitle}>Name:</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.profileInfo}>Jun</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.profileTitle}>Gender:</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.profileInfo}>Male</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.profileTitle}>City:</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.profileInfo}>Kuching</Text>
+                        </View>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoColumnTitle}>
+                            <Text style={styles.profileTitle}>Date of Birth:</Text>
+                        </View>
+                        <View style={styles.infoColumnInfo}>
+                            <Text style={styles.profileInfo}>2000-07-15</Text>
+                        </View>
+                    </View>
+                </View>
             </View>
         );
     }
@@ -33,7 +67,29 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-
+    infoColumnTitle:{
+        flex:2,
+    },
+    infoColumnInfo:{
+        flex:1,
+    },
+    infoRow:{
+        flexDirection:"row",
+        marginLeft:"10%",
+        marginRight:"10%",
+        marginTop:"5%",
+        marginBottom:"5%",
+    },
+    profileTitle:{
+        textAlign:"left",
+        fontSize:15,
+        fontWeight:"bold",
+    },
+    profileInfo:{
+        textAlign:"right",
+        fontSize:15,
+        color:"#8100e3",
+    },
     contentContainer1: {
         padding: 20,
     },
@@ -77,5 +133,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
         padding: 20,
+    },
+    cardView: {
+        width: "80%",
+        flex:1,
+        borderRadius: 15,
+        backgroundColor: 'white',
+        margin:"10%",
+
+        //ios
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+
+        //android
+        elevation: 5,
     },
 });
