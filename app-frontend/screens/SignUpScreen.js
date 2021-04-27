@@ -14,23 +14,53 @@ export default class SignUpScreen extends Component {
 
         sampleDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         
-        this.state = { currentDate: sampleDate, }
+        this.state = {  
+            user_name: "",
+            currentDate: sampleDate,
+            gender: "",
+            city: "",
+            phone_number: "",
+            dob: "",
+            email: "",
+            password: "",
+        }
+
     }
 
     state = {
         genderSelected: '',
-        citySelected: ''
+        citySelected: '',
     }
 
-    submit(){
-        const requestOptions = {
+    // submit(){
+    //     const requestOptions = {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ title: 'React POST Request Example' })
+    //     };
+    //     fetch('http://192.168.0.192:8000/api/users')
+    //         .then(response => response.json())
+    //         .then(data => console.log(data));
+    // }
+
+    register = () => {
+
+        fetch('http://192.168.0.192:8000/api/users', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: 'React POST Request Example' })
-        };
-        fetch('http://192.168.0.192:8000/api/users')
-            .then(response => response.json())
-            .then(data => console.log(data));
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              user_name: this.state.user_name,
+              phone_number: this.state.phone_number,
+              email: this.state.email,
+              password: this.state.password,
+            })
+        });  
+        
+        Actions.login();
+        console.log(this.state.user_name);
     }
 
     render() {
@@ -44,7 +74,11 @@ export default class SignUpScreen extends Component {
                     <View>
                         <Text style={styles.heading}>Create Account.</Text>
                         <View style={styles.input}>
-                            <TextInput placeholder="Username" />
+                            <TextInput
+                                placeholder = "Name"
+                                onChangeText={(name) => this.setState({user_name:name})}
+                                value = {this.state.user_name}
+                            />
                         </View>
                         <View style={styles.picker}>
                             <Picker
@@ -67,7 +101,11 @@ export default class SignUpScreen extends Component {
                             </Picker>
                         </View>
                         <View style={styles.input}>
-                            <TextInput placeholder="Phone number e.g. 012345678" />
+                            <TextInput
+                                placeholder="Phone number e.g. 012345678" 
+                                onChangeText={(number) => this.setState({phone_number:number})}
+                                value = {this.state.phone_number}
+                             />
                         </View>
                         <View style={styles.picker}>
                             <DatePicker style={styles.selectDate} 
@@ -85,10 +123,19 @@ export default class SignUpScreen extends Component {
                                 onDateChange={(date) => { this.setState({ sampleDate: date }); }} />
                         </View>
                         <View style={styles.input}>
-                            <TextInput placeholder="Email" />
+                            <TextInput 
+                                placeholder="Email" 
+                                onChangeText={(email_input) => this.setState({email:email_input})}
+                                value = {this.state.email}
+                            />
                         </View>
                         <View style={styles.input}>
-                            <TextInput placeholder="Password" secureTextEntry />
+                            <TextInput 
+                                placeholder="Password" 
+                                onChangeText={(password_input) => this.setState({password:password_input})}
+                                value = {this.state.password}
+                                secureTextEntry 
+                            />
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View style={styles.input}>
@@ -96,7 +143,7 @@ export default class SignUpScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn} onPress={Actions.start}>
+                            <Button style={styles.submitBtn} onPress={this.register}>
                                 <Text style={styles.btnText}>SIGN UP</Text>
                             </Button>
                         </View>
