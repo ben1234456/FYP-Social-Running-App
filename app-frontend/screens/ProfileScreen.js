@@ -72,7 +72,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 30,
         flex: 1,
         backgroundColor: 'white',
     },
@@ -101,6 +100,7 @@ const styles = StyleSheet.create({
     },
     contentContainer1: {
         padding: 20,
+        marginTop: 30,
     },
 
     rowContainer: {

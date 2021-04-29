@@ -74,10 +74,10 @@ export default class HomeScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        marginTop: 30,
         backgroundColor: 'white',
     },
     contentContainer1: {
+        marginTop: 30,
         padding: 20,
     },
     rowContainer: {

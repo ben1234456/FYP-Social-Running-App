@@ -75,7 +75,7 @@ export default class eventDetails extends Component {
                                 <Text style={styles.aboutText}>Please be noted that the postage is within Malaysia only and entitlement will be posted from 12 August 2021.</Text>
                             </View>
                             <View style={styles.about}>    
-                                <Text style={styles.aboutHeading}>REGRISTRATION START DATE</Text>
+                                <Text style={styles.aboutHeading}>REGISTRATION START DATE</Text>
                                 <Text style={styles.aboutText}>7 July 2021 11.59pm (GMT +8:00)</Text>
                             </View>
                             <View style={styles.about}>
