@@ -103,6 +103,7 @@ export default class SignUpScreen extends Component {
                         <View style={styles.input}>
                             <TextInput
                                 placeholder="Phone number e.g. 012345678" 
+                                keyboardType = 'numeric'
                                 onChangeText={(number) => this.setState({phone_number:number})}
                                 value = {this.state.phone_number}
                              />
