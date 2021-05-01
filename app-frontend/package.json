@@ -21,7 +21,7 @@
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "^0.63.4",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-base": "^1.1.0",
     "react-native-chart-kit": "^6.11.0",
     "react-native-date-picker": "^3.2.10",

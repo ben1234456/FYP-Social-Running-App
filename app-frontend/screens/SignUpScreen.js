@@ -18,18 +18,13 @@ export default class SignUpScreen extends Component {
             user_name: "",
             currentDate: sampleDate,
             gender: "",
-            city: "",
+            user_state: "",
             phone_number: "",
             dob: "",
             email: "",
             password: "",
         }
 
-    }
-
-    state = {
-        genderSelected: '',
-        citySelected: '',
     }
 
     // submit(){
@@ -54,7 +49,7 @@ export default class SignUpScreen extends Component {
             body: JSON.stringify({
               user_name: this.state.user_name,
               phone_number: this.state.phone_number,
-              email: this.state.email,
+            //   email: this.state.email,
               password: this.state.password,
             })
         });  
@@ -80,26 +75,48 @@ export default class SignUpScreen extends Component {
                                 value = {this.state.user_name}
                             />
                         </View>
+                        
                         <View style={styles.picker}>
                             <Picker
-                                selectedValue={this.state.genderSelected}
-                                onValueChange={(itemValue) => this.setState({ genderSelected: itemValue })}>
+                                selectedValue={this.state.gender}
+                                onValueChange={
+                                    (itemValue) => this.setState({ gender: itemValue })
+                                }>
+           
+                                {/* ()=>{console.log(this.state.genderSelected);} */}
+                                
 
                                 <Picker.Item label="Select your gender" value="null" color="#999" />
-                                <Picker.Item label="Male" value="Male" />
-                                <Picker.Item label="Female" value="Female" />
+                                <Picker.Item label="Male" value="male" />
+                                <Picker.Item label="Female" value="female" />
                             </Picker>
                         </View>
+
                         <View style={styles.picker}>
                             <Picker
-                                selectedValue={this.state.citySelected}
-                                onValueChange={(itemValue) => this.setState({ citySelected: itemValue })}>
+                                selectedValue={this.state.user_state}
+                                onValueChange={(itemValue) => this.setState({ user_state: itemValue })}>
 
-                                <Picker.Item label="Select your city" value="null" color="#999" />
-                                <Picker.Item label="Kuching" value="Kuching" />
-                                <Picker.Item label="Miri" value="Miri" />
+                                <Picker.Item label="Select your state" value="null" color="#999" />
+                                <Picker.Item label="Labuan" value="Labuan" />
+                                <Picker.Item label="Malacca" value="Malacca" />
+                                <Picker.Item label="Putrajaya" value="Putrajaya" />
+                                <Picker.Item label="Perlis" value="Perlis" />
+                                <Picker.Item label="Negeri Sembilan" value="Negeri Sembilan" />
+                                <Picker.Item label="Pahang" value="Pahang" />
+                                <Picker.Item label="Terrengganu" value="Terrengganu" />
+                                <Picker.Item label="Johor" value="Johor" />
+                                <Picker.Item label="Kuala Lumpur" value="Kuala Lumpur" />
+                                <Picker.Item label="Penang" value="Penang" />
+                                <Picker.Item label="Sabah" value="Sabah" />
+                                <Picker.Item label="Kelantan" value="Kelantan" />
+                                <Picker.Item label="Selangor" value="Selangor" />
+                                <Picker.Item label="Perak" value="Perak" />
+                                <Picker.Item label="Kedah" value="Kedah" />
+                                <Picker.Item label="Sarawak" value="Sarawak" />
                             </Picker>
                         </View>
+
                         <View style={styles.input}>
                             <TextInput
                                 placeholder="Phone number e.g. 012345678" 
@@ -108,6 +125,7 @@ export default class SignUpScreen extends Component {
                                 value = {this.state.phone_number}
                              />
                         </View>
+
                         <View style={styles.picker}>
                             <DatePicker style={styles.selectDate} 
                                 placeholder="Choose your date of birth"
@@ -121,15 +139,17 @@ export default class SignUpScreen extends Component {
                                     dateIcon: { display: 'none' },
                                     dateInput: { borderWidth: 0 },
                                 }} 
-                                onDateChange={(date) => { this.setState({ sampleDate: date }); }} />
+                                onDateChange={(date) => { this.setState({ sampleDate: date }) }} />
                         </View>
-                        <View style={styles.input}>
+
+                        {/* <View style={styles.input}>
                             <TextInput 
                                 placeholder="Email" 
                                 onChangeText={(email_input) => this.setState({email:email_input})}
                                 value = {this.state.email}
                             />
-                        </View>
+                        </View> */}
+
                         <View style={styles.input}>
                             <TextInput 
                                 placeholder="Password" 
