@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView} from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
@@ -17,16 +17,17 @@ export default class couponScreen extends Component {
                             <View style={styles.couponDate}>
                                 <Text style={styles.eventDate}>7 July - 12 August 2021</Text>
                             </View>
-                            <View style={styles.couponRow}>
-                                <View style={styles.couponImg}>
-                                    <Image style={styles.image} source={Event} />
+                            <TouchableOpacity onPress={Actions.couponDetails}>
+                                <View style={styles.couponRow} onPress={Actions.couponDetails}>
+                                    <View style={styles.couponImg}>
+                                        <Image style={styles.image} source={Event} />
+                                    </View>
+                                    <View style={styles.couponInfo}>
+                                        <Text style={styles.eventTitle}>Virtual Half Marathon</Text>
+                                        <Text style={styles.eventDatail}>Progress: 2.75 /5km</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.couponInfo}>
-                                    <Text style={styles.eventTitle}>Virtual Half Marathon</Text>
-                                    <Text style={styles.eventDatail}>Progress: 2.75 /5km</Text>
-                                </View>
-                            </View>
-                        
+                            </TouchableOpacity>
                     </View>
                     <View style={styles.coupon}>
                         
