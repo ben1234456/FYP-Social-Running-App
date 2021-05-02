@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView} from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView,TouchableOpacity} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
