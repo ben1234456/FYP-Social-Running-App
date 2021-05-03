@@ -72,7 +72,7 @@ export default class App extends Component {
                         name="Coupon"
                         component={couponScreen}
                         initial={false}
-                        screenOptions={{headerTitleAlign: 'center'}}
+                        options={{headerTitleAlign: 'center'}}
                     />
                     <Stack.Screen
                         name="top"
