@@ -12,7 +12,7 @@ export default class LoginScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity onPress={Actions.start}>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('start')}>
                         <Image style={styles.image} source={Back} />
                     </TouchableOpacity>
 
@@ -26,7 +26,7 @@ export default class LoginScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn} onPress={Actions.app}>
+                            <Button style={styles.submitBtn}  onPress={() => this.props.navigation.navigate('app')}>
                                 <Text style={styles.btnText}>SIGN IN</Text>
                             </Button>
                         </View>

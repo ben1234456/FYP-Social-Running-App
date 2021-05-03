@@ -54,15 +54,15 @@ export default class SignUpScreen extends Component {
             })
         });  
         
-        Actions.login();
         console.log(this.state.user_name);
+        this.props.navigation.navigate('login');
     }
 
     render() {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity onPress={Actions.start}>
+                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('start')}>
                         <Image style={styles.image} source={Back} />
                     </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export default class SignUpScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn} onPress={this.register}>
+                            <Button style={styles.submitBtn}  onPress={() => this.props.navigation.navigate('register')}>
                                 <Text style={styles.btnText}>SIGN UP</Text>
                             </Button>
                         </View>

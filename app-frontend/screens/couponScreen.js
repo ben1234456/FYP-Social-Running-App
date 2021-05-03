@@ -17,8 +17,8 @@ export default class couponScreen extends Component {
                             <View style={styles.couponDate}>
                                 <Text style={styles.eventDate}>7 July - 12 August 2021</Text>
                             </View>
-                            <TouchableOpacity onPress={Actions.couponDetails}>
-                                <View style={styles.couponRow} onPress={Actions.couponDetails}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('couponDetails')}>
+                                <View style={styles.couponRow}  onPress={() => this.props.navigation.navigate('couponDetails')}>
                                     <View style={styles.couponImg}>
                                         <Image style={styles.image} source={Event} />
                                     </View>

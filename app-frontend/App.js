@@ -10,11 +10,17 @@ import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
 import couponDetails from "./screens/couponDetails";
 import submitRun from "./screens/submitRun";
+import musicScreen from "./screens/MusicScreen";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
+
 
 export default class App extends Component {
     render() {
         return (
-            <Router>
+            /*<Router>
                 <Scene key='root'>
                     <Scene key='splash' component={SplashScreen} initial={true} headerShown={false}></Scene>
                     <Scene key="start" component={StartedScreen} headerShown={false}></Scene>
@@ -27,9 +33,71 @@ export default class App extends Component {
                     <Scene key="top" component={TopTabNavigator} headerShown={false}></Scene>
                     <Scene key="couponDetails" component={couponDetails} initial={false} headerShown={false}></Scene>
                     <Scene key="submitRun" component={submitRun} initial={false} headerShown={false}></Scene>
+                    <Scene key="Music" component={musicScreen} initial={false} titleStyle={{ alignSelf: 'center' }}></Scene>
                 </Scene>               
-            </Router>
+            </Router>*/
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="splash"
+                        component={SplashScreen}
+                        initial={true} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="start"
+                        component={StartedScreen}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="login"
+                        component={LoginScreen}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="register"
+                        component={SignUpScreen}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="app"
+                        component={AppNavigation}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="eventDetails"
+                        component={eventDetails}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="Coupon"
+                        component={couponScreen}
+                        initial={false}
+                        screenOptions={{headerTitleAlign: 'center'}}
+                    />
+                    <Stack.Screen
+                        name="top"
+                        component={TopTabNavigator}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="couponDetails"
+                        component={couponDetails}
+                        initial={false} options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="submitRun"
+                        component={submitRun}
+                        initial={false} options={{headerShown: false}} 
+                    />
+                    <Stack.Screen
+                        name="Music"
+                        component={musicScreen}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center'}}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
         );
-    }   
+    }
 }
 

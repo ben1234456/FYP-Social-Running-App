@@ -64,8 +64,8 @@ export default class couponDetails extends Component {
                             <Text style={styles.btnText}>RUN</Text>
                         </Button>
                     </View>
-                    <View>
-                        <Text style={styles.submit}>Submit your run</Text>
+                    <View >
+                        <Text style={styles.submit} onPress={() => this.props.navigation.navigate('submitRun')}>Submit your run</Text>
                     </View>
                 </View>
             </ScrollView>

@@ -25,7 +25,7 @@ export default class HomeScreen extends Component {
 
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity onPress={Actions.eventDetails}>
+                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('eventDetails')}>
                             <View style={styles.cardView}>
                                 <View style={styles.view1}>
                                     <Image style={styles.image2} source={Event} />

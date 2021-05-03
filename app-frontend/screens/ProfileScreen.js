@@ -12,7 +12,7 @@ export default class App extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity onPress={Actions.coupon}>
+                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('Coupon')}>
                             <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
                         </TouchableOpacity>
                     </View>

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Button } from 'native-base';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
+//import Geolocation from 'react-native-geolocation-service';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import { Dimensions } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 export default class FreeRunScreen extends Component {
 
@@ -28,18 +29,14 @@ export default class FreeRunScreen extends Component {
             this.setState({ errorMessage: "Permission to access location was denied"});
             return;
         }
-        permissionStatus=await Location.requestBackgroundPermissionsAsync();
-        if(permissionStatus.status!=="granted"){
-            this.setState({ errorMessage: "Permission to access location was denied"});
-            return;
-        }
-        currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
+        //permissionStatus=await Location.requestBackgroundPermissionsAsync();
+        
+        let currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
         console.log(this.state.errorMessage);
         this.setState({ latitude: currentLocation.coords.latitude});
         this.setState({ longitude: currentLocation.coords.longitude});
         const currentLatitude=currentLocation.coords.latitude;
         const currentLongitude=currentLocation.coords.longitude;
-        
 
         this.state.reference.current.animateToRegion({
         
@@ -63,7 +60,7 @@ export default class FreeRunScreen extends Component {
                     <Marker coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}} />
                 </MapView>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity style={styles.music}>
+                    <TouchableOpacity style={styles.music} onPress={() => this.props.navigation.navigate('Music')}>
                         <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
                     </TouchableOpacity>
                     <Button block style={styles.stickyBtn}>
