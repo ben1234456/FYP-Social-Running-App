@@ -7,73 +7,59 @@ import Geolocation from 'react-native-geolocation-service';
 import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Setting from 'react-native-vector-icons/SimpleLineIcons';
+import { Dimensions } from 'react-native';
 
 export default class FreeRunScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            initialPosition: 0,
-            mapRegion: null,
-            locationResult: null,
-            latitude: 0,
-            longitude: 0,
+          errorMessage:"",
+          latitude:0,
+          longitude:0,
+          reference:React.createRef(),
         };
     }
-
-    componentDidMount() {
-        this.requestLocation();
-    }
-
-    requestLocation = async () => {
-        try {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                this.setState({
-                    locationResult: 'Permission to access location was denied',
-                });
-            }
-            else if (status === 'granted') {
-                //this.locateCurrentPosition();
-                let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-                this.setState({ initialPosition: JSON.stringify(location) });
-                this.setState({ mapRegion: { latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 } });
-            }
+    getLocation=async()=>{
+        
+        permissionStatus=await Location.requestForegroundPermissionsAsync();
+        
+        if(permissionStatus.status!=="granted"){
+            this.setState({ errorMessage: "Permission to access location was denied"});
+            return;
         }
-        catch (err) {
-            console.error(err);
+        permissionStatus=await Location.requestBackgroundPermissionsAsync();
+        if(permissionStatus.status!=="granted"){
+            this.setState({ errorMessage: "Permission to access location was denied"});
+            return;
         }
+        currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
+        console.log(this.state.errorMessage);
+        this.setState({ latitude: currentLocation.coords.latitude});
+        this.setState({ longitude: currentLocation.coords.longitude});
+        const currentLatitude=currentLocation.coords.latitude;
+        const currentLongitude=currentLocation.coords.longitude;
+        
+
+        this.state.reference.current.animateToRegion({
+        
+            latitude:currentLatitude,
+            longitude:currentLongitude,
+
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          })
     };
-
-    /*locateCurrentPosition = () => {
-        Location._getCurrentWatchId(
-            position => {
-                console.log(JSON.stringify(position));
-
-                let initialPosition = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    latitudeDelta: 0.09,
-                    longitudeDelta: 0.035,
-                }
-
-                this.state({initialPosition});
-            },
-            error => this.setState({ error: error.message }),
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000, distanceFilter: 0 }
-        );
-    }*/
+    
+    componentDidMount(){
+        this.getLocation();
+    }
 
     render() {
 
         return (
             <View style={styles.container}>
-                <MapView style={styles.rowContainer}
-                    provider={PROVIDER_GOOGLE}
-                    ref={map => this._map = map}
-                    style={{ flex: 1 }}
-                    initialRegion={this.state.mapRegion}
-                >
+                <MapView style={styles.map} ref={this.state.reference} >
                     <Marker coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}} />
                 </MapView>
                 <View style={styles.contentContainer}>
@@ -94,7 +80,13 @@ export default class FreeRunScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject,
+        flex: 1, 
+        justifyContent: "center", 
+        alignItems: "center",
+    },
+    map: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
     },
     rowContainer: {
         flex: 0,
