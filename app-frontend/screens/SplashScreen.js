@@ -36,6 +36,7 @@ export default class SplashScreen extends Component {
         ]).start(() => {
             this.state.LoadingSpinner = true,
             setTimeout(()=>{this.props.navigation.navigate('start')}, 500);
+            this.props.navigation.replace('start');
         });
     }
 

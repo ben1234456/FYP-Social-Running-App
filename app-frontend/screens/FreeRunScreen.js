@@ -8,7 +8,6 @@ import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import { Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 
 export default class FreeRunScreen extends Component {
 
@@ -23,7 +22,7 @@ export default class FreeRunScreen extends Component {
     }
     getLocation=async()=>{
         
-        permissionStatus=await Location.requestForegroundPermissionsAsync();
+        const permissionStatus=await Location.requestForegroundPermissionsAsync();
         
         if(permissionStatus.status!=="granted"){
             this.setState({ errorMessage: "Permission to access location was denied"});
@@ -43,8 +42,8 @@ export default class FreeRunScreen extends Component {
             latitude:currentLatitude,
             longitude:currentLongitude,
 
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
           })
     };
     
@@ -56,8 +55,8 @@ export default class FreeRunScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <MapView style={styles.map} ref={this.state.reference} >
-                    <Marker coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}} />
+                <MapView style={styles.map} ref={this.state.reference} provider={ PROVIDER_GOOGLE } showsUserLocation={true}>
+                    {/* <Marker coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}} /> */}
                 </MapView>
                 <View style={styles.contentContainer}>
                     <TouchableOpacity style={styles.music} onPress={() => this.props.navigation.navigate('Music')}>
@@ -82,8 +81,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     map: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        ...StyleSheet.absoluteFillObject,
     },
     rowContainer: {
         flex: 0,
