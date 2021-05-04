@@ -4,7 +4,8 @@ import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { Divider } from 'react-native-elements';
- 
+import { TouchableOpacity } from 'react-native';
+
 export default class App extends Component {
     state = {
         categoryPosition: '',
@@ -43,45 +44,51 @@ export default class App extends Component {
                             <Text style={styles.viewMore}>{'View More >'}</Text>
                         </View>
                     </View>
-                    <View style={styles.activityRow}>
-                        <View style={styles.icon}>
-                            <Icon name="run" size={30} color={'#8352F2'} />
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Icon name="run" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>3.55 / 5 km</Text>
+                                <Text style={styles.activityDuration}>00:40:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-03-03</Text>
+                            </View>
                         </View>
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>3.55 / 5 km</Text>
-                            <Text style={styles.activityDuration}>00:40:00</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Font name="bicycle" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>6.34 / 7 km</Text>
+                                <Text style={styles.activityDuration}>01:00:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-02-02</Text>
+                            </View>
                         </View>
-                        <View style={styles.activityColumn}>
-                            <Text style={styles.date}>2021-03-03</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Icon name="hiking" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>5.67 / 6 km</Text>
+                                <Text style={styles.activityDuration}>01:10:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-01-01</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={styles.activityRow}>
-                        <View style={styles.icon}>
-                            <Font name="bicycle" size={30} color={'#8352F2'} />
-                        </View>
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>6.34 / 7 km</Text>
-                            <Text style={styles.activityDuration}>01:00:00</Text>
-                        </View>
-                        <View style={styles.activityColumn}>
-                            <Text style={styles.date}>2021-02-02</Text>
-                        </View>
-                    </View>
-                    <View style={styles.activityRow}>
-                        <View style={styles.icon}>
-                            <Icon name="hiking" size={30} color={'#8352F2'} />
-                        </View>
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>5.67 / 6 km</Text>
-                            <Text style={styles.activityDuration}>01:10:00</Text>
-                        </View>
-                        <View style={styles.activityColumn}>
-                            <Text style={styles.date}>2021-01-01</Text>
-                        </View>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
-                <Divider style={styles.divider}/> 
+                <Divider style={styles.divider} />
 
                 <View style={styles.contentContainer}>
                     <Text style={styles.statis}>Statistics</Text>
@@ -231,7 +238,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
     divider: {
-        backgroundColor: 'black', 
+        backgroundColor: 'black',
         marginTop: 60,
     },
     activityInfo: {
