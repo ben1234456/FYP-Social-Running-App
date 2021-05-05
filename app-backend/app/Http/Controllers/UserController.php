@@ -27,10 +27,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        error_log($request->user_name);
+        // error_log($request->user_name);
         // error_log($request->phone_number);
-        error_log($request->email);
-        error_log($request->password);
+        // error_log($request->email);
+        // error_log($request->password);
         $user = new User;
         $user->first_name = $request->user_name;
         // $user->phone_number = $request->phone_number;

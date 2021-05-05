@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet, Picker} from 'react-native';
+import { View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet, Alert, Picker} from 'react-native';
 import { Button } from 'native-base'
 import Back from '../images/left-arrow.png';
-import { Actions } from 'react-native-router-flux';
 import Eye from '../images/eye.png';
 import DatePicker from 'react-native-datepicker';
 
@@ -23,49 +22,129 @@ export default class SignUpScreen extends Component {
             dob: "",
             email: "",
             password: "",
+            confirmpassword: "",
         }
 
     }
 
-    // submit(){
-    //     const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ title: 'React POST Request Example' })
-    //     };
-    //     fetch('http://192.168.0.192:8000/api/users')
-    //         .then(response => response.json())
-    //         .then(data => console.log(data));
-    // }
+    validation = () => {
+        
+        var empty=[];
+
+        //check empty
+        if (!(this.state.user_name)){
+            empty.push("name");
+        }
+
+        if (!(this.state.gender)){
+            empty.push("gender");
+        }
+        
+        if (!(this.state.user_state)){
+            empty.push("city");
+        }
+
+        if (!(this.state.sampleDate)){
+            empty.push("date of birth");
+        }
+
+        if (!(this.state.email)){
+            empty.push("email");
+        }
+
+        if (!(this.state.password) || !(this.state.confirmpassword)){
+            empty.push("password");
+        }
+
+        if (empty.length != 0){
+           
+            console.log(empty[0]);
+
+            var errormsg = "Your "; 
+            var i;
+            
+            for (i = 0; i < empty.length; i++) {
+                if (i == empty.length - 1){
+                    errormsg += empty[i] + " ";
+                }
+                else{
+                    errormsg += empty[i] + ", ";
+                }
+            }  
+
+            errormsg += "cannot be emtpy";
+
+            Alert.alert(
+                errormsg,
+                '',
+                [
+                  { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return false;
+        }
+
+        // else if (!this.emailvalidation()){
+        //     Alert.alert(
+        //         "Please enter an valid email address",
+        //         '',
+        //         [
+        //           { text: "Ok", onPress: () => console.log("OK Pressed") }
+        //         ]
+        //     );
+
+        //     return false;
+        // }
+
+        else if (this.state.password != this.state.confirmpassword ){
+            Alert.alert(
+                "Both passwords must be the same",
+                '',
+                [
+                  { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+
+            return false;
+        }
+
+        else{
+
+            return true;
+        }
+    }
 
     register = () => {
         
-        const data = {user_name: this.state.user_name,
-            // phone_number: this.state.phone_number,
-            dob: this.state.sampleDate,
-            city: this.state.user_state,
-            email: this.state.email,
-            gender: this.state.gender,
-            password: this.state.password};
+        if (this.validation()){
+            const data = {user_name: this.state.user_name,
+                // phone_number: this.state.phone_number,
+                dob: this.state.sampleDate,
+                city: this.state.user_state,
+                email: this.state.email,
+                gender: this.state.gender,
+                password: this.state.password};
+    
+            
+            fetch('http://192.168.0.192:8000/api/users', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:',data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });  
+            
+            this.props.navigation.navigate('login');
+        }
 
-        
-        fetch('http://192.168.0.192:8000/api/users', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:',data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });  
-        
-        this.props.navigation.navigate('login');
     }
 
     render() {
@@ -77,7 +156,7 @@ export default class SignUpScreen extends Component {
                     </TouchableOpacity>
 
                     <View>
-                        <Text style={styles.heading}>Create Account.</Text>
+                        <Text style={styles.heading}>Create Account</Text>
                         <View style={styles.input}>
                             <TextInput
                                 placeholder = "Name"
@@ -155,7 +234,7 @@ export default class SignUpScreen extends Component {
                         <View style={styles.input}>
                             <TextInput 
                                 placeholder="Email" 
-                                keyboardType = 'email-address'
+                                keyboardType = 'email-address'                                
                                 onChangeText={(email_input) => this.setState({email:email_input})}
                                 value = {this.state.email}
                             />
@@ -171,7 +250,12 @@ export default class SignUpScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View style={styles.input}>
-                            <TextInput placeholder="Confirm Password" secureTextEntry />
+                            <TextInput 
+                                placeholder="Confirm Password" 
+                                secureTextEntry
+                                onChangeText={(password_input) => this.setState({confirmpassword:password_input})}
+                                value = {this.state.confirmpassword}
+                            />
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
