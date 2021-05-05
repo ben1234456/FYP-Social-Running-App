@@ -65,7 +65,7 @@ export default class FreeRunScreen extends Component {
                     <Button block style={styles.stickyBtn}>
                         <Text style={styles.btnText}>START RUNNING</Text>
                     </Button>
-                    <TouchableOpacity style={styles.settingBtn}>
+                    <TouchableOpacity style={styles.settingBtn} onPress={() => this.props.navigation.navigate('Activity Setup')}>
                         <Setting name="settings" size={30} color={'#8352F2'} />
                     </TouchableOpacity>
                 </View>

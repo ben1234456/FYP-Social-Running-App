@@ -5,26 +5,27 @@ import { Actions } from 'react-native-router-flux';
 //import { createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class couponScreen extends Component {
+export default class MusicScreen extends Component {
 
     render() {
         return (
             <ScrollView style={styles.background}>
                 <View style={styles.container}>
-                    <View style={styles.coupon}>
-
-                        <View style={styles.couponDate}>
-                            <Text style={styles.eventDate}>Music Settings</Text>
+                    <View style={styles.music}>
+                        <View style={styles.musicTitle}>
+                            <Text style={styles.musicSetting}>Music Settings</Text>
                         </View>
-                        <View style={styles.couponRow}>
-                            <View style={styles.couponImg}>
-                                <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
+                        <TouchableOpacity>
+                            <View style={styles.musicRow}>
+                                <View style={styles.musicIcon}>
+                                    <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
+                                </View>
+                                <View style={styles.musicInfo}>
+                                    <Text style={styles.musicTitle}>Change Default Player</Text>
+                                    <Text style={styles.musicDetail}>Choose your player</Text>
+                                </View>
                             </View>
-                            <View style={styles.couponInfo}>
-                                <Text style={styles.eventTitle}>Change Default Player</Text>
-                                <Text style={styles.eventDatail}>Choose your player</Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -38,9 +39,9 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     container: {
-        
+
     },
-    coupon: {
+    music: {
         marginTop: "5%",
         marginBottom: "5%",
         marginLeft: "10%",
@@ -48,30 +49,28 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
     },
-    couponDate: {
+    musicSetting: {
         marginTop: "5%",
         marginBottom: "5%",
-
     },
-    couponRow: {
+    musicRow: {
         flexDirection: "row",
         marginBottom: "5%"
     },
-    couponImg: {
+    musicIcon: {
         padding: 10,
         width: '20%',
     },
-    couponInfo: {
+    musicInfo: {
         textAlignVertical: "center",
         justifyContent: "center",
-
     },
-    eventTitle: {
+    musicTitle: {
         fontWeight: "bold",
         fontSize: 17,
         color: '#373737',
     },
-    eventDate: {
+    musicSetting: {
         color: "#808080",
     },
     image: {
