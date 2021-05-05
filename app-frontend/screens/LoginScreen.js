@@ -4,6 +4,7 @@ import { Button } from 'native-base'
 import Back from '../images/left-arrow.png';
 import Eye from '../images/eye.png';
 import { Actions } from 'react-native-router-flux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class LoginScreen extends Component {
 
@@ -20,38 +21,39 @@ export default class LoginScreen extends Component {
 
     login = () => {
 
-        const data = {email: this.state.email,
-            password: this.state.password};
+        // const data = {email: this.state.email,
+        //     password: this.state.password};
 
-        fetch('http://192.168.0.192:8000/api/login', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:',data.message);
-            if (data.status == "success"){
-                this.props.navigation.navigate('app');
-            }
+        // fetch('http://192.168.0.192:8000/api/login', {
+        //     method: 'POST',
+        //     headers: {
+        //       Accept: 'application/json',
+        //       'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (data.status == "success"){
+        //         AsyncStorage.setItem('@userid',String(data.userid));
+        //         this.props.navigation.navigate('app');
+        //     }
 
-            else if (data.status =="fail"){
-                Alert.alert(
-                    data.message,
-                    '',
-                    [
-                      { text: "Ok", onPress: () => console.log("OK Pressed") }
-                    ]
-                );                
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });  
+        //     else if (data.status =="fail"){
+        //         Alert.alert(
+        //             data.message,
+        //             '',
+        //             [
+        //               { text: "Ok", onPress: () => console.log("OK Pressed") }
+        //             ]
+        //         );                
+        //     }
+        // })
+        // .catch((error) => {
+        //     console.error('Error:', error);
+        // });  
         
+        this.props.navigation.navigate('app');
     }
 
     render() {

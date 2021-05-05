@@ -14,7 +14,9 @@ class LoginController extends Controller
         $loginDetails = $request->only('email','password');
 
         if(Auth::attempt($loginDetails)){
-            return response()->json(['status' => 'success', 'message' => 'login successful']);
+            $user = User::where('email',$request->email)->first();
+            $userid = $user->id;
+            return response()->json(['status' => 'success', 'userid' => $userid]);
         }
         else{
             return response()->json(['status' => 'fail', 'message' => 'You have entered a wrong email or password']);

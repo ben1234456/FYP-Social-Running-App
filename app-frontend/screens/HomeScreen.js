@@ -5,15 +5,48 @@ import Logo from '../images/logo.png';
 import Event from '../images/event.png';
 import Event2 from '../images/marathon.png';
 import UpcomingEvent from '../images/family_marathon.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class HomeScreen extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            id:"",
+            name:"",     
+        };
+
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@userid')
+            if(value !== null) {
+                this.setState({ id: value });
+                const url = "http://192.168.0.192:8000/api/users/";
+                const fetchlink = url + this.state.id;
+                fetch(fetchlink)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.setState({name:data.first_name});
+                    });   
+            }
+
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    getData();
+    
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
-                        <Text style={styles.name}> Jun</Text>
+                        <Text style={styles.name}> {this.state.name}</Text>
                         <Image style={styles.image} source={Logo} />
                     </View>
 

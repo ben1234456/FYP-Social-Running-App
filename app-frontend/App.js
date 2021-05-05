@@ -14,9 +14,10 @@ import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { LogBox } from 'react-native';
 
 const Stack = createStackNavigator();
-
+// LogBox.ignoreAllLogs = true;
 
 export default class App extends Component {
     render() {
