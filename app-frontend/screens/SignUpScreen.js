@@ -19,7 +19,7 @@ export default class SignUpScreen extends Component {
             currentDate: sampleDate,
             gender: "",
             user_state: "",
-            phone_number: "",
+            // phone_number: "",
             dob: "",
             email: "",
             password: "",
@@ -39,22 +39,32 @@ export default class SignUpScreen extends Component {
     // }
 
     register = () => {
+        
+        const data = {user_name: this.state.user_name,
+            // phone_number: this.state.phone_number,
+            dob: this.state.sampleDate,
+            city: this.state.user_state,
+            email: this.state.email,
+            gender: this.state.gender,
+            password: this.state.password};
 
+        
         fetch('http://192.168.0.192:8000/api/users', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-              user_name: this.state.user_name,
-              phone_number: this.state.phone_number,
-            //   email: this.state.email,
-              password: this.state.password,
-            })
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:',data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });  
         
-        console.log(this.state.user_name);
         this.props.navigation.navigate('login');
     }
 
@@ -117,14 +127,14 @@ export default class SignUpScreen extends Component {
                             </Picker>
                         </View>
 
-                        <View style={styles.input}>
+                        {/* <View style={styles.input}>
                             <TextInput
                                 placeholder="Phone number e.g. 012345678" 
                                 keyboardType = 'numeric'
                                 onChangeText={(number) => this.setState({phone_number:number})}
                                 value = {this.state.phone_number}
                              />
-                        </View>
+                        </View> */}
 
                         <View style={styles.picker}>
                             <DatePicker style={styles.selectDate} 
@@ -142,13 +152,14 @@ export default class SignUpScreen extends Component {
                                 onDateChange={(date) => { this.setState({ sampleDate: date }) }} />
                         </View>
 
-                        {/* <View style={styles.input}>
+                        <View style={styles.input}>
                             <TextInput 
                                 placeholder="Email" 
+                                keyboardType = 'email-address'
                                 onChangeText={(email_input) => this.setState({email:email_input})}
                                 value = {this.state.email}
                             />
-                        </View> */}
+                        </View>
 
                         <View style={styles.input}>
                             <TextInput 
@@ -164,7 +175,7 @@ export default class SignUpScreen extends Component {
                             <Image style={styles.icon} source={Eye} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn}  onPress={() => this.props.navigation.navigate('register')}>
+                            <Button style={styles.submitBtn}  onPress={this.register}>
                                 <Text style={styles.btnText}>SIGN UP</Text>
                             </Button>
                         </View>

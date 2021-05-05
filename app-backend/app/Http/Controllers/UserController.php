@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,17 +28,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         error_log($request->user_name);
-        error_log($request->phone_number);
+        // error_log($request->phone_number);
         error_log($request->email);
         error_log($request->password);
         $user = new User;
         $user->first_name = $request->user_name;
-        $user->last_name = "?";
-        $user->phone_number = $request->phone_number;
-        $user->email_address = "eee";
-        $user->gender = "male";
-        $user->password = $request->password;
-        $user->city = "x";
+        // $user->phone_number = $request->phone_number;
+        $user->email_address = $request->email;
+        $user->gender = $request->gender;
+        $user->password = Hash::make($request->password);
+        $user->city = $request->city;
+        $stringdob = strtotime($request->dob);
+        $dob = date('Y-m-d',$stringdob);
+        $user->dob = $dob;
         $save = $user->save();
 
         if(!$saved){
