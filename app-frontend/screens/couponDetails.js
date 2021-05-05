@@ -85,7 +85,7 @@ export const styles = StyleSheet.create({
         width:"40%",
         flex:1,
         marginTop:"10%",
-        backgroundColor:"#8100e3"
+        backgroundColor:'#8352F2'
     },
     btnText:{
         color:"#ffffff",
@@ -117,8 +117,8 @@ export const styles = StyleSheet.create({
     },
     eventTitle:{
         textAlign:"left",
-        fontSize:20,
-        color:"#4d535c",
+        fontSize:18,
+        color:"#808080",
     },
     eventInfo:{
         textAlign:"right",
@@ -126,8 +126,8 @@ export const styles = StyleSheet.create({
     },
     userTitle:{
         textAlign:"left",
-        fontSize:20,
-        color:"#4d535c",
+        fontSize:18,
+        color:"#808080",
         fontWeight:"bold",
     },
     userInfo:{

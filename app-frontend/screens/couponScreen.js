@@ -71,7 +71,6 @@ export const styles = StyleSheet.create({
     couponDate:{
         marginTop:"5%",
         marginBottom:"5%",
-        
     },
     couponRow:{
         flexDirection:"row",
@@ -89,14 +88,15 @@ export const styles = StyleSheet.create({
         height:"100%",
     },
     eventDetail:{
-        
+        color: "#373737",
     },
     eventTitle:{
         fontWeight:"bold",
-        fontSize:17,
+        fontSize:18,
+        color: "#373737",
     },
     eventDate:{
-        color:"#4d535c",
+        color:"#808080",
     },
     image: {
         height:"100%",
