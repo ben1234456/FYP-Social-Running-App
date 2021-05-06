@@ -114,11 +114,10 @@ export const styles = StyleSheet.create({
         width:"40%",
         position:"absolute",
         bottom:15,
-        backgroundColor:"#8100e3",
+        backgroundColor:'#8352F2',
     },
     btnText:{
         color:"#ffffff",
-        fontWeight:"bold",
     },
     image: {
         width: "100%",
@@ -141,12 +140,11 @@ export const styles = StyleSheet.create({
     eventInfo:{
         textAlign:"right",
         fontSize:15,
-        color:"#8100e3",
+        color:'#8352F2',
     },
     bottom: {
         flex: 1,
     },
-
     title: {
         fontSize: 20,
         lineHeight: 40,
@@ -162,11 +160,11 @@ export const styles = StyleSheet.create({
     aboutHeading:{
         fontWeight:"bold",
         fontSize:20,
-        color:"#4d535c",
+        color:"#373737",
     },
     aboutText:{
         fontSize:15,
-        color:"#4d535c",
+        color:"#373737",
     },
 });
 

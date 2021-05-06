@@ -7,11 +7,9 @@ const Drawer = createDrawerNavigator();
 export default class AppNavigation extends Component {
     render() {
         return (
-            <NavigationContainer>
-                <Drawer.Navigator initialRouteName="Home">
-                    <Drawer.Screen name="Home" component={BottomTabScreen} />
-                </Drawer.Navigator>
-            </NavigationContainer>
+            <Drawer.Navigator initialRouteName="Home">
+                <Drawer.Screen name="Home" component={BottomTabScreen} />
+            </Drawer.Navigator>
         );
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet} from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Run from '../images/running.jpg';
@@ -7,7 +7,7 @@ import Run from '../images/running.jpg';
 //import  { createStackNavigator }  from 'react-navigation';
 
 export default class StartedScene extends Component {
-       
+
     render() {
         return (
             <View style={styles.container}>
@@ -17,12 +17,12 @@ export default class StartedScene extends Component {
                 <View style={styles.bottom}>
                     <Text style={styles.heading}>Let's get started!</Text>
                     <Text style={styles.subHeading}>Enjoy.</Text>
-                    <Button block style={styles.submitBtn} onPress={Actions.register}>
+                    <Button block style={styles.submitBtn} onPress={() => this.props.navigation.navigate('register')}>
                         <Text style={styles.btnText}>SIGN UP</Text>
                     </Button>
                     <Text style={styles.signin}>
                         <Text style={styles.link}>Already have an account? </Text>
-                        <Text style={styles.signinText} onPress={Actions.login}>SIGN IN</Text>
+                        <Text style={styles.signinText} onPress={() => this.props.navigation.navigate('login')}>SIGN IN</Text>
                     </Text>
                 </View>
             </View>

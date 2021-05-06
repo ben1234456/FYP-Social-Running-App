@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, ScrollView, Picker, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Text, View, ScrollView, Picker, Dimensions, FlatList } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Font from 'react-native-vector-icons/Ionicons';
+import { Divider } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native';
 
 export default class App extends Component {
     state = {
-        genderSelected: '',
-        categorySelected: '',
-    }
-
-    category = {
-        week: '',
-        month: '',
-        year: '',
+        categoryPosition: '',
+        categorySelected: '25 March - 01 April 2021',
     }
 
     render() {
@@ -35,7 +33,63 @@ export default class App extends Component {
             barPercentage: 0.5,
         };
         return (
+
             <ScrollView style={styles.container}>
+                <View style={styles.activity}>
+                    <View style={styles.activityRow}>
+                        <View style={styles.icon}>
+                            <Text style={styles.activityTitle}>Recent Activities</Text>
+                        </View>
+                        <View style={styles.activityColumn}>
+                            <Text style={styles.viewMore}>{'View More >'}</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Icon name="run" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>3.55 / 5 km</Text>
+                                <Text style={styles.activityDuration}>00:40:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-03-03</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Font name="bicycle" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>6.34 / 7 km</Text>
+                                <Text style={styles.activityDuration}>01:00:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-02-02</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.activityRow}>
+                            <View style={styles.icon}>
+                                <Icon name="hiking" size={30} color={'#8352F2'} />
+                            </View>
+                            <View style={styles.activityInfo}>
+                                <Text style={styles.activityDistance}>5.67 / 6 km</Text>
+                                <Text style={styles.activityDuration}>01:10:00</Text>
+                            </View>
+                            <View style={styles.activityColumn}>
+                                <Text style={styles.date}>2021-01-01</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <Divider style={styles.divider} />
+
                 <View style={styles.contentContainer}>
                     <Text style={styles.statis}>Statistics</Text>
                     <View style={styles.rowContainer}>
@@ -53,18 +107,17 @@ export default class App extends Component {
                             <Picker
                                 selectedValue={this.state.categorySelected}
                                 backgroundColor={'white'}
-                                onValueChange={(itemValue, itemPosition) => this.setState({ categorySelected: itemValue, category: itemPosition })}>
+                                onValueChange={(itemValue, itemPosition) => this.setState({ categorySelected: itemValue, categoryPosition: itemPosition })}>
 
-                                <Picker.Item label="WEEK" value="Week" color='#999999'/>
-                                <Picker.Item label="MONTH" value="Month" color='#999999' />
-                                <Picker.Item label="YEAR" value="Year" color='#999999' />
+                                <Picker.Item label="WEEK" value="25 March - 01 April 2021" color='#999999' />
+                                <Picker.Item label="MONTH" value="April 2021" color='#999999' />
+                                <Picker.Item label="YEAR" value="2021" color='#999999' />
                             </Picker>
-                            <Text style={styles.categoryDisplay}>25 March - 01 April 2021</Text>
+                            <Text style={styles.categoryDisplay}>{this.state.categorySelected}</Text>
                         </View>
                     </View>
                     <Text style={styles.distance}>Distance (km)</Text>
                     <Text style={styles.disValue}>6.95</Text>
-
                 </View>
                 <View style={styles.chart}>
                     <LineChart
@@ -105,7 +158,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     contentContainer: {
-        marginTop: 30,
         padding: 40,
     },
     contentContainer2: {
@@ -166,5 +218,46 @@ const styles = StyleSheet.create({
     },
     chart: {
         marginLeft: 20,
-    }
+    },
+    activity: {
+        marginTop: 30,
+    },
+    activityTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    activityRow: {
+        paddingTop: 60,
+    },
+    viewMore: {
+        color: '#8352F2',
+        fontSize: 16,
+    },
+    icon: {
+        margin: 40,
+        position: 'absolute',
+    },
+    divider: {
+        backgroundColor: 'black',
+        marginTop: 60,
+    },
+    activityInfo: {
+        position: 'absolute',
+        top: 35,
+        left: 100,
+    },
+    activityColumn: {
+        margin: 40,
+        position: 'absolute',
+        right: 5,
+    },
+    activityDistance: {
+        color: '#373737',
+    },
+    activityDuration: {
+        color: '#808080',
+    },
+    date: {
+        color: '#999999',
+    },
 });

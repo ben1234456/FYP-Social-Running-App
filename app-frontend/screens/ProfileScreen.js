@@ -4,15 +4,53 @@ import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../images/avatar.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class App extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            id:"",
+            name:"",
+            gender:"",  
+            city:"",   
+            dob:"",
+        };
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@userid')
+            if(value !== null) {
+                this.setState({ id: value });
+                const url = "http://192.168.0.192:8000/api/users/";
+                const fetchlink = url + this.state.id;
+                fetch(fetchlink)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.setState({name:data.first_name});
+                        this.setState({gender:data.gender});
+                        this.setState({city:data.city});
+                        this.setState({dob:data.dob});
+                    });   
+            }
+
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    getData();
+    
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity onPress={Actions.coupon}>
+                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('Coupon')}>
                             <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
                         </TouchableOpacity>
                     </View>
@@ -31,7 +69,7 @@ export default class App extends Component {
                             <Text style={styles.proColumnName}>Name:</Text>
                         </View>
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>Jun</Text>
+                            <Text style={styles.proDetails}>{this.state.name}</Text>
                         </View>
                     </View>
 
@@ -41,17 +79,17 @@ export default class App extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>Male</Text>
+                            <Text style={styles.proDetails}>{this.state.gender}</Text>
                         </View>
                     </View>
 
                     <View style={styles.proRow}>
                         <View style={styles.proTitle}>
-                            <Text style={styles.proColumnName}>City:</Text>
+                            <Text style={styles.proColumnName}>State:</Text>
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>Kuching</Text>
+                            <Text style={styles.proDetails}>{this.state.city}</Text>
                         </View>
                     </View>
 
@@ -61,7 +99,7 @@ export default class App extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>2000-07-15</Text>
+                            <Text style={styles.proDetails}>{this.state.dob}</Text>
                         </View>
                     </View>
                 </View>

@@ -3,9 +3,11 @@ import { View, Image, Text, StyleSheet, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Logo from '../images/logo.png';
 
-const switchtoLogin = () => {
-    Actions.replace('start');
-}
+/*const switchtoLogin = () => {
+    Actions.start()
+}*/
+
+
 
 export default class SplashScreen extends Component {
 
@@ -33,7 +35,8 @@ export default class SplashScreen extends Component {
             }),
         ]).start(() => {
             this.state.LoadingSpinner = true,
-            setTimeout(switchtoLogin, 500)
+            setTimeout(()=>{this.props.navigation.navigate('start')}, 500);
+            this.props.navigation.replace('start');
         });
     }
 
