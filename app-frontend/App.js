@@ -10,13 +10,14 @@ import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
 import couponDetails from "./screens/couponDetails";
 import submitRun from "./screens/submitRun";
+import addRouteScreen from "./screens/addRouteScreen"
 
 export default class App extends Component {
     render() {
         return (
             <Router>
                 <Scene key='root'>
-                    <Scene key='splash' component={SplashScreen} initial={true} headerShown={false}></Scene>
+                    <Scene key='splash' component={SplashScreen} initial={false} headerShown={false}></Scene>
                     <Scene key="start" component={StartedScreen} headerShown={false}></Scene>
                     <Scene key="login" component={LoginScreen} headerShown={false}></Scene>
                     <Scene key="register" component={SignUpScreen} headerShown={false}></Scene>
@@ -27,6 +28,7 @@ export default class App extends Component {
                     <Scene key="top" component={TopTabNavigator} headerShown={false}></Scene>
                     <Scene key="couponDetails" component={couponDetails} initial={false} headerShown={false}></Scene>
                     <Scene key="submitRun" component={submitRun} initial={false} headerShown={false}></Scene>
+                    <Scene key="addRouteScreeb" component={addRouteScreen} initial={true} headerShown={false}></Scene>
                 </Scene>               
             </Router>
         );
