@@ -10,11 +10,13 @@ import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
 import couponDetails from "./screens/couponDetails";
 import submitRun from "./screens/submitRun";
+
 import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LogBox } from 'react-native';
+import addRouteScreen from "./screens/addRouteScreen"
 
 const Stack = createStackNavigator();
 // LogBox.ignoreAllLogs = true;
@@ -35,6 +37,7 @@ export default class App extends Component {
                     <Scene key="top" component={TopTabNavigator} headerShown={false}></Scene>
                     <Scene key="couponDetails" component={couponDetails} initial={false} headerShown={false}></Scene>
                     <Scene key="submitRun" component={submitRun} initial={false} headerShown={false}></Scene>
+                    <Scene key="addRouteScreen" component={addRouteScreen} initial={false} headerShown={false}></Scene>
                     <Scene key="Music" component={musicScreen} initial={false} titleStyle={{ alignSelf: 'center' }}></Scene>
                 </Scene>               
             </Router>*/
@@ -100,6 +103,12 @@ export default class App extends Component {
                     <Stack.Screen
                         name="Activity Setup"
                         component={activitySetup}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center'}}
+                    />
+                    <Stack.Screen
+                        name="addRouteScreen"
+                        component={addRouteScreen}
                         initial={false} 
                         options={{headerTitleAlign: 'center'}}
                     />
