@@ -34,7 +34,7 @@ class UserController extends Controller
         $user = new User;
         $user->first_name = $request->user_name;
         // $user->phone_number = $request->phone_number;
-        $user->email_address = $request->email;
+        $user->email = $request->email;
         $user->gender = $request->gender;
         $user->password = Hash::make($request->password);
         $user->city = $request->city;
@@ -68,7 +68,22 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->first_name = $request->name;
+        $user->email = $request->email;
+        $user->city = $request->city;
+        $stringdob = strtotime($request->dob);
+        $dob = date('Y-m-d',$stringdob);
+        $user->dob = $dob;
+        $user->gender = $request->gender;
+        $status = $user->save();
+        
+        if($status){
+            return response()->json(['status' => 'success']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
+
     }
 
     /**

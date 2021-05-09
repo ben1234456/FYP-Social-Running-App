@@ -14,58 +14,77 @@ export default class editProfileScreen extends Component {
         super(props);
         this.state = {
             id:"",
-            name:"Jun",
-            gender:"Male",  
-            city:"Kuching",   
-            dob:"2000-07-15",
-            email:"12345678@gmail.com",
-            phoneNum:"012345678",
+            name:"",
+            gender:"",  
+            city:"",   
+            dob:"",
+            email:"",
+            phoneNum:"",
             cityList:["Kuching1","Kuching2","Kuching","Kuching3","Kuching4"],
             checked:"Male"
         };
     
 
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@userid')
-            if(value !== null) {
-                this.setState({ id: value });
-                const url = "http://192.168.0.192:8000/api/users/";
-                const fetchlink = url + this.state.id;
-                fetch(fetchlink)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.setState({name:data.first_name});
-                        this.setState({gender:data.gender});
-                        this.setState({city:data.city});
-                        this.setState({dob:data.dob});
-                    });   
-            }
+        const getData = async () => {
+            try {
+                const value = await AsyncStorage.getItem('@userid')
+                if(value !== null) {
+                    this.setState({ id: value });
+                    const url = "http://192.168.0.192:8000/api/users/";
+                    const fetchlink = url + this.state.id;
+                    fetch(fetchlink)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.setState({name:data.first_name});
+                            this.setState({email:data.email});
+                            this.setState({gender:data.gender});
+                            this.setState({city:data.city});
+                            this.setState({dob:data.dob});
+                        });   
+                }
 
-        } catch(e) {
-            console.log(e);
-        }
-    };
+            } catch(e) {
+                console.log(e);
+            }
+        };
     
     getData();
+
     }
-    changeGender=(newGender)=>{
-        this.setState({checked:newGender});
-    };
-    formatPickerList=()=>{
-        console.log(this.state.cityList.indexOf("Kuching"));
-        let defaultIndex=this.state.cityList.indexOf(this.state.city);
-        let tempoArray=[];
-        tempoArray.push(this.state.cityList[defaultIndex]);
-        for(let i=0;i<this.state.cityList.length;i++){
-            if(i!=defaultIndex){
-                tempoArray.push(this.state.cityList[i]);
-            }
-        }
-    };
-    componentDidMount(){
-        this.formatPickerList();    
-    };
+
+    edit = async () =>{
+
+        const ip = "192.168.0.192";
+
+        const data = {
+            name: this.state.name,
+            dob: this.state. dob,
+            city: this.state.city,
+            email: this.state.email,
+            gender: this.state.gender
+        };
+
+        const apilink = 'http://' + ip + ':8000/api/users/' + this.state.id ;
+        console.log(apilink);
+        fetch(apilink, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => { 
+            console.log('Success:',data.status);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+                 
+        this.props.navigation.push('app');
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -87,25 +106,35 @@ export default class editProfileScreen extends Component {
                             />
                         </View>
                     </View>
+
                     <View style={styles.infoRow}>
                         <View style={styles.infoTitle}>
                             <Text style={styles.info}>Gender:</Text>
                         </View>
                         <View style={styles.infoData}>
                             <RadioButton.Group onValueChange={(newGender) => this.setState({gender:newGender})} value={this.state.gender}>
-                                <View style={styles.genderColumn}>
-                                    <View style={styles.radioBtn}>
-                                        <RadioButton  value="Male" />
-                                        <Text >Male</Text>
-                                    </View>
-                                    <View style={styles.radioBtn}>
-                                        <RadioButton  value="Female" />
-                                        <Text>Female</Text>
-                                    </View>
+                            <View style={styles.genderColumn}>
+                                
+                                <View style={styles.radioBtn}>
+                                    <RadioButton  
+                                        value="male"
+                                        status={ this.state.gender == "male" ? 'checked' : 'unchecked' }
+                                    />
+                                    <Text>Male</Text>
                                 </View>
+                                <View style={styles.radioBtn}>
+                                    <RadioButton  
+                                        value="female" 
+                                        status={ this.state.gender == "female" ? 'checked' : 'unchecked' }
+                                    />
+                                    <Text>Female</Text>
+                                </View>
+                                
+                            </View>
                             </RadioButton.Group>
                         </View>
                     </View>
+
                     <View style={styles.infoRow}>
                         <View style={styles.infoTitle}>
                             <Text style={styles.info}>Email:</Text>
@@ -119,19 +148,7 @@ export default class editProfileScreen extends Component {
                             />
                         </View>
                     </View>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoTitle}>
-                            <Text style={styles.info}>Phone No.</Text>
-                        </View>
-                        <View style={styles.infoData}>
-                            <TextInput
-                                placeholder = {this.state.phoneNum}
-                                onChangeText={(phoneNum) => this.setState({phoneNum:phoneNum})}
-                                value = {this.state.phoneNum}
-                                style={styles.input}
-                            />
-                        </View>
-                    </View>
+
                     <View style={styles.infoRow}>
                         <View style={styles.infoTitle}>
                             <Text style={styles.info}>DOB:</Text>
@@ -164,20 +181,32 @@ export default class editProfileScreen extends Component {
                         </View>
                         <View style={styles.infoData}>
                             <Picker
-                                selectedValue={this.state.city}
-                                onValueChange={
-                                    (itemValue) => this.setState({ city: itemValue })
-                                    }>{
-                                        this.state.cityList.map( (e)=>{
-                                         return <Picker.Item label={e} value={e} />
-                                        })
-                                       }
+                               selectedValue={this.state.city}
+                               onValueChange={(itemValue) => this.setState({ city: itemValue })}>
+
+                               <Picker.Item label="Select your state" value="null" color="#999" />
+                               <Picker.Item label="Labuan" value="Labuan" />
+                               <Picker.Item label="Malacca" value="Malacca" />
+                               <Picker.Item label="Putrajaya" value="Putrajaya" />
+                               <Picker.Item label="Perlis" value="Perlis" />
+                               <Picker.Item label="Negeri Sembilan" value="Negeri Sembilan" />
+                               <Picker.Item label="Pahang" value="Pahang" />
+                               <Picker.Item label="Terrengganu" value="Terrengganu" />
+                               <Picker.Item label="Johor" value="Johor" />
+                               <Picker.Item label="Kuala Lumpur" value="Kuala Lumpur" />
+                               <Picker.Item label="Penang" value="Penang" />
+                               <Picker.Item label="Sabah" value="Sabah" />
+                               <Picker.Item label="Kelantan" value="Kelantan" />
+                               <Picker.Item label="Selangor" value="Selangor" />
+                               <Picker.Item label="Perak" value="Perak" />
+                               <Picker.Item label="Kedah" value="Kedah" />
+                               <Picker.Item label="Sarawak" value="Sarawak" />
                             </Picker>
                         </View>
                     </View>
                 </View>
                 <View style={styles.save}>
-                    <Button block style={styles.saveBtn}>
+                    <Button block style={styles.saveBtn} onPress={this.edit}>
                         <Text style={styles.btnText}>SAVE</Text>
                     </Button>
                 </View>

@@ -117,13 +117,14 @@ export default class SignUpScreen extends Component {
     register = () => {
         
         if (this.validation()){
-            const data = {user_name: this.state.user_name,
-                // phone_number: this.state.phone_number,
+            const data = {
+                user_name: this.state.user_name,
                 dob: this.state.sampleDate,
                 city: this.state.user_state,
                 email: this.state.email,
                 gender: this.state.gender,
-                password: this.state.password};
+                password: this.state.password
+            };
     
             
             fetch('http://192.168.0.192:8000/api/users', {
@@ -134,13 +135,13 @@ export default class SignUpScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:',data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });  
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log('Success:',data);
+            // })
+            // .catch((error) => {
+            //     console.error('Error:', error);
+            // });  
             
             this.props.navigation.navigate('login');
         }

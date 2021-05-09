@@ -20,7 +20,7 @@ import addRouteScreen from "./screens/addRouteScreen"
 import editProfileScreen from "./screens/editProfileScreen"
 
 const Stack = createStackNavigator();
-// LogBox.ignoreAllLogs = true;
+LogBox.ignoreAllLogs = true;
 
 export default class App extends Component {
     render() {
@@ -78,7 +78,7 @@ export default class App extends Component {
                         name="Coupon"
                         component={couponScreen}
                         initial={false}
-                        options={{headerTitleAlign: 'center'}}
+                        options={{headerTitleAlign: 'center', title: 'Registered Events'}}
                     />
                     <Stack.Screen
                         name="top"
@@ -117,7 +117,7 @@ export default class App extends Component {
                         name="editProfileScreen"
                         component={editProfileScreen}
                         initial={false} 
-                        options={{headerTitleAlign: 'center'}}
+                        options={{headerTitleAlign: 'center', title: 'Edit Profile'}}
                     />  
                 </Stack.Navigator>
             </NavigationContainer>

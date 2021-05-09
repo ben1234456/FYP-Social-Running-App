@@ -59,7 +59,7 @@ export default class App extends Component {
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
                 <View style={styles.rowContainer2}>
-                    <Button block style={styles.editProfile}>
+                    <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('editProfileScreen')}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
                 </View>
