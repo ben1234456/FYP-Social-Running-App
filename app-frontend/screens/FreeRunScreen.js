@@ -17,7 +17,7 @@ export default class FreeRunScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            errorMessage:"",
+            errorMessage: "",
             prevLat: 0,
             prevLng: 0,
             curnLat: 0,
@@ -27,25 +27,25 @@ export default class FreeRunScreen extends Component {
             endLat: 0,
             latitude: 0,
             longitude: 0,
-            tracking:false,
+            tracking: false,
             distanceTravelled: 0,
             routeCoordinates: [],
-            reference:React.createRef(),
+            reference: React.createRef(),
 
             //stopwatch
             stopwatchStart: false,
             stopwatchReset: false,
-            runtime:"",
+            runtime: "",
 
             //calculate time
-            startsec:"",
-            startminute:"",
-            starthour:"",
-            endsec:"",
-            endminute:"",
-            endhour:"",
-            startTimestamp:"",
-            endTimestamp:"",
+            startsec: "",
+            startminute: "",
+            starthour: "",
+            endsec: "",
+            endminute: "",
+            endhour: "",
+            startTimestamp: "",
+            endTimestamp: "",
 
             //button state
             button: "Start",
@@ -58,49 +58,49 @@ export default class FreeRunScreen extends Component {
 
 
     toggleStopwatch() {
-    this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
-    }
-    
-    resetStopwatch() {
-    this.setState({stopwatchStart: false, stopwatchReset: true});
+        this.setState({ stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false });
     }
 
-    getLocation=async()=>{
-        
-        const permissionStatus=await Location.requestForegroundPermissionsAsync();
-        
-        if(permissionStatus.status!=="granted"){
-            this.setState({ errorMessage: "Permission to access location was denied"});
+    resetStopwatch() {
+        this.setState({ stopwatchStart: false, stopwatchReset: true });
+    }
+
+    getLocation = async () => {
+
+        const permissionStatus = await Location.requestForegroundPermissionsAsync();
+
+        if (permissionStatus.status !== "granted") {
+            this.setState({ errorMessage: "Permission to access location was denied" });
             return;
         }
         //permissionStatus=await Location.requestBackgroundPermissionsAsync();
-        
-        let currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
+
+        let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
         console.log(this.state.errorMessage);
         console.log(currentLocation);
-        this.setState({ latitude: currentLocation.coords.latitude});
-        this.setState({ longitude: currentLocation.coords.longitude});
-        const currentLatitude=currentLocation.coords.latitude;
-        const currentLongitude=currentLocation.coords.longitude;
+        this.setState({ latitude: currentLocation.coords.latitude });
+        this.setState({ longitude: currentLocation.coords.longitude });
+        const currentLatitude = currentLocation.coords.latitude;
+        const currentLongitude = currentLocation.coords.longitude;
 
-        this.setState({prevLat:currentLatitude});
-        this.setState({prevLng:currentLongitude});
+        this.setState({ prevLat: currentLatitude });
+        this.setState({ prevLng: currentLongitude });
 
         this.state.reference.current.animateToRegion({
-        
-            latitude:currentLatitude,
-            longitude:currentLongitude,
 
-            startLat:currentLatitude,
-            startLng:currentLongitude,
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+
+            startLat: currentLatitude,
+            startLng: currentLongitude,
 
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
 
         })
     };
-    
-    componentDidMount(){
+
+    componentDidMount() {
         this.getLocation();
     }
 
@@ -109,51 +109,52 @@ export default class FreeRunScreen extends Component {
 
         this.toggleStopwatch();
 
-        if (this.state.tracking == false){
+        if (this.state.tracking == false) {
 
             const currentDate = new Date();
             const timestamp = currentDate.getTime();
 
             this.setState({
-                tracking:true,
-                startTimestamp:timestamp,
+                tracking: true,
+                startTimestamp: timestamp,
             });
-            
+
         }
 
-        else{
+        else {
 
             const currentDate = new Date();
             const timestamp = currentDate.getTime();
 
             this.setState({
-                tracking:false,
-                endTimestamp:timestamp,
+                tracking: false,
+                endTimestamp: timestamp,
             });
 
-            const data = {start_lat: String(this.state.startLat), 
+            const data = {
+                start_lat: String(this.state.startLat),
                 start_lng: String(this.state.startLng),
                 end_lat: String(this.state.latitude),
                 end_lng: String(this.state.longitude),
-                total_distance: String(this.state.distanceTravelled),             
+                total_distance: String(this.state.distanceTravelled),
             };
 
             fetch('http://192.168.0.192:8000/api/activity', {
                 method: 'POST',
                 headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Success");
-            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success");
+                })
             // .catch((error) => {
             //     console.error('Error:', error);
             // }); 
-            
+
         }
 
     }
@@ -161,41 +162,41 @@ export default class FreeRunScreen extends Component {
     change = (geolocation) => {
         // console.log(geolocation.latitude);
 
-        if(this.state.tracking == true){
+        if (this.state.tracking == true) {
             this.state.reference.current.animateToRegion({
-        
+
                 latitude: geolocation.latitude,
                 longitude: geolocation.longitude,
-    
+
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
             })
-    
-            var previousgeo = {latitude:this.state.prevLat, longitude:this.state.prevLng};
-            var currentgeo = {latitude:geolocation.latitude, longitude:geolocation.longitude};
-    
+
+            var previousgeo = { latitude: this.state.prevLat, longitude: this.state.prevLng };
+            var currentgeo = { latitude: geolocation.latitude, longitude: geolocation.longitude };
+
             var totaldistance = this.state.distanceTravelled;
             var totalnewdistance = (haversine(previousgeo, currentgeo));
-    
+
             var latitude = geolocation.latitude;
             var longitude = geolocation.longitude;
             var vrc = this.state.routeCoordinates;
-    
+
             var newCoordinate = {
                 latitude,
                 longitude
             };
-    
+
             this.setState({
-                prevLat:geolocation.latitude,
-                prevLng:geolocation.longitude,
+                prevLat: geolocation.latitude,
+                prevLng: geolocation.longitude,
                 routeCoordinates: vrc.concat([newCoordinate]),
             });
-    
+
             // console.log(this.state.routeCoordinates);
-    
-            if (geolocation.latitude != 0 || this.state.prevLat != 0){
-                this.setState({distanceTravelled: totaldistance + totalnewdistance});
+
+            if (geolocation.latitude != 0 || this.state.prevLat != 0) {
+                this.setState({ distanceTravelled: totaldistance + totalnewdistance });
             }
         }
 
@@ -205,43 +206,38 @@ export default class FreeRunScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <MapView style={styles.map} 
-                    ref={this.state.reference} 
-                    provider={ PROVIDER_GOOGLE } 
+                <MapView style={styles.map}
+                    ref={this.state.reference}
+                    provider={PROVIDER_GOOGLE}
                     showsUserLocation
                     followUserLocation
-                    onUserLocationChange = {
-                        (geolocation)=>this.change(geolocation.nativeEvent.coordinate)
+                    onUserLocationChange={
+                        (geolocation) => this.change(geolocation.nativeEvent.coordinate)
                     }
                 >
                     <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
-                    
+
                     {/* <Marker coordinate={{latitude: this.state.latitude, longitude: this.state.longitude}} /> */}
                 </MapView>
 
-                <View>
-
+                <View style={styles.columnContainer}>
                     <Text>
                         {parseFloat(this.state.distanceTravelled).toFixed(2)} km
                     </Text>
-
                     {/* <Stopwatch laps start={this.state.stopwatchStart}
                         getTime={this.getFormattedTime} 
                     /> */}
-
-                </View>   
-
-
-                <View style={styles.contentContainer}>
-                    <TouchableOpacity style={styles.music} onPress={() => this.props.navigation.navigate('Music')}>
-                        <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
-                    </TouchableOpacity>
-                    <Button block style={styles.stickyBtn} onPress={this.tracking}>
-                        <Text style={styles.btnText}>{!this.state.tracking ? "Start" : "Stop"}</Text>
-                    </Button>
-                    <TouchableOpacity style={styles.settingBtn} onPress={() => this.props.navigation.navigate('Activity Setup')}>
-                        <Setting name="settings" size={30} color={'#8352F2'} />
-                    </TouchableOpacity>
+                    <View style={styles.contentContainer}>
+                        <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Music')}>
+                            <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
+                        </TouchableOpacity>
+                        <Button block style={styles.stickyBtn} onPress={this.tracking}>
+                            <Text style={styles.btnText}>{!this.state.tracking ? "Start" : "Stop"}</Text>
+                        </Button>
+                        <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Activity Setup')}>
+                            <Setting name="settings" size={30} color={'#8352F2'} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
@@ -250,33 +246,29 @@ export default class FreeRunScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
-        justifyContent: "center", 
-        alignItems: "center",
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
     },
-    rowContainer: {
+    columnContainer: {
         flex: 0,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'center'
     },
     contentContainer: {
         padding: 40,
         backgroundColor: 'transparent',
-        position: 'absolute',
-        bottom: 5,
-        left: 60,
-        right: 60,
+        flex: 0,
+        flexDirection: 'row',
     },
-    music: {
+    icon: {
         backgroundColor: 'white',
         borderRadius: 30,
-        position: 'absolute',
-        right: 220,
-        bottom: 41,
         padding: 6,
+        flex: 0,
 
         //ios
         shadowColor: '#000',
@@ -288,9 +280,12 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     stickyBtn: {
-        alignItems: 'center',
         borderRadius: 30,
         backgroundColor: '#8352F2',
+        flex: 1,
+        width: "auto",
+        marginLeft: 30,
+        marginRight: 30,
 
         //ios
         shadowColor: '#000',
@@ -303,22 +298,5 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: "#ffffff",
-    },
-    settingBtn: {
-        backgroundColor: 'white',
-        borderRadius: 30,
-        position: 'absolute',
-        left: 220,
-        bottom: 41,
-        padding: 6,
-
-        //ios
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
-
-        //android
-        elevation: 5,
     },
 });
