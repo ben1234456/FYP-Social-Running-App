@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class App extends Component {
 
@@ -49,6 +50,7 @@ export default class App extends Component {
             <View style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
+                        <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('start')}/>
                         <Text style={styles.profile}>Profile</Text>
                         <TouchableOpacity  onPress={() => this.props.navigation.navigate('Coupon')}>
                             <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
