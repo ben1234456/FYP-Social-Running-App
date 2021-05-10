@@ -5,6 +5,7 @@ import Back from '../images/left-arrow.png';
 import Eye from '../images/eye.png';
 import { Actions } from 'react-native-router-flux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class LoginScreen extends Component {
 
@@ -13,8 +14,10 @@ export default class LoginScreen extends Component {
         super(props);  
 
         this.state = {  
+            icEye: 'eye-off',
             email: "",
             password: "",
+            showPassword: true
         }
 
     }
@@ -53,8 +56,27 @@ export default class LoginScreen extends Component {
             console.error('Error:', error);
         });  
         
-        // this.props.navigation.navigate('app');
+        //this.props.navigation.navigate('app');
     }
+
+    changePasswordType = () => {
+        let newState;
+        if (this.state.showPassword) {
+            newState = {
+                icEye: 'eye',
+                showPassword: false,
+                password: this.state.password
+            }
+        } else {
+            newState = {
+                icEye: 'eye-off',
+                showPassword: true,
+                password: this.state.password
+            }
+        }
+        // set new state value
+        this.setState(newState)
+    };
 
     render() {
 
@@ -76,13 +98,13 @@ export default class LoginScreen extends Component {
                             />
                         </View>
                         <View style={styles.input}>
-                            <TextInput 
+                            <TextInput style={styles.inputRow}
                                 placeholder="Password" 
-                                secureTextEntry 
+                                secureTextEntry = {this.state.showPassword}
                                 onChangeText={(password_input) => this.setState({password:password_input})}
                                 value = {this.state.password}
-                            />
-                            <Image style={styles.icon} source={Eye} />
+                            />  
+                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
                         </View>
                         <View>
                             <Button style={styles.submitBtn}  onPress={this.login}>
@@ -165,8 +187,12 @@ export const styles = StyleSheet.create({
     },
 
     icon: {
-        marginLeft: 160,
+        flex: 0,
         width: 25,
         height: 25,
+    },
+
+    inputRow: {
+        flex: 1,
     }
 });

@@ -4,6 +4,7 @@ import { Button } from 'native-base'
 import Back from '../images/left-arrow.png';
 import Eye from '../images/eye.png';
 import DatePicker from 'react-native-datepicker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class SignUpScreen extends Component {
     constructor(props) {
@@ -23,8 +24,9 @@ export default class SignUpScreen extends Component {
             email: "",
             password: "",
             confirmpassword: "",
+            icEye: 'eye-off',
+            showPassword: true,
         }
-
     }
 
     validation = () => {
@@ -148,6 +150,25 @@ export default class SignUpScreen extends Component {
 
     }
 
+    changePasswordType = () => {
+        let newState;
+        if (this.state.showPassword) {
+            newState = {
+                icEye: 'eye',
+                showPassword: false,
+                password: this.state.password
+            }
+        } else {
+            newState = {
+                icEye: 'eye-off',
+                showPassword: true,
+                password: this.state.password
+            }
+        }
+        // set new state value
+        this.setState(newState)
+    };
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -242,22 +263,22 @@ export default class SignUpScreen extends Component {
                         </View>
 
                         <View style={styles.input}>
-                            <TextInput 
+                            <TextInput style={styles.inputRow}
                                 placeholder="Password" 
                                 onChangeText={(password_input) => this.setState({password:password_input})}
                                 value = {this.state.password}
-                                secureTextEntry 
+                                secureTextEntry = {this.state.showPassword}
                             />
-                            <Image style={styles.icon} source={Eye} />
+                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
                         </View>
                         <View style={styles.input}>
-                            <TextInput 
+                            <TextInput style={styles.inputRow}
                                 placeholder="Confirm Password" 
-                                secureTextEntry
+                                secureTextEntry = {this.state.showPassword}
                                 onChangeText={(password_input) => this.setState({confirmpassword:password_input})}
                                 value = {this.state.confirmpassword}
                             />
-                            <Image style={styles.icon} source={Eye} />
+                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
                         </View>
                         <View>
                             <Button style={styles.submitBtn}  onPress={this.register}>
@@ -306,6 +327,7 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         marginTop: 15,
         display: 'flex',
+        flexDirection: 'row',
         padding: 10,
     },
 
@@ -341,9 +363,12 @@ export const styles = StyleSheet.create({
     },
 
     icon: {
-        marginTop: -25,
-        marginLeft: 230,
+        flex: 0,
         width: 25,
         height: 25,
+    },
+
+    inputRow: {
+        flex: 1,
     }
 });
