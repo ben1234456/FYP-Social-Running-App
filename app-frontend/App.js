@@ -20,6 +20,7 @@ import addRouteScreen from "./screens/addRouteScreen";
 import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
+import activityHistoryScreen from './screens/ActivityHistoryScreen';
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs = true;
@@ -132,6 +133,12 @@ export default class App extends Component {
                         component={upcomingEventsScreen}
                         initial={false} 
                         options={{headerTitleAlign: 'center', title: 'Upcoming Events'}}
+                    /> 
+                    <Stack.Screen
+                        name="activityHistoryScreen"
+                        component={activityHistoryScreen}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center', title: 'History'}}
                     /> 
                 </Stack.Navigator>
             </NavigationContainer>
