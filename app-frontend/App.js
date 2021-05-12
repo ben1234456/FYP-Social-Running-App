@@ -16,8 +16,10 @@ import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LogBox } from 'react-native';
-import addRouteScreen from "./screens/addRouteScreen"
-import editProfileScreen from "./screens/editProfileScreen"
+import addRouteScreen from "./screens/addRouteScreen";
+import editProfileScreen from "./screens/editProfileScreen";
+import eventsScreen from "./screens/EventsScreen";
+import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs = true;
@@ -119,6 +121,18 @@ export default class App extends Component {
                         initial={false} 
                         options={{headerTitleAlign: 'center', title: 'Edit Profile'}}
                     />  
+                    <Stack.Screen
+                        name="eventsScreen"
+                        component={eventsScreen}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center', title: 'Featured Events'}}
+                    /> 
+                    <Stack.Screen
+                        name="upcomingEventsScreen"
+                        component={upcomingEventsScreen}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center', title: 'Upcoming Events'}}
+                    /> 
                 </Stack.Navigator>
             </NavigationContainer>
         );

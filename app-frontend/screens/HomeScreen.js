@@ -12,32 +12,32 @@ export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id:"",
-            name:"",     
+            id: "",
+            name: "",
         };
 
 
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@userid')
-            if(value !== null) {
-                this.setState({ id: value });
-                const url = "http://192.168.0.192:8000/api/users/";
-                const fetchlink = url + this.state.id;
-                fetch(fetchlink)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.setState({name:data.first_name});
-                    });   
+        const getData = async () => {
+            try {
+                const value = await AsyncStorage.getItem('@userid')
+                if (value !== null) {
+                    this.setState({ id: value });
+                    const url = "http://192.168.0.192:8000/api/users/";
+                    const fetchlink = url + this.state.id;
+                    fetch(fetchlink)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.setState({ name: data.first_name });
+                        });
+                }
+
+            } catch (e) {
+                console.log(e);
             }
-
-        } catch(e) {
-            console.log(e);
         }
-    }
 
-    getData();
-    
+        getData();
+
     }
 
     render() {
@@ -49,16 +49,17 @@ export default class HomeScreen extends Component {
                         <Text style={styles.name}> {this.state.name}</Text>
                         <Image style={styles.image} source={Logo} />
                     </View>
-
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Event</Text>
-                        <Text style={styles.more}>{"View More >"}</Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventsScreen')}>
+                            <Text style={styles.more}>{"View More >"}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('eventDetails')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
                             <View style={styles.cardView}>
                                 <View style={styles.view1}>
                                     <Image style={styles.image2} source={Event} />
@@ -69,35 +70,41 @@ export default class HomeScreen extends Component {
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <View style={styles.cardView}>
-                            <View style={styles.view1}>
-                                <Image style={styles.image2} source={Event2} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={Event2} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Spartan Virtual Marathon</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
                             </View>
-                            <View style={styles.view2}>
-                                <Text style={styles.title}>Spartan Virtual Marathon</Text>
-                                <Text style={styles.venue}>Anywhere</Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
-                
+
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>
-                        <Text style={styles.more}>{"View More >"}</Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('upcomingEventsScreen')}>
+                            <Text style={styles.more}>{"View More >"}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <View style={styles.cardView}>
-                            <View style={styles.view1}>
-                                <Image style={styles.image2} source={UpcomingEvent} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={UpcomingEvent} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Family Virtual Run</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
                             </View>
-                            <View style={styles.view2}>
-                                <Text style={styles.title}>Family Virtual Run</Text>
-                                <Text style={styles.venue}>Anywhere</Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
             </ScrollView>
@@ -107,6 +114,7 @@ export default class HomeScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: 'white',
     },
     contentContainer1: {
