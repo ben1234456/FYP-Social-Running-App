@@ -3,8 +3,12 @@ import { StyleSheet, Image,Text, View, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Dimensions } from 'react-native';
-import Event from '../images/event.png';
+import Purple from '../images/purple.png';
+import Blue from '../images/blue.png';
+import Green from '../images/green.png';
+import Orange from '../images/orange.png';
 import MapViewDirections from 'react-native-maps-directions';
+import haversine from "haversine";
 
 export default class addRouteScreen extends Component {
 
@@ -15,6 +19,7 @@ export default class addRouteScreen extends Component {
             errorMessage:"",
             latitude:0,
             longitude:0,
+            totaldistance:0,
             defaultMarker:{
                 title:"You are here",
                 coordinates:{
@@ -57,7 +62,9 @@ export default class addRouteScreen extends Component {
                 },    
                 selected:false,
             }, 
+
             checkPointArray:[],
+
             startCoor:{
                 latitude:0,
                 longitude:0,
@@ -69,35 +76,40 @@ export default class addRouteScreen extends Component {
         
             
             reference:React.createRef(),
-            startingPoint:"startPoint",
-            endingPoint:"endPoint",
-            checkPoint1:"firstCheckPoint",
-            checkPoint2:"secondCheckPoint",
+            startingPoint:"Start Point",
+            endingPoint:"End Point",
+            checkPoint1:"First Checkpoint",
+            checkPoint2:"Second CheckPoint",
             selection:0,
 
             
             //sign up and get api key https://developer.here.com/#
-            api:"",
+            api:"ysrvAnGD9v99umFWd_SWtpu7O68r1jzIrLiDNV9GLKw",
             //get key https://developers.google.com/maps/documentation/directions/get-api-key
             //get Google Maps Directions API https://console.cloud.google.com/apis/dashboard?project=social-running-app&folder=&organizationId=
-            googleApi:"",
+            googleApi:"AIzaSyB15Wdjt0OdRs09MlU09gENop0nLYtjz_o",
         };
     }
     //get user permission and current location
     getLocation=async()=>{
         
-        permissionStatus=await Location.requestForegroundPermissionsAsync();
+        const permissionStatus=await Location.requestForegroundPermissionsAsync();
         
         if(permissionStatus.status!=="granted"){
             this.setState({ errorMessage: "Permission to access location was denied"});
             return;
         }
-        permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        // permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
         if(permissionStatus.status!=="granted"){
             this.setState({ errorMessage: "Permission to access location was denied"});
             return;
         }
-        currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
+
+        let currentLocation=await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High });
+        // console.log(currentLocation);
+
         console.log(this.state.errorMessage);
         const currentLatitude=currentLocation.coords.latitude;
         const currentLongitude=currentLocation.coords.longitude;
@@ -122,16 +134,23 @@ export default class addRouteScreen extends Component {
     };
     
     changeLocation=(point)=>{
+
         //get the latitude and longitude clicked
         let tempoLat=point.nativeEvent.coordinate.latitude || this.state.latitude;
         let tempoLong=point.nativeEvent.coordinate.longitude || this.state.longitude;
+
+        console.log(tempoLat);
+
         this.setState({
             latitude: tempoLat,
             longitude: tempoLong,
-          });
+        });
+
+        
         //get the address of the latitude and longitude
         this.getAddress(tempoLat,tempoLong);
     };
+
     getAddress(latitude, longitude) {
         return new Promise((resolve) => {
           const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${this.state.api}&mode=retrieveAddresses&prox=${latitude},${longitude}`
@@ -177,9 +196,15 @@ export default class addRouteScreen extends Component {
                                 longitude: this.state.checkMarker2.coordinate.longitude,
                               })
                         }
+
                         this.setState({checkPointArray:tempoArray});
                     }
                 }
+
+                // //get total distance
+                // for (var i = 0; i < tempoArray.length - 1; i++){
+
+                // }
                 
                 resolve();
                 
@@ -193,6 +218,7 @@ export default class addRouteScreen extends Component {
       
     changeSelection=(newSelection)=>{
         this.setState({ selection: newSelection});
+        console.log(this.state.selection);
         
     };
     componentDidMount(){
@@ -205,7 +231,7 @@ export default class addRouteScreen extends Component {
                 <View style={styles.topInfo}>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>
-                            <Image style={styles.image} source={Event} />
+                            <Image style={styles.image} source={Blue} />
                         </View>
                         <View style={styles.infoColumn}>
                             <TouchableOpacity onPress={() => this.changeSelection(0)} >
@@ -217,7 +243,7 @@ export default class addRouteScreen extends Component {
                     </View>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>
-                            <Image style={styles.image} source={Event} />
+                            <Image style={styles.image} source={Green} />
                         </View>
                         <View style={styles.infoColumn}>
                             <TouchableOpacity onPress={() => this.changeSelection(1)}>
@@ -229,7 +255,7 @@ export default class addRouteScreen extends Component {
                     </View>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>
-                            <Image style={styles.image} source={Event} />
+                            <Image style={styles.image} source={Orange} />
                         </View>
                         <View style={styles.infoColumn}>
                             <TouchableOpacity onPress={() => this.changeSelection(2)}>
@@ -241,7 +267,7 @@ export default class addRouteScreen extends Component {
                     </View>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>
-                            <Image style={styles.image} source={Event} />
+                            <Image style={styles.image} source={Purple} />
                         </View>
                         <View style={styles.infoColumn}>
                             <TouchableOpacity onPress={() => this.changeSelection(3)}>
@@ -253,19 +279,17 @@ export default class addRouteScreen extends Component {
                     </View>
                 </View>
                 <MapView onPress={this.changeLocation.bind(this)} style={styles.map} ref={this.state.reference} >
-                    <Marker coordinate={this.state.startMarker.coordinate} pinColor={"#00ff26"} title={this.state.startMarker.title}/>
-                    <Marker coordinate={this.state.endMarker.coordinate} pinColor={"#00ff26"} title={this.state.endMarker.title}/>
-                    <Marker coordinate={this.state.checkMarker1.coordinate} pinColor={"#00ff26"} title={this.state.checkMarker1.title}/>
-                    <Marker coordinate={this.state.checkMarker2.coordinate} pinColor={"#00ff26"} title={this.state.checkMarker2.title}/>
+                    <Marker coordinate={this.state.startMarker.coordinate} pinColor={"#0000FF"} title={this.state.startMarker.title}/>
+                    <Marker coordinate={this.state.endMarker.coordinate} pinColor={"#800080"} title={this.state.endMarker.title}/>
+                    <Marker coordinate={this.state.checkMarker1.coordinate} pinColor={"#008000"} title={this.state.checkMarker1.title}/>
+                    <Marker coordinate={this.state.checkMarker2.coordinate} pinColor={"#ffcc00"} title={this.state.checkMarker2.title}/>
                     <MapViewDirections origin={this.state.startCoor} destination={this.state.endCoor} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}/>
                     <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} />
                 </MapView>
                 <View style={styles.botInfo}>
+
                     <View style={styles.routeInfo}>
-                        <Text>40 min to Ending Point</Text>
-                    </View>
-                    <View style={styles.routeInfo}>
-                        <Text>3.55 km</Text>
+                        <Text>Total Distance: 3.55 km</Text>
                     </View>
                 </View>
             </View>
