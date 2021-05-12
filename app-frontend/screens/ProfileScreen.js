@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginLeft: 25,
         flex: 1,
     },
 
