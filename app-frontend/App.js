@@ -21,6 +21,7 @@ import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 import activityHistoryScreen from './screens/ActivityHistoryScreen';
+import startFreeRunScreen from "./screens/startFreeRunScreen"
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs = true;
@@ -138,6 +139,12 @@ export default class App extends Component {
                         name="activityHistoryScreen"
                         component={activityHistoryScreen}
                         initial={false} 
+                        options={{headerTitleAlign: 'center', title: 'History'}}
+                    /> 
+                    <Stack.Screen
+                        name="startFreeRunScreen"
+                        component={startFreeRunScreen}
+                        initial={true} 
                         options={{headerTitleAlign: 'center', title: 'History'}}
                     /> 
                 </Stack.Navigator>
