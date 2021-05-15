@@ -38,7 +38,7 @@ export default class LoginScreen extends Component {
         .then(response => response.json())
         .then(data => {
             if (data.status == "success"){
-                AsyncStorage.setItem('@userid',String(data.userid));
+                AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
                 this.props.navigation.navigate('app');
             }
 

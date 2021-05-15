@@ -5,12 +5,60 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { Divider } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class App extends Component {
-    state = {
-        categoryPosition: '',
-        categorySelected: '25 March - 01 April 2021',
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user_id:"",   
+            categoryPosition: '',
+            categorySelected: '25 March - 01 April 2021',
+            activityData:'',
+        };
+
+
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        user_id:user.id,
+                    });
+                }
+
+            } catch(e) {
+                console.log(e);
+            }
+
+            fetch('http://192.168.0.192:8000/api/activity/users/' + this.state.user_id, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    activityData:data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        getData();
+        
     }
+
+    // renderItemComponent = (data) => 
+    //     <View style={styles.activityRow}>
+    //         <Text>x</Text>
+    //     </View>
 
     render() {
         const screenWidth = 330;
@@ -44,13 +92,23 @@ export default class App extends Component {
                             <Text style={styles.viewMore}>{'View More >'}</Text>
                         </View>
                     </View>
+
+                    {/* <TouchableOpacity>
+                        <FlatList horizontal={true}
+                            data={this.state.activityData}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={item => this.renderItemComponent(item)}
+                        /> 
+                    </TouchableOpacity> */}
+
+
                     <TouchableOpacity>
                         <View style={styles.activityRow}>
                             <View style={styles.icon}>
                                 <Icon name="run" size={30} color={'#8352F2'} />
                             </View>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityDistance}>3.55 / 5 km</Text>
+                                <Text style={styles.activityDistance}>3.55 km</Text>
                                 <Text style={styles.activityDuration}>00:40:00</Text>
                             </View>
                             <View style={styles.activityColumn}>
@@ -58,13 +116,14 @@ export default class App extends Component {
                             </View>
                         </View>
                     </TouchableOpacity>
+                    
                     <TouchableOpacity>
                         <View style={styles.activityRow}>
                             <View style={styles.icon}>
                                 <Font name="bicycle" size={30} color={'#8352F2'} />
                             </View>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityDistance}>6.34 / 7 km</Text>
+                                <Text style={styles.activityDistance}>6.34 km</Text>
                                 <Text style={styles.activityDuration}>01:00:00</Text>
                             </View>
                             <View style={styles.activityColumn}>
@@ -78,7 +137,7 @@ export default class App extends Component {
                                 <Icon name="hiking" size={30} color={'#8352F2'} />
                             </View>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityDistance}>5.67 / 6 km</Text>
+                                <Text style={styles.activityDistance}>5.67 km</Text>
                                 <Text style={styles.activityDuration}>01:10:00</Text>
                             </View>
                             <View style={styles.activityColumn}>

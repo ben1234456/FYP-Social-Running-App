@@ -21,19 +21,16 @@ export default class App extends Component {
 
     const getData = async () => {
         try {
-            const value = await AsyncStorage.getItem('@userid')
-            if(value !== null) {
-                this.setState({ id: value });
-                const url = "http://192.168.0.192:8000/api/users/";
-                const fetchlink = url + this.state.id;
-                fetch(fetchlink)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.setState({name:data.first_name});
-                        this.setState({gender:data.gender});
-                        this.setState({city:data.city});
-                        this.setState({dob:data.dob});
-                    });   
+            const userJson = await AsyncStorage.getItem('@userJson')
+            if(userJson !== null) {
+                const user = JSON.parse(userJson);
+                this.setState({
+                    name:user.first_name,
+                    email:user.email,
+                    gender:user.gender,
+                    city:user.city,
+                    dob:user.dob
+                });
             }
 
         } catch(e) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class ActivityController extends Controller
@@ -97,5 +98,12 @@ class ActivityController extends Controller
     public function destroy(Activity $activity)
     {
         //
+    }
+
+    public function showUserActivities(Request $request, User $user)
+    {
+        $activities = DB::table('activities')->get();
+
+        return $activities;
     }
 }

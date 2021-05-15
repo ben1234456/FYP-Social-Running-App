@@ -55,7 +55,9 @@ export default class TrainingRouteScreen extends Component {
 
                 <View style={styles.rowContainer}>
                     <Text style={styles.routes}>My Routes</Text>
-                    <Text style={styles.more}>{"Add new route"}</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('addRouteScreen')}>
+                        <Text style={styles.more}>Add new route</Text>
+                    </TouchableOpacity>
                 </View>
                 
                 <View>

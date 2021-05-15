@@ -12,6 +12,7 @@ import haversine from "haversine";
 import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
 
 
+
 export default class FreeRunScreen extends Component {
 
     constructor(props) {
@@ -121,8 +122,7 @@ export default class FreeRunScreen extends Component {
 
         }
 
-        else {
-
+        else{
             const currentDate = new Date();
             const timestamp = currentDate.getTime();
 
@@ -147,14 +147,10 @@ export default class FreeRunScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Success");
-                })
-            // .catch((error) => {
-            //     console.error('Error:', error);
-            // }); 
+            
 
+            this.props.navigation.navigate('Progress');
+            
         }
 
     }
@@ -268,7 +264,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 30,
         padding: 6,
-        flex: 0,
+        flex: 1,
 
         //ios
         shadowColor: '#000',
@@ -292,11 +288,30 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
         shadowRadius: 5,
+        flex: 1,
 
         //android
         elevation: 5,
     },
     btnText: {
         color: "#ffffff",
+    },
+    settingBtn: {
+        backgroundColor: 'white',
+        borderRadius: 30,
+        position: 'absolute',
+        left: 220,
+        bottom: 41,
+        padding: 6,
+        flex: 1,
+
+        //ios
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+
+        //android
+        elevation: 5,
     },
 });

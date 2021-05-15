@@ -10,6 +10,9 @@ import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
 import couponDetails from "./screens/couponDetails";
 import submitRun from "./screens/submitRun";
+import FreeRun from "./screens/FreeRunScreen";
+import Progress from "./screens/ProgressScreen";
+import Profile from "./screens/ProfileScreen";
 
 import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
@@ -69,6 +72,25 @@ export default class App extends Component {
                         component={AppNavigation}
                         initial={false} options={{headerShown: false}}
                     />
+
+                    <Stack.Screen
+                        name="profile"
+                        component={Profile}
+                        initial={false} options={{headerShown: false}}
+                    />
+
+                    <Stack.Screen
+                        name="run"
+                        component={FreeRun}
+                        initial={false} options={{headerShown: false}}
+                    />
+
+                    <Stack.Screen
+                        name="progress"
+                        component={Progress}
+                        initial={false} options={{headerShown: false}}
+                    />
+
                     <Stack.Screen
                         name="eventDetails"
                         component={eventDetails}
@@ -111,7 +133,7 @@ export default class App extends Component {
                         name="addRouteScreen"
                         component={addRouteScreen}
                         initial={false} 
-                        options={{headerTitleAlign: 'center'}}
+                        options={{headerTitleAlign: 'center', title: 'Add Route'}}
                     />
                     <Stack.Screen
                         name="editProfileScreen"
