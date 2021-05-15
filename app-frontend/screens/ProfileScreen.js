@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
@@ -12,11 +12,11 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id:"",
-            name:"",
-            gender:"",  
-            city:"",   
-            dob:"",
+            id: "",
+            name: "",
+            gender: "",
+            city: "",
+            dob: "",
         };
 
     const getData = async () => {
@@ -32,14 +32,25 @@ export default class App extends Component {
                     dob:user.dob
                 });
             }
-
-        } catch(e) {
-            console.log(e);
         }
+
+        getData();
+
     }
 
-    getData();
-    
+    logout = async () => {
+
+        var errormsg = "Are you sure you want to log out?";
+
+        Alert.alert(
+            errormsg,
+            '',
+            [
+                { text: "Logout Now", style: "default", onPress: () => this.props.navigation.navigate('start')},
+                { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
+            ],
+            {cancelable: false},
+        );
     }
 
     render() {
@@ -47,9 +58,9 @@ export default class App extends Component {
             <View style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
-                        <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('start')}/>
+                        <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity  onPress={() => this.props.navigation.navigate('Coupon')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Coupon')}>
                             <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
                         </TouchableOpacity>
                     </View>
@@ -112,28 +123,28 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    infoColumnTitle:{
-        flex:2,
+    infoColumnTitle: {
+        flex: 2,
     },
-    infoColumnInfo:{
-        flex:1,
+    infoColumnInfo: {
+        flex: 1,
     },
-    infoRow:{
-        flexDirection:"row",
-        marginLeft:"10%",
-        marginRight:"10%",
-        marginTop:"5%",
-        marginBottom:"5%",
+    infoRow: {
+        flexDirection: "row",
+        marginLeft: "10%",
+        marginRight: "10%",
+        marginTop: "5%",
+        marginBottom: "5%",
     },
-    profileTitle:{
-        textAlign:"left",
-        fontSize:15,
-        fontWeight:"bold",
+    profileTitle: {
+        textAlign: "left",
+        fontSize: 15,
+        fontWeight: "bold",
     },
-    profileInfo:{
-        textAlign:"right",
-        fontSize:15,
-        color:"#8100e3",
+    profileInfo: {
+        textAlign: "right",
+        fontSize: 15,
+        color: "#8100e3",
     },
     contentContainer1: {
         padding: 20,
@@ -149,8 +160,8 @@ const styles = StyleSheet.create({
 
     rowContainer2: {
         flex: 0,
-        flexDirection: 'row',   
-        justifyContent: 'center',  
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
     },
 
@@ -158,7 +169,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginLeft: 25,
         flex: 1,
     },
 

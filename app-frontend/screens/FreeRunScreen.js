@@ -227,7 +227,7 @@ export default class FreeRunScreen extends Component {
                         <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Music')}>
                             <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
-                        <Button block style={styles.stickyBtn} onPress={this.tracking}>
+                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('startFreeRunScreen')}>
                             <Text style={styles.btnText}>{!this.state.tracking ? "Start" : "Stop"}</Text>
                         </Button>
                         <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Activity Setup')}>

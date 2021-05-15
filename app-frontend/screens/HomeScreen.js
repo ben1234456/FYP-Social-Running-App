@@ -80,7 +80,6 @@ export default class HomeScreen extends Component {
                             <Image style={styles.image} source={Logo}/>
                         </TouchableOpacity>
                     </View>
-
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Events</Text>
                         <Text style={styles.more}>{"View More >"}</Text>
@@ -98,20 +97,24 @@ export default class HomeScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>
-                        <Text style={styles.more}>{"View More >"}</Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('upcomingEventsScreen')}>
+                            <Text style={styles.more}>{"View More >"}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <View style={styles.cardView}>
-                            <View style={styles.view1}>
-                                <Image style={styles.image2} source={UpcomingEvent} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={UpcomingEvent} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Family Virtual Run</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
                             </View>
-                            <View style={styles.view2}>
-                                <Text style={styles.title}>Family Virtual Run</Text>
-                                <Text style={styles.venue}>Anywhere</Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
             </ScrollView>
@@ -121,6 +124,7 @@ export default class HomeScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: 'white',
     },
     contentContainer1: {
