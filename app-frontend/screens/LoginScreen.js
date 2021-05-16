@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
 export default class LoginScreen extends Component {
 
     constructor(props) {
@@ -38,7 +39,7 @@ export default class LoginScreen extends Component {
         // .then(response => response.json())
         // .then(data => {
         //     if (data.status == "success"){
-        //         AsyncStorage.setItem('@userid',String(data.userid));
+        //         AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
         //         this.props.navigation.navigate('app');
         //     }
 

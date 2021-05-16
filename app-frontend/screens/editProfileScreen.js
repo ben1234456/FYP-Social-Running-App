@@ -20,8 +20,8 @@ export default class editProfileScreen extends Component {
             dob:"",
             email:"",
             phoneNum:"",
-            cityList:["Kuching1","Kuching2","Kuching","Kuching3","Kuching4"],
-            checked:"Male"
+            cityList:["Labuan","Malacca","Putrajaya","Perlis","Negeri Sembilan","Pahang"],
+            checked:"Male",
         };
     
 
@@ -31,6 +31,7 @@ export default class editProfileScreen extends Component {
                 if(userJson !== null) {
                     const user = JSON.parse(userJson);
                     this.setState({
+                        id:user.id,
                         name:user.first_name,
                         email:user.email,
                         gender:user.gender,
@@ -73,11 +74,12 @@ export default class editProfileScreen extends Component {
         .then(response => response.json())
         .then(data => { 
             console.log('Success:',data.status);
+            AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
         })
         .catch((error) => {
             console.error('Error:', error);
         });
-                 
+
         this.props.navigation.push('app');
     }
 

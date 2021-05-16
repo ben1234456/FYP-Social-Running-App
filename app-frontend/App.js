@@ -167,7 +167,7 @@ export default class App extends Component {
                         name="startFreeRunScreen"
                         component={startFreeRunScreen}
                         initial={true} 
-                        options={{headerTitleAlign: 'center', title: 'History'}}
+                        options={{headerTitleAlign: 'center', title: 'Tracking'}}
                     /> 
                 </Stack.Navigator>
             </NavigationContainer>

@@ -19,24 +19,29 @@ export default class App extends Component {
             dob: "",
         };
 
-    const getData = async () => {
-        try {
-            const userJson = await AsyncStorage.getItem('@userJson')
-            if(userJson !== null) {
-                const user = JSON.parse(userJson);
-                this.setState({
-                    name:user.first_name,
-                    email:user.email,
-                    gender:user.gender,
-                    city:user.city,
-                    dob:user.dob
-                });
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        name:user.first_name,
+                        email:user.email,
+                        gender:user.gender,
+                        city:user.city,
+                        dob:user.dob
+                    });  
+                }
+    
+            } catch(e) {
+                console.log(e);
             }
         }
-
+    
         getData();
-
-    }
+        
+        }
 
     logout = async () => {
 

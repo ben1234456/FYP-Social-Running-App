@@ -78,7 +78,7 @@ class UserController extends Controller
         $status = $user->save();
         
         if($status){
-            return response()->json(['status' => 'success']);
+            return response()->json(['status' => 'success', 'user' => $user]);
         }
         else{
             return response()->json(['status' => 'fail']);
