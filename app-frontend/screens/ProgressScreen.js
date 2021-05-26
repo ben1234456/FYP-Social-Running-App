@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, Picker, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Picker, TouchableOpacity, FlatList, LogBox,YellowBox } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default class App extends Component {
+YellowBox.ignoreWarnings([""]);
 
+export default class App extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -54,10 +56,17 @@ export default class App extends Component {
         
     }
 
-    // renderItemComponent = (data) => 
-    //     <View style={styles.activityRow}>
-    //         <Text>x</Text>
-    //     </View>
+    renderItemComponent = (data) => 
+    <TouchableOpacity>
+        <View style={styles.rowContainer}>
+            <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />
+            <View style={styles.activityInfo}>
+                <Text style={styles.activityDistance}>{data.item.total_distance} km</Text>
+                <Text style={styles.activityDuration}>{data.item.total_duration}</Text>
+            </View>
+            <Text style={styles.date}>{(data.item.created_at).slice(0,10)}</Text>
+        </View>
+    </TouchableOpacity>
 
     render() {
         const screenWidth = 330;
@@ -80,7 +89,7 @@ export default class App extends Component {
             barPercentage: 0.5,
         };
         return (
-
+            
             <ScrollView style={styles.container}>
                 <View style={styles.activityContainer}>
                     <View style={styles.rowContainer}>
@@ -90,16 +99,13 @@ export default class App extends Component {
                         </TouchableOpacity>
                     </View>
 
+                    <FlatList 
+                        data={this.state.activityData}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderItemComponent(item)}
+                    /> 
+  
                     {/* <TouchableOpacity>
-                        <FlatList horizontal={true}
-                            data={this.state.activityData}
-                            keyExtractor={item => item.id.toString()}
-                            renderItem={item => this.renderItemComponent(item)}
-                        /> 
-                    </TouchableOpacity> */}
-
-
-                    <TouchableOpacity>
                         <View style={styles.rowContainer}>
                             <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />
                             <View style={styles.activityInfo}>
@@ -120,6 +126,7 @@ export default class App extends Component {
                             <Text style={styles.date}>2021-02-02</Text>
                         </View>
                     </TouchableOpacity>
+
                     <TouchableOpacity>
                         <View style={styles.rowContainer}>
                             <Icon name="hiking" style={styles.icon} size={30} color={'#8352F2'} />
@@ -129,7 +136,7 @@ export default class App extends Component {
                             </View>
                             <Text style={styles.date}>2021-01-01</Text>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <Divider style={styles.divider} />

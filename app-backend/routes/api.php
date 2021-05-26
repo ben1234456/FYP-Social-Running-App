@@ -34,3 +34,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', [LoginController::class, 'login']);
 
 Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
+
+Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);

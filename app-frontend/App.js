@@ -27,10 +27,10 @@ import activityHistoryScreen from './screens/ActivityHistoryScreen';
 import startFreeRunScreen from "./screens/startFreeRunScreen"
 
 const Stack = createStackNavigator();
-LogBox.ignoreAllLogs = true;
 
 export default class App extends Component {
     render() {
+        LogBox.ignoreAllLogs = true;
         return (
             /*<Router>
                 <Scene key='root'>

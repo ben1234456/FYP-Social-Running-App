@@ -97,7 +97,7 @@ export default class startFreeRunScreen extends Component {
     toggle=()=>{
         if(this.state.stopwatch==true){
             this.setState({ stopwatch: false});
-            this.setState({ startPause: "START"});
+            this.setState({ startPause: "RESUME"});
             var currentTime=moment(new Date());
             var date=moment(this.state.date);
             const diff = currentTime.diff(date);

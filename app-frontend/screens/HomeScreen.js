@@ -54,6 +54,25 @@ export default class HomeScreen extends Component {
         
     }
 
+    componentDidUpdate(){
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        name:user.first_name,
+                    });
+                }
+
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        getData();
+    };
+
     renderItemComponent = (data) => 
         <TouchableOpacity  onPress={() => this.props.navigation.navigate('eventDetails',{'eventid':data.item.id})}>
             <View style={styles.cardView}>

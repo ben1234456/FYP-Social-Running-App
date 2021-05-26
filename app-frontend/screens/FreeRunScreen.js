@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 30,
         padding: 6,
-        flex: 1,
+        // flex: 1,
 
 
         //ios
