@@ -110,15 +110,31 @@ class ActivityController extends Controller
     public function showUserActivities(Request $request, User $user)
     {
 
-        $activities = DB::table('user_activities')->where('user_id', $user->id)->get();
+        $activities = DB::table('user_activities')->OrderBy('id', 'desc')->where('user_id', $user->id)->get();
 
         $arr = array();
 
         foreach($activities as $activity){
-            array_push($arr, $activity->id);
+            array_push($arr, $activity->activity_id);
         }
 
-        $useractivities = DB::table('activities')->whereIn('id', $arr)->take(3)->get();
+        $useractivities = DB::table('activities')->OrderBy('id', 'desc')->whereIn('id', $arr)->take(3)->get();
+
+        return $useractivities->toJson();
+    }
+
+    public function showAllUserActivities(Request $request, User $user)
+    {
+
+        $activities = DB::table('user_activities')->OrderBy('id', 'desc')->where('user_id', $user->id)->get();
+
+        $arr = array();
+
+        foreach($activities as $activity){
+            array_push($arr, $activity->activity_id);
+        }
+
+        $useractivities = DB::table('activities')->OrderBy('id', 'desc')->whereIn('id', $arr)->get();
 
         return $useractivities->toJson();
     }

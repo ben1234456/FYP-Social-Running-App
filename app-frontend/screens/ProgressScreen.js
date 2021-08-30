@@ -59,7 +59,12 @@ export default class App extends Component {
     renderItemComponent = (data) => 
     <TouchableOpacity>
         <View style={styles.rowContainer}>
-            <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />
+            <Icon name={ (data.item.activity_type == "walking") ? "walk" : 
+                (data.item.activity_type == "running") ? "run" :
+                (data.item.activity_type == "hiking") ? "hiking" : 
+                (data.item.activity_type == "cycling") ? "bicycle" : ""
+                }  
+                style={styles.icon} size={30} color={'#8352F2'} />
             <View style={styles.activityInfo}>
                 <Text style={styles.activityDistance}>{data.item.total_distance} km</Text>
                 <Text style={styles.activityDuration}>{data.item.total_duration}</Text>

@@ -149,11 +149,16 @@ export default class startFreeRunScreen extends Component {
         });
 
         // console.log(this.state.routeCoordinates);
+
+        //if stopwatch is running
         if (this.state.stopwatch){
+
+            //calculate the distance
             var totaldistance = this.state.distanceTravelled;
             var totalnewdistance = (haversine(previousgeo, currentgeo));
 
-            if (totalnewdistance < 1000) {
+            //distance checker, if >10m then the distance won't be added to the total distance 
+            if (totalnewdistance < 0.01) {
                 this.setState({ distanceTravelled: totaldistance + totalnewdistance });
             }
         }    

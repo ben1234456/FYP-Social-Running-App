@@ -11,10 +11,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 export default class LoginScreen extends Component {
 
     constructor(props) {
-        
-        super(props);  
 
-        this.state = {  
+        super(props);
+
+        this.state = {
             icEye: 'eye-off',
             email: "",
             password: "",
@@ -23,41 +23,97 @@ export default class LoginScreen extends Component {
 
     }
 
+    validation = () => {
+
+        var empty = [];
+
+        if (!(this.state.email)) {
+            empty.push("email");
+        }
+
+        if (!(this.state.password)) {
+            empty.push("password");
+        }
+
+        if (empty.length != 0) {
+
+            console.log(empty[0]);
+
+            var errormsg = "Your ";
+            var i;
+
+            for (i = 0; i < empty.length; i++) {
+                if (i == empty.length - 1) {
+                    errormsg += empty[i] + " ";
+                }
+                else {
+                    errormsg += empty[i] + ", ";
+                }
+            }
+
+            errormsg += "cannot be emtpy";
+
+            Alert.alert(
+                errormsg,
+                '',
+                [
+                    { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return false;
+        }
+
+        else {
+
+            return true;
+        }
+    }
+
     login = () => {
 
-        const data = {email: this.state.email,
-            password: this.state.password};
+        if (this.validation()) {
+            const data = {
+                email: this.state.email,
+                password: this.state.password
+            };
 
-        fetch('http://192.168.0.192:8000/api/login', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status == "success"){
-                AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
-                this.props.navigation.navigate('app');
-            }
+            fetch('http://192.168.0.192:8000/api/login', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    //success
+                    if (data.status == "success") {
+                        //save JSON data to local storage
+                        AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
+                        //navigate to home page
+                        this.props.navigation.navigate('app');
+                    }
 
-            else if (data.status =="fail"){
-                Alert.alert(
-                    data.message,
-                    '',
-                    [
-                      { text: "Ok", onPress: () => console.log("OK Pressed") }
-                    ]
-                );                
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });  
-        
-        // this.props.navigation.navigate('app');
+                    //fail 
+                    else if (data.status == "fail") {
+                        //alert fail message
+                        Alert.alert(
+                            data.message,
+                            '',
+                            [
+                                { text: "Ok", onPress: () => console.log("OK Pressed") }
+                            ]
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+            this.props.navigation.navigate('app');
+        }
+
     }
 
     changePasswordType = () => {
@@ -84,31 +140,31 @@ export default class LoginScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('start')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('start')}>
                         <Image style={styles.image} source={Back} />
                     </TouchableOpacity>
 
                     <View>
                         <Text style={styles.heading}>Welcome Back.</Text>
                         <View style={styles.input}>
-                            <TextInput 
-                                placeholder="Email" 
-                                autoFocus 
-                                onChangeText={(email_input) => this.setState({email:email_input})}
-                                value = {this.state.email}
+                            <TextInput
+                                placeholder="Email"
+                                autoFocus
+                                onChangeText={(email_input) => this.setState({ email: email_input })}
+                                value={this.state.email}
                             />
                         </View>
                         <View style={styles.input}>
                             <TextInput style={styles.inputRow}
-                                placeholder="Password" 
-                                secureTextEntry = {this.state.showPassword}
-                                onChangeText={(password_input) => this.setState({password:password_input})}
-                                value = {this.state.password}
-                            />  
-                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
+                                placeholder="Password"
+                                secureTextEntry={this.state.showPassword}
+                                onChangeText={(password_input) => this.setState({ password: password_input })}
+                                value={this.state.password}
+                            />
+                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType} />
                         </View>
                         <View>
-                            <Button style={styles.submitBtn}  onPress={this.login}>
+                            <Button style={styles.submitBtn} onPress={this.login}>
                                 <Text style={styles.btnText}>SIGN IN</Text>
                             </Button>
                         </View>

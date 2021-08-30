@@ -122,6 +122,20 @@ export default class eventDetails extends Component {
     //     return null;
     // }
     register = () =>{
+
+        const data = {
+            user_ID: String(this.state.user_ID),
+        };
+
+        fetch('http://192.168.0.192:8000/api/events', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+        })
+
         Alert.alert(
             'You have successfully signed-up for the event',
             '',

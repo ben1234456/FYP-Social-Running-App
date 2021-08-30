@@ -19,16 +19,23 @@ export default class App extends Component {
             dob: "",
         };
 
+        //get data from async storage
         const getData = async () => {
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
                 
                 if(userJson !== null) {
                     const user = JSON.parse(userJson);
+
+                    //change to upper case
+                    var gender = user.gender;
+                    var genderText = gender[0].toUpperCase() + gender.substring(1);
+                    
+                    //update state
                     this.setState({
                         name:user.first_name,
                         email:user.email,
-                        gender:user.gender,
+                        gender:genderText,
                         city:user.city,
                         dob:user.dob
                     });  

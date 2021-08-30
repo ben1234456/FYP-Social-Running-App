@@ -1,14 +1,79 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, Picker } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Picker, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class App extends Component {
-    state = {
-        categoryPosition: '',
-        activitySelected: '',
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user_id:"",   
+            categoryPosition: '',
+            categorySelected: '25 March - 01 April 2021',
+            activityData:'',
+            categoryPosition: '',
+            activitySelected: '',
+            activityData:'',
+            activityNumber:0,
+        };
+
+
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        user_id:user.id,
+                    });
+                }
+
+            } catch(e) {
+                console.log(e);
+            }
+
+            fetch('http://192.168.0.192:8000/api/activity/all/users/' + this.state.user_id, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success');
+                this.setState({
+                    activityData:data,
+                    activityNumber:data.length,
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        getData();
+        
     }
+
+    renderItemComponent = (data) => 
+    <TouchableOpacity>
+        <View style={styles.rowContainer}>
+            <Icon name={ (data.item.activity_type == "walking") ? "walk" : 
+                (data.item.activity_type == "running") ? "run" :
+                (data.item.activity_type == "hiking") ? "hiking" : 
+                (data.item.activity_type == "cycling") ? "bicycle" : ""
+                } 
+                style={styles.icon} size={30} color={'#8352F2'} />
+            <View style={styles.activityInfo}>
+                <Text style={styles.activityDistance}>{data.item.total_distance} km</Text>
+                <Text style={styles.activityDuration}>{data.item.total_duration}</Text>
+            </View>
+            <Text style={styles.date}>{(data.item.created_at).slice(0,10)}</Text>
+        </View>
+    </TouchableOpacity>
 
     render() {
         return (
@@ -28,68 +93,16 @@ export default class App extends Component {
                 </View>
                 <View style={styles.rowContainer}>
                     <Text style={styles.activityTitle}>Total Activities: </Text>
-                    <Text style={styles.activityTotal}>6</Text>
+                    <Text style={styles.activityTotal}>{this.state.activityNumber}</Text>
                 </View>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>3.55 / 5 km</Text>
-                            <Text style={styles.activityDuration}>00:40:00</Text>
-                        </View>
-                        <Text style={styles.date}>2021-03-03</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Font name="bicycle" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>6.34 / 7 km</Text>
-                            <Text style={styles.activityDuration}>01:00:00</Text>
-                        </View>
-                        <Text style={styles.date}>2021-02-02</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Icon name="hiking" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>5.67 / 6 km</Text>
-                            <Text style={styles.activityDuration}>01:10:00</Text>
-                        </View>
-                        <Text style={styles.date}>2021-01-01</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>3.55 / 5 km</Text>
-                            <Text style={styles.activityDuration}>00:40:00</Text>
-                        </View>
-                        <Text style={styles.date}>2020-12-12</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Font name="bicycle" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>6.34 / 7 km</Text>
-                            <Text style={styles.activityDuration}>01:00:00</Text>
-                        </View>
-                        <Text style={styles.date}>2021-11-11</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <View style={styles.rowContainer}>
-                        <Icon name="hiking" style={styles.icon} size={30} color={'#8352F2'} />
-                        <View style={styles.activityInfo}>
-                            <Text style={styles.activityDistance}>5.67 / 6 km</Text>
-                            <Text style={styles.activityDuration}>01:10:00</Text>
-                        </View>
-                        <Text style={styles.date}>2021-10-10</Text>
-                    </View>
-                </TouchableOpacity>
+
+                <FlatList 
+                    data={this.state.activityData}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={item => this.renderItemComponent(item)}
+                /> 
+
+                
             </ScrollView>
         );
     }

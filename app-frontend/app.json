@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app-frontend",
-    "slug": "app-frontend",
+    "name": "Social Running App",
+    "slug": "social-running-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/ben1234456/FYP-Social-Running-App"
   }
 }
