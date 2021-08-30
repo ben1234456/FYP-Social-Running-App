@@ -21,6 +21,7 @@ import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 import activityHistoryScreen from './screens/ActivityHistoryScreen';
+import addEventScreen from './screens/addEvent';
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs = true;
@@ -47,6 +48,8 @@ export default class App extends Component {
             </Router>*/
             <NavigationContainer>
                 <Stack.Navigator>
+                    
+                    
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
@@ -140,6 +143,11 @@ export default class App extends Component {
                         initial={false} 
                         options={{headerTitleAlign: 'center', title: 'History'}}
                     /> 
+                    <Stack.Screen
+                        name="addEventsScreen"
+                        component={addEventScreen}
+                        initial={false} options={{headerShown: false}}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
