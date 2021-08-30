@@ -5,6 +5,7 @@ import StartedScreen from './screens/StartedScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import AppNavigation from './screens/AppNavigation';
+import AdminAppNavigation from './screens/AdminAppNavigation';
 import eventDetails from "./screens/eventDetails";
 import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
@@ -74,6 +75,12 @@ export default class App extends Component {
                     <Stack.Screen
                         name="app"
                         component={AppNavigation}
+                        initial={false} options={{headerShown: false}}
+                    />
+
+                    <Stack.Screen
+                        name="adminapp"
+                        component={AdminAppNavigation}
                         initial={false} options={{headerShown: false}}
                     />
 

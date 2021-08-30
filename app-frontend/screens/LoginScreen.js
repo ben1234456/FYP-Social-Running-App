@@ -111,7 +111,8 @@ export default class LoginScreen extends Component {
                     console.error('Error:', error);
                 });
 
-            this.props.navigation.navigate('app');
+            //this.props.navigation.navigate('app');
+            this.props.navigation.navigate('adminapp');
         }
 
     }
