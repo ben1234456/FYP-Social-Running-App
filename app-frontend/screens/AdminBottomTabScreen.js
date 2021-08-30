@@ -9,6 +9,7 @@ import ProfileScreen from './ProfileScreen';
 import AdminHomeScreen from './AdminHomeScreen';
 import AdminMapScreen from './AdminMapScreen';
 import AdminReportScreen from './AdminReportScreen';
+import AdminProfileScreen from './AdminProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -58,7 +59,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Profile"
-      component={ProfileScreen}
+      component={AdminProfileScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarIcon: ({ color, size }) => (
