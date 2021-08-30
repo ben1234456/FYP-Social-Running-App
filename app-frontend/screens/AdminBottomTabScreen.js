@@ -7,6 +7,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons'
 import ProfileScreen from './ProfileScreen';
 import AdminHomeScreen from './AdminHomeScreen';
+import AdminMapScreen from './AdminMapScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Map"
-      component={AdminHomeScreen}
+      component={AdminMapScreen}
       options={{
         tabBarLabel: 'Map',
         tabBarIcon: ({ color, size }) => (
