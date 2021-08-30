@@ -8,6 +8,7 @@ import Ion from 'react-native-vector-icons/Ionicons'
 import ProfileScreen from './ProfileScreen';
 import AdminHomeScreen from './AdminHomeScreen';
 import AdminMapScreen from './AdminMapScreen';
+import AdminReportScreen from './AdminReportScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const BottomTabScreen = () => (
 
     <Tab.Screen
       name="Report"
-      component={AdminHomeScreen}
+      component={AdminReportScreen}
       options={{
         tabBarLabel: 'Report',
         tabBarIcon: ({ color, size }) => (
