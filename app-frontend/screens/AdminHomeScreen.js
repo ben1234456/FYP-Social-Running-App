@@ -119,7 +119,7 @@ export default class AdminHomeScreen extends Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
-                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} />
+                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
                     <View>
                         <ScrollView style={styles.scrollview} horizontal={true}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
@@ -162,7 +162,7 @@ export default class AdminHomeScreen extends Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
-                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} />
+                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
                     <View>
                         <ScrollView style={styles.scrollview} horizontal={true}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
