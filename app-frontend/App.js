@@ -25,6 +25,8 @@ import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 import activityHistoryScreen from './screens/ActivityHistoryScreen';
+
+import addEventScreen from './screens/addEvent';
 import startFreeRunScreen from "./screens/startFreeRunScreen"
 import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -55,6 +57,8 @@ export default class App extends Component {
             </Router>*/
             <NavigationContainer>
                 <Stack.Navigator>
+                    
+                    
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
@@ -171,6 +175,13 @@ export default class App extends Component {
                     <Stack.Screen
                         name="activityHistoryScreen"
                         component={activityHistoryScreen}
+                        initial={false} 
+                        options={{headerTitleAlign: 'center', title: 'History'}}
+                    /> 
+                    <Stack.Screen
+                        name="addEventsScreen"
+                        component={addEventScreen}
+                        initial={false} options={{headerShown: false}}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'History' }}
                     />
