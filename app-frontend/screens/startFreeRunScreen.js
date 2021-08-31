@@ -28,6 +28,9 @@ export default class startFreeRunScreen extends Component {
             stopwatch:false,
             startPause:"START",
 
+            start_dt:new Date(),
+            end_dt: new Date(),
+
             errorMessage: "",
             prevLat: 0,
             prevLng: 0,
@@ -43,6 +46,7 @@ export default class startFreeRunScreen extends Component {
             routeCoordinates: [],
             reference: React.createRef(),
             avgSpeed: 0,
+            count: 0,
             
         };
 
@@ -77,6 +81,7 @@ export default class startFreeRunScreen extends Component {
                  hour: this.setDigit(hour),
                  minute: this.setDigit(minute),
                  second: this.setDigit(second),
+                 start_dt: Date().toLocaleString(),
 
             });
         }
@@ -95,6 +100,14 @@ export default class startFreeRunScreen extends Component {
     }
 
     toggle=()=>{
+
+        if(this.state.count == 0){
+            this.setState({ 
+                end_dt: Date().toLocaleString(),
+                count: 1,
+            });
+        }
+
         if(this.state.stopwatch==true){
             this.setState({ stopwatch: false});
             this.setState({ startPause: "RESUME"});
@@ -189,6 +202,9 @@ export default class startFreeRunScreen extends Component {
         
         clearInterval(this.interval);
 
+        this.setState({end_dt: Date().toLocaleString()});
+        
+
         const total_duration = String(this.state.hour) + ":" + String(this.state.minute) + ":" + String(this.state.second)
 
         const data = {
@@ -199,6 +215,8 @@ export default class startFreeRunScreen extends Component {
             total_distance: String(this.state.distanceTravelled),
             user_ID: String(this.state.user_ID),
             total_duration: total_duration,
+            start_dt: this.state.start_dt,
+            end_dt: this.state.end_dt
         };
 
         fetch('http://192.168.0.192:8000/api/activity', {

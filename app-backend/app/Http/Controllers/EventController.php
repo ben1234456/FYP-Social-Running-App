@@ -35,7 +35,22 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = new Event;
+
+        $event->event_name = $request->event_name;
+        $event->no_of_participants = 0;
+        $event->start =  new DateTime();
+        $event->end =  new DateTime();
+        $event->registration_start =  new DateTime();
+        $event->registration_end =  new DateTime();
+        $event->description =  $request->description;
+        $event->fee_5km =  $request->fee_5km;
+        $event->fee_10km =  $request->fee_10km;
+        $event->fee_21km =  $request->fee_21km;
+        $event->fee_42km =  $request->fee_42km;
+
+        $event->save();
+
     }
 
     /**
