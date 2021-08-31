@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('city');
             $table->date('dob');
+            $table->enum('role',array('admin','user'));
             $table->rememberToken();
             $table->timestamps();
         });

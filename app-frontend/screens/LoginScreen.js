@@ -92,7 +92,12 @@ export default class LoginScreen extends Component {
                         //save JSON data to local storage
                         AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
                         //navigate to home page
-                        this.props.navigation.navigate('app');
+                        if (data.role == "user"){
+                            this.props.navigation.navigate('app');
+                        }else if (data.role == "admin"){
+                            this.props.navigation.navigate('adminapp');
+                        }
+                        
                     }
 
                     //fail 
@@ -112,8 +117,9 @@ export default class LoginScreen extends Component {
                 });
 
             //this.props.navigation.navigate('app');
-            this.props.navigation.navigate('adminapp');
         }
+
+        this.props.navigation.navigate('adminapp');
 
     }
 

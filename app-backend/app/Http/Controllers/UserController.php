@@ -41,6 +41,7 @@ class UserController extends Controller
         $stringdob = strtotime($request->dob);
         $dob = date('Y-m-d',$stringdob);
         $user->dob = $dob;
+        $user->role = "user";
         $save = $user->save();
 
         if(!$saved){

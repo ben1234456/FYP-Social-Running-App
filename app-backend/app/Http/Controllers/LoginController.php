@@ -15,7 +15,12 @@ class LoginController extends Controller
 
         if(Auth::attempt($loginDetails)){
             $user = User::where('email',$request->email)->first();
-            return response()->json(['status' => 'success', 'user' => $user]);
+            if($user->role == "user"){
+                return response()->json(['status' => 'success', 'user' => $user, 'role' => 'user']);
+            }else if ($user->role == "admin"){
+                return response()->json(['status' => 'success', 'user' => $user, 'role' => 'admin']);
+            }
+            
         }
         else{
             return response()->json(['status' => 'fail', 'message' => 'You have entered a wrong email or password']);
