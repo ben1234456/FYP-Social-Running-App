@@ -4,10 +4,38 @@ import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
 import Run from '../images/running.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
 
 export default class couponDetails extends Component {
-       
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            id:"",
+            name:"",     
+        };
+
+
+    const getData = async () => {
+        try {
+            const userJson = await AsyncStorage.getItem('@userJson')
+            if(userJson !== null) {
+                const user = JSON.parse(userJson);
+                this.setState({
+                    name:user.first_name,
+                });
+            }
+
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    getData();
+    
+    }
+
     render() {
         return (
             <ScrollView style={styles.background}>
@@ -40,7 +68,7 @@ export default class couponDetails extends Component {
                             <Text style={styles.userTitle}>Name</Text>
                         </View>
                         <View style={styles.infoColumnInfo}>
-                            <Text style={styles.userInfo}>Jun</Text>
+                            <Text style={styles.userInfo}>{this.state.name}</Text>
                         </View>
                     </View>
                     <View style={styles.infoRow}>
@@ -60,13 +88,13 @@ export default class couponDetails extends Component {
                         </View>
                     </View>
                     <View>
-                        <Button block style={styles.stickyBtn}>
+                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('run')} >
                             <Text style={styles.btnText}>RUN</Text>
                         </Button>
                     </View>
-                    <View >
+                    {/* <View >
                         <Text style={styles.submit} onPress={() => this.props.navigation.navigate('submitRun')}>Submit your run</Text>
-                    </View>
+                    </View> */}
                 </View>
             </ScrollView>
         );

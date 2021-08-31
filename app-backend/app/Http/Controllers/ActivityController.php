@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class ActivityController extends Controller
@@ -52,6 +54,12 @@ class ActivityController extends Controller
 
         $activity->save();
 
+        $useractivity = new UserActivity;
+        $useractivity->user_id = $request->user_ID;
+        $latest = DB::table('activities')->order_by('id', 'desc')->first();
+        $useractivity->activity_id = $latest->id;
+        $useractivity->save();
+
     }
 
     /**
@@ -97,5 +105,37 @@ class ActivityController extends Controller
     public function destroy(Activity $activity)
     {
         //
+    }
+
+    public function showUserActivities(Request $request, User $user)
+    {
+
+        $activities = DB::table('user_activities')->OrderBy('id', 'desc')->where('user_id', $user->id)->get();
+
+        $arr = array();
+
+        foreach($activities as $activity){
+            array_push($arr, $activity->activity_id);
+        }
+
+        $useractivities = DB::table('activities')->OrderBy('id', 'desc')->whereIn('id', $arr)->take(3)->get();
+
+        return $useractivities->toJson();
+    }
+
+    public function showAllUserActivities(Request $request, User $user)
+    {
+
+        $activities = DB::table('user_activities')->OrderBy('id', 'desc')->where('user_id', $user->id)->get();
+
+        $arr = array();
+
+        foreach($activities as $activity){
+            array_push($arr, $activity->activity_id);
+        }
+
+        $useractivities = DB::table('activities')->OrderBy('id', 'desc')->whereIn('id', $arr)->get();
+
+        return $useractivities->toJson();
     }
 }

@@ -145,6 +145,15 @@ export default class SignUpScreen extends Component {
             //     console.error('Error:', error);
             // });  
             
+            Alert.alert(
+                data.message,
+                'Account Succesfully Registered!',
+                ''
+                [
+                    { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+
             this.props.navigation.navigate('login');
         }
 

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import BottomTabScreen from './BottomTabScreen';
+import AdminBottomTabScreen from './AdminBottomTabScreen';
 
 const Drawer = createDrawerNavigator();
-export default class AppNavigation extends Component {
+export default class AdminAppNavigation extends Component {
     render() {
         return (
-            <BottomTabScreen/>
+            <AdminBottomTabScreen/>
         );
     }
 }

@@ -5,15 +5,14 @@ import MapView, { PROVIDER_GOOGLE, AnimatedRegion, Marker, Polyline } from 'reac
 //import Geolocation from 'react-native-geolocation-service';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import * as Location from 'expo-location';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Font from 'react-native-vector-icons/FontAwesome5';
 import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import { Dimensions } from 'react-native';
 import haversine from "haversine";
 import moment from 'moment';
 
-
-
-export default class FreeRunScreen extends Component {
+export default class AdminMapScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -74,7 +73,6 @@ export default class FreeRunScreen extends Component {
             this.setState({ errorMessage: "Permission to access location was denied" });
             return;
         }
-        //permissionStatus=await Location.requestBackgroundPermissionsAsync();
 
         let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
         console.log(this.state.errorMessage);
@@ -234,14 +232,11 @@ export default class FreeRunScreen extends Component {
                 <View style={styles.columnContainer}>
  
                     <View style={styles.contentContainer}>
-                        <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Music')}>
-                            <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
+                        <TouchableOpacity style={styles.icon2} onPress={() => this.props.navigation.navigate('AdminSavedRouteScreen')}>
+                            <Font name="route" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
-                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng})}>
-                            <Text style={styles.btnText}>{!this.state.tracking ? "Start" : "Stop"}</Text>
-                        </Button>
-                        <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Activity Setup')}>
-                            <Setting name="settings" size={30} color={'#8352F2'} />
+                        <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('addRouteScreen')}>
+                            <Icon name="add-location" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -276,6 +271,20 @@ const styles = StyleSheet.create({
         padding: 6,
         // flex: 1,
 
+        //ios
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+
+        //android
+        elevation: 5,
+    },
+    icon2: {
+        backgroundColor: 'white',
+        borderRadius: 30,
+        padding: 6,
+        marginRight: 195,
 
         //ios
         shadowColor: '#000',
@@ -303,9 +312,6 @@ const styles = StyleSheet.create({
 
         //android
         elevation: 5,
-    },
-    btnText: {
-        color: "#ffffff",
     },
     settingBtn: {
         backgroundColor: 'white',

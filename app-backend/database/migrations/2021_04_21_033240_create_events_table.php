@@ -22,10 +22,10 @@ class CreateEventsTable extends Migration
             $table->datetime('registration_start');
             $table->datetime('registration_end');
             $table->text('description');
-            $table->decimal('5km_fee',5,2);
-            $table->decimal('10km_fee',5,2);
-            $table->decimal('21km_fee',5,2);
-            $table->decimal('42km_fee',5,2);
+            $table->decimal('fee_5km',5,2);
+            $table->decimal('fee_10km',5,2);
+            $table->decimal('fee_21km',5,2);
+            $table->decimal('fee_42km',5,2);
             $table->timestamps();
         });
     }

@@ -41,6 +41,7 @@ class UserController extends Controller
         $stringdob = strtotime($request->dob);
         $dob = date('Y-m-d',$stringdob);
         $user->dob = $dob;
+        $user->role = "user";
         $save = $user->save();
 
         if(!$saved){
@@ -78,7 +79,7 @@ class UserController extends Controller
         $status = $user->save();
         
         if($status){
-            return response()->json(['status' => 'success']);
+            return response()->json(['status' => 'success', 'user' => $user]);
         }
         else{
             return response()->json(['status' => 'fail']);

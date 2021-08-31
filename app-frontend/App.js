@@ -5,11 +5,15 @@ import StartedScreen from './screens/StartedScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import AppNavigation from './screens/AppNavigation';
+import AdminAppNavigation from './screens/AdminAppNavigation';
 import eventDetails from "./screens/eventDetails";
 import TopTabNavigator from "./screens/TopTabNavigator";
 import couponScreen from "./screens/couponScreen";
 import couponDetails from "./screens/couponDetails";
 import submitRun from "./screens/submitRun";
+import FreeRun from "./screens/FreeRunScreen";
+import Progress from "./screens/ProgressScreen";
+import Profile from "./screens/ProfileScreen";
 
 import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
@@ -21,13 +25,18 @@ import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 import activityHistoryScreen from './screens/ActivityHistoryScreen';
+
 import addEventScreen from './screens/addEvent';
+import startFreeRunScreen from "./screens/startFreeRunScreen"
+import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
+import Icon from "react-native-vector-icons/Ionicons";
+import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
 
 const Stack = createStackNavigator();
-LogBox.ignoreAllLogs = true;
 
 export default class App extends Component {
     render() {
+        LogBox.ignoreAllLogs = true;
         return (
             /*<Router>
                 <Scene key='root'>
@@ -53,90 +62,116 @@ export default class App extends Component {
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
-                        initial={true} options={{headerShown: false}}
+                        initial={true} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="start"
                         component={StartedScreen}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="login"
                         component={LoginScreen}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="register"
                         component={SignUpScreen}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="app"
                         component={AppNavigation}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
+
+                    <Stack.Screen
+                        name="adminapp"
+                        component={AdminAppNavigation}
+                        initial={false} options={{ headerShown: false }}
+                    />
+
+                    <Stack.Screen
+                        name="profile"
+                        component={Profile}
+                        initial={false} options={{ headerShown: false }}
+                    />
+
+                    <Stack.Screen
+                        name="run"
+                        component={FreeRun}
+                        initial={false} options={{ headerShown: false }}
+                    />
+
+                    <Stack.Screen
+                        name="progress"
+                        component={Progress}
+                        initial={false} options={{ headerShown: false }}
+                    />
+
                     <Stack.Screen
                         name="eventDetails"
                         component={eventDetails}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="Coupon"
                         component={couponScreen}
                         initial={false}
-                        options={{headerTitleAlign: 'center', title: 'Registered Events'}}
+                        options={{ headerTitleAlign: 'center', title: 'Registered Events' }}
                     />
                     <Stack.Screen
                         name="top"
                         component={TopTabNavigator}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="couponDetails"
                         component={couponDetails}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="submitRun"
                         component={submitRun}
-                        initial={false} options={{headerShown: false}} 
+                        initial={false} options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="Music"
                         component={musicScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center'}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center' }}
                     />
                     <Stack.Screen
                         name="Activity Setup"
                         component={activitySetup}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center'}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center' }}
                     />
                     <Stack.Screen
                         name="addRouteScreen"
                         component={addRouteScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center'}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Add Route',headerRight: ()=>
+                        <Icon name="save-sharp" style={{marginRight: 10}} size={30} color={'#8352F2'} /> }}
                     />
                     <Stack.Screen
                         name="editProfileScreen"
                         component={editProfileScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center', title: 'Edit Profile'}}
-                    />  
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Edit Profile' }}
+                    />
                     <Stack.Screen
                         name="eventsScreen"
                         component={eventsScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center', title: 'Featured Events'}}
-                    /> 
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Featured Events' }}
+                    />
                     <Stack.Screen
                         name="upcomingEventsScreen"
                         component={upcomingEventsScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center', title: 'Upcoming Events'}}
-                    /> 
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Upcoming Events' }}
+                    />
                     <Stack.Screen
                         name="activityHistoryScreen"
                         component={activityHistoryScreen}
@@ -147,6 +182,28 @@ export default class App extends Component {
                         name="addEventsScreen"
                         component={addEventScreen}
                         initial={false} options={{headerShown: false}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'History' }}
+                    />
+                    <Stack.Screen
+                        name="startFreeRunScreen"
+                        component={startFreeRunScreen}
+                        initial={true}
+                        options={{ headerTitleAlign: 'center', title: 'Tracking' }}
+                    />
+                    <Stack.Screen
+                        name="AdminSavedRouteScreen"
+                        component={AdminSavedRouteScreen}
+                        initial={false}
+                        options={{
+                            headerTitleAlign: 'center', title: 'Saved Routes'
+                        }}
+                    />
+                    <Stack.Screen
+                        name="AdminEditProfileScreen"
+                        component={AdminEditProfileScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Edit Profile' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
