@@ -34,7 +34,7 @@ import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
 import savedRouteScreen from "./screens/savedRouteScreen"
 
 import adminEventDetailsScreen from "./screens/adminEventDetails";
-
+import routeListScreen from './screens/routeListScreen';
 
 const Stack = createStackNavigator();
 
@@ -223,11 +223,19 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Saved Routes' }}
                     />
+                    <Stack.Screen
                         name="adminEventDetailsScreen"
                         component={adminEventDetailsScreen}
                         initial={false} options={{headerShown: false}}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Virtual run event' }}
+                        />
+                    <Stack.Screen
+                        name="routeListScreen"
+                        component={routeListScreen}
+                        initial={false} options={{headerShown: false}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Routes' }}
                         />
                 </Stack.Navigator>
             </NavigationContainer>
