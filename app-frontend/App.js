@@ -31,7 +31,7 @@ import startFreeRunScreen from "./screens/startFreeRunScreen"
 import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
-
+import adminEventDetailsScreen from "./screens/adminEventDetails";
 
 
 const Stack = createStackNavigator();
@@ -214,6 +214,13 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Event' }}
                     />
+                    <Stack.Screen
+                        name="adminEventDetailsScreen"
+                        component={adminEventDetailsScreen}
+                        initial={false} options={{headerShown: false}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Virtual run event' }}
+                        />
                 </Stack.Navigator>
             </NavigationContainer>
         );
