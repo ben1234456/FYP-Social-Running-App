@@ -35,6 +35,8 @@ import savedRouteScreen from "./screens/savedRouteScreen"
 
 import adminEventDetailsScreen from "./screens/adminEventDetails";
 import routeListScreen from './screens/routeListScreen';
+import editRouteScreen from './screens/editRouteScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -233,6 +235,13 @@ export default class App extends Component {
                     <Stack.Screen
                         name="routeListScreen"
                         component={routeListScreen}
+                        initial={false} options={{headerShown: false}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Routes' }}
+                        />
+                    <Stack.Screen
+                        name="editRouteScreen"
+                        component={editRouteScreen}
                         initial={false} options={{headerShown: false}}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Routes' }}
