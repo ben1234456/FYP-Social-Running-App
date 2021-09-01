@@ -25,12 +25,14 @@ import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
 import upcomingEventsScreen from './screens/UpcomingEventsScreen';
 import activityHistoryScreen from './screens/ActivityHistoryScreen';
-
+import editEventScreen from './screens/editEvent';
 import addEventScreen from './screens/addEvent';
 import startFreeRunScreen from "./screens/startFreeRunScreen"
 import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
+
+
 
 const Stack = createStackNavigator();
 
@@ -204,6 +206,13 @@ export default class App extends Component {
                         component={AdminEditProfileScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Profile' }}
+                    />
+                    <Stack.Screen
+                        name="editEventsScreen"
+                        component={editEventScreen}
+                        initial={false} options={{headerShown: false}}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Edit Event' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
