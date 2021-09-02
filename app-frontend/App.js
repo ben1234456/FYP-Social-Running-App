@@ -37,6 +37,7 @@ import adminEventDetailsScreen from "./screens/adminEventDetails";
 import routeListScreen from './screens/routeListScreen';
 import editRouteScreen from './screens/editRouteScreen';
 import routeDetailsScreen from './screens/routeDetailsScreen';
+import ForumDetailsScreen from './screens/ForumDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -63,8 +64,8 @@ export default class App extends Component {
             </Router>*/
             <NavigationContainer>
                 <Stack.Navigator>
-                    
-                    
+
+
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
@@ -157,8 +158,10 @@ export default class App extends Component {
                         name="addRouteScreen"
                         component={addRouteScreen}
                         initial={false}
-                        options={{ headerTitleAlign: 'center', title: 'Add Route',headerRight: ()=>
-                        <Icon name="save-sharp" style={{marginRight: 10}} size={30} color={'#8352F2'} /> }}
+                        options={{
+                            headerTitleAlign: 'center', title: 'Add Route', headerRight: () =>
+                                <Icon name="save-sharp" style={{ marginRight: 10 }} size={30} color={'#8352F2'} />
+                        }}
                     />
                     <Stack.Screen
                         name="editProfileScreen"
@@ -181,13 +184,13 @@ export default class App extends Component {
                     <Stack.Screen
                         name="activityHistoryScreen"
                         component={activityHistoryScreen}
-                        initial={false} 
-                        options={{headerTitleAlign: 'center', title: 'History'}}
-                    /> 
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'History' }}
+                    />
                     <Stack.Screen
                         name="addEventsScreen"
                         component={addEventScreen}
-                        initial={false} options={{headerShown: false}}
+                        initial={false} options={{ headerShown: false }}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Add Event' }}
                     />
@@ -214,45 +217,46 @@ export default class App extends Component {
                     <Stack.Screen
                         name="editEventsScreen"
                         component={editEventScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Edit Event' }}
                     />
                     <Stack.Screen
                         name="savedRouteScreen"
                         component={savedRouteScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Saved Routes' }}
                     />
                     <Stack.Screen
                         name="adminEventDetailsScreen"
                         component={adminEventDetailsScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Virtual run event' }}
-                        />
+                    />
                     <Stack.Screen
                         name="routeListScreen"
                         component={routeListScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Routes' }}
-                        />
+                    />
                     <Stack.Screen
                         name="editRouteScreen"
                         component={editRouteScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Routes' }}
-                        />
+                    />
                     <Stack.Screen
                         name="routeDetailsScreen"
                         component={routeDetailsScreen}
-                        initial={false} options={{headerShown: false}}
-                        initial={false}
+                        initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Route' }}
-                        />
+                    />
+
+                    <Stack.Screen
+                        name="ForumDetailsScreen"
+                        component={ForumDetailsScreen}
+                        initial={false} options={{ headerShown: false }}
+                        options={{ headerTitleAlign: 'center', title: 'Forum View' }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
