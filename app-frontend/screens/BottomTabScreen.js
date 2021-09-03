@@ -8,6 +8,8 @@ import HomeScreen from './HomeScreen';
 import ActivityScreen from './ActivityScreen';
 import ProgressScreen from './ProgressScreen';
 import ProfileScreen from './ProfileScreen';
+import ForumScreen from './ForumScreen';
+import { Animated } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +30,17 @@ const BottomTabScreen = () => (
         tabBarLabel: 'Home',
         tabBarIcon: ({ color, size }) => (
           <Font name="home" color={color} size={size} />
+        ),
+      }}
+    />
+
+    <Tab.Screen
+      name="Forum"
+      component={ForumScreen}
+      options={{
+        tabBarLabel: 'Forum',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="forum" color={color} size={size} />
         ),
       }}
     />

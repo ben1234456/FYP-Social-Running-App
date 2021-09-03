@@ -182,17 +182,14 @@ export default class SignUpScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('start')}>
-                        <Image style={styles.image} source={Back} />
-                    </TouchableOpacity>
-
                     <View>
                         <Text style={styles.heading}>Create Account</Text>
-                        <View style={styles.input}>
+                        <View >
                             <TextInput
                                 placeholder = "Name"
                                 onChangeText={(name) => this.setState({user_name:name})}
                                 value = {this.state.user_name}
+                                style={styles.input}
                             />
                         </View>
                         
@@ -262,8 +259,9 @@ export default class SignUpScreen extends Component {
                                 onDateChange={(date) => { this.setState({ sampleDate: date }) }} />
                         </View>
 
-                        <View style={styles.input}>
+                        <View >
                             <TextInput 
+                                style={styles.input}
                                 placeholder="Email" 
                                 keyboardType = 'email-address'                                
                                 onChangeText={(email_input) => this.setState({email:email_input})}
@@ -271,7 +269,7 @@ export default class SignUpScreen extends Component {
                             />
                         </View>
 
-                        <View style={styles.input}>
+                        <View style={styles.inputPass}>
                             <TextInput style={styles.inputRow}
                                 placeholder="Password" 
                                 onChangeText={(password_input) => this.setState({password:password_input})}
@@ -280,7 +278,7 @@ export default class SignUpScreen extends Component {
                             />
                             <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
                         </View>
-                        <View style={styles.input}>
+                        <View style={styles.inputPass}>
                             <TextInput style={styles.inputRow}
                                 placeholder="Confirm Password" 
                                 secureTextEntry = {this.state.showPassword}
@@ -303,15 +301,16 @@ export default class SignUpScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        padding: 30,
         display: 'flex',
         flex: 1,
+        paddingTop:0,
         backgroundColor: 'white',
     },
 
     contentContainer: {
         flex: 1,
-        padding: 20,
+        paddingTop:0,
     },
 
     image: {
@@ -339,7 +338,17 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
     },
-
+    inputPass: {
+        backgroundColor: '#ECECEC',
+        borderRadius: 15,
+        
+        marginTop: 15,
+        flexDirection: 'row',
+    },
+    icon: {
+        flex: 1,
+        padding: 10,
+    },
     picker: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
@@ -348,7 +357,6 @@ export const styles = StyleSheet.create({
         paddingTop: 2,
         paddingBottom: 2,
     },
-
     selectDate: {
         width: 270,
         paddingTop: 2.5,
@@ -371,13 +379,10 @@ export const styles = StyleSheet.create({
         padding: 20,
     },
 
-    icon: {
-        flex: 0,
-        width: 25,
-        height: 25,
-    },
+    
 
     inputRow: {
-        flex: 1,
+        flex: 9,
+        padding: 10,
     }
 });

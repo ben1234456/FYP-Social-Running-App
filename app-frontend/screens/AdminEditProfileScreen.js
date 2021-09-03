@@ -80,7 +80,7 @@ export default class AdminEditProfileScreen extends Component {
             console.error('Error:', error);
         });
 
-        this.props.navigation.push('app');
+        this.props.navigation.push('adminapp');
     }
 
     render() {

@@ -147,10 +147,6 @@ export default class LoginScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('start')}>
-                        <Image style={styles.image} source={Back} />
-                    </TouchableOpacity>
-
                     <View>
                         <Text style={styles.heading}>Welcome Back.</Text>
                         <View style={styles.input}>
@@ -187,15 +183,16 @@ export default class LoginScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        padding: 40,
         display: 'flex',
         flex: 1,
         backgroundColor: 'white',
+        paddingTop:0,
     },
 
     contentContainer: {
         flex: 1,
-        padding: 20,
+        
     },
 
     image: {
