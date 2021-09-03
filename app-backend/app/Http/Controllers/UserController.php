@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // error_log($request->user_name);
+        error_log($request->user_name);
         // error_log($request->phone_number);
         // error_log($request->email);
         // error_log($request->password);
@@ -44,9 +44,9 @@ class UserController extends Controller
         $user->role = "user";
         $save = $user->save();
 
-        if(!$saved){
-            error_log("......");
-        }
+        // if(!$saved){
+        //     error_log("......");
+        // }
     }
 
     /**

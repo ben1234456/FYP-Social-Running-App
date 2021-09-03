@@ -18,12 +18,15 @@ export default class addEvent extends Component {
         
         this.state = {  
             eventName: "",
-            eventDate:"",
-            regisDate:"",
+            regisDate: "",
             regisDueDate:"",
-            regisFee:0,
-            eventVenue:"",
-            runSub:"",
+            startDate:"",
+            endDate:"",
+            regisFee_5km:0,
+            regisFee_10km:0,
+            regisFee_21km:0,
+            regisFee_42km:0,
+            description:"",
             imageSource:addImage,
         }
     }
@@ -54,25 +57,25 @@ export default class addEvent extends Component {
         if (!(this.state.eventName)){
             empty.push("event name");
         }
-        if (!(this.state.eventDate)){
-            empty.push("event date");
-        }
         if (!(this.state.regisDate)){
             empty.push("registration date");
         }
         if (!(this.state.regisDueDate)){
             empty.push("registration due date");
         }
-        if (!(this.state.regisFee)){
-            empty.push("registration fee");
+        if (!(this.state.regisFee_5km)){
+            empty.push("registration fee (5km)");
         }
-        if (!(this.state.eventVenue)){
-            empty.push("event venue");
+        if (!(this.state.regisFee_10km)){
+            empty.push("registration fee (10km)");
         }
-        if (!(this.state.runSub)){
-            empty.push("run submission");
+        if (!(this.state.regisFee_21km)){
+            empty.push("registration fee (21km)");
         }
-
+        if (!(this.state.regisFee_42km)){
+            empty.push("registration fee (42km)");
+        }
+       
         if (empty.length != 0){
            
             console.log(empty[0]);
@@ -111,17 +114,20 @@ export default class addEvent extends Component {
         
         if (this.validation()){
             const data = {
-                eventName: this.state.eventName,
-                eventDate: this.state.eventDate,
+                event_name: this.state.eventName,
+                description: this.state.description,
+                start: this.state.startDate,
+                end: this.state.endDate,
                 regisDate: this.state.regisDate,
                 regisDueDate: this.state.regisDueDate,
-                regisFee: this.state.regisFee,
-                eventVenue: this.state.eventVenue,
-                runSub: this.state.runSub,
+                fee_5km: this.state.regisFee_5km,
+                fee_10km: this.state.regisFee_10km,
+                fee_21km: this.state.regisFee_21km,
+                fee_42km: this.state.regisFee_42km,
             };
     
             
-            fetch('http://192.168.0.192:8000/api/users', {
+            fetch('http://192.168.0.192:8000/api/events', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -129,13 +135,21 @@ export default class addEvent extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Success:',data);
-            // })
-            // .catch((error) => {
-            //     console.error('Error:', error);
-            // });  
+            .then(response => response.json())
+            .then(data => {
+                // console.log('Success:',data);
+                Alert.alert(
+                    'Event Succesfully Created!',
+                    '',
+                    [
+                        { text: "Ok", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+                this.props.navigation.navigate('adminapp');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });  
             
         }
 
@@ -159,118 +173,101 @@ export default class addEvent extends Component {
                 <View style={styles.contentContainer}>
                     
                     <View>
-                        <View style={styles.input}>
-                            <View style={styles.inputText}>
-                            <TextInput
-                                placeholder = "Title Name"
-                                onChangeText={(name) => this.setState({eventName:name})}
-                                value = {this.state.eventName}
-                            />
-                            </View>
-                        </View>
-                        
-                        <View style={styles.infoRow}>
-                            <View style={styles.infoColumnTitle}>
-                                <Text style={styles.infoTitle}>Venue:</Text>
-                            </View>
-                            <View style={styles.infoColumnInfo}>
-                                <View style={styles.inputWithTitle}>
-                                    <View style={styles.inputText}>
-                                        <TextInput
-                                            placeholder = "Venue"
-                                            onChangeText={(venue) => this.setState({eventVenue:venue})}
-                                            value = {this.state.eventVenue}
-                                        />
-                                    </View>
-                                </View>                         
-                            </View>
-                        </View>
-                        <View style={styles.infoRow}>
-                            <View style={styles.infoColumnTitle}>
-                                <Text style={styles.infoTitle}>Price:</Text>
-                            </View>
-                            <View style={styles.infoColumnInfo}>
-                                <View style={styles.inputWithTitle}>
-                                    <View style={styles.inputText}>
-                                        <TextInput 
-                                            placeholder = "e.g. RMXXX"
-                                            keyboardType = 'numeric'                                
-                                            onChangeText={(fee) => this.setState({regisFee:fee})}
-                                            value = {this.state.regisFee}
-                                        />
-                                    </View>
-                                </View>                         
-                            </View>
-                        </View>
-                        <View style={styles.infoRow}>
-                            <View style={styles.infoColumnTitle}>
-                                <Text style={styles.infoTitle}>Date:</Text>
-                            </View>
-                            <View style={styles.infoColumnInfo}>
-                                <View style={styles.inputWithTitle}>
-                                    <View style={styles.pickerLeftTitle}>
-                                        <DatePicker style={styles.inputDateLeftTitle}
-                                            placeholder="Date"
-                                            date={this.state.sampleDate} 
-                                            minDate={new Date()} 
-                                            confirmBtnText="Confirm" 
-                                            cancelBtnText="Cancel" 
-                                            useNativeDriver='true' 
-                                            format="YYYY-MM-DD" 
-                                            customStyles={{
-                                                dateIcon: { display: 'none' },
-                                                dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
-                                            }} 
-                                            onDateChange={(date) => { this.setState({ eventDate: date }) }} />
-                                    </View>
-                                </View>                         
-                            </View>
-                        </View>
-                        <View style={styles.infoRow}>
-                            <View style={styles.infoColumnTitle}>
-                                <Text style={styles.infoTitleTwoRow}>Reward:</Text>
-                            </View>
-                            <View style={styles.infoColumnInfo}>
-                                <View style={styles.sameRow}>
-                                    <View>
-                                        <TouchableOpacity onPress={this.selectFile}>
-                                            <Text style={styles.choseFile}>Choose File</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View>
-                                        <Text style={styles.fileStatus}>No file chosen</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.inputWithTitle}>
-                                    <View style={styles.inputText}>
-                                        <TextInput 
-                                            placeholder = "Write the reward's name"
-                                            onChangeText={(fee) => this.setState({regisFee:fee})}
-                                            value = {this.state.regisFee}
-                                        />
-                                    </View>
-                                </View>                         
-                            </View>
-                        </View>
+
                         <View>
-                            <Text style={styles.botTitle}>ABOUT</Text>
+                            <Text style={styles.botTitle}>Event Name</Text>
+                        </View>
+
+                        <View style={styles.inputTitleTop}>
+                            <View style={styles.inputText}>
+                                <TextInput
+                                    placeholder = "Event Name"
+                                    onChangeText={(name) => this.setState({eventName:name})}
+                                    value = {this.state.eventName}
+                                />
+                            </View>
+                        </View>
+
+                        <View>
+                            <Text style={styles.botTitle}>Description</Text>
                         </View>
                         <View style={styles.inputWithTitleTopBig}>
                             <View style={styles.inputText}>
                                 <TextInput 
                                     placeholder = "Write your description here"
-                                    onChangeText={(fee) => this.setState({regisFee:fee})}
-                                    value = {this.state.regisFee}
+                                    onChangeText={(des) => this.setState({description:des})}
+                                    value = {this.state.description}
                                 />
                             </View>
                         </View>  
+
                         <View>
-                            <Text style={styles.botTitle}>REGISTRATION START DATE</Text>
+                            <Text style={styles.botTitle}>Fee (5km)</Text>
+                        </View>
+
+                        <View style={styles.inputTitleTop}>
+                            <View style={styles.inputText}>
+                                <TextInput
+                                    placeholder = "e.g. RMXXX"
+                                    keyboardType = 'numeric' 
+                                    onChangeText={(fee) => this.setState({regisFee_5km:fee})}
+                                    value = {this.state.regisFee_5km}
+                                />
+                            </View>
+                        </View>
+
+                        <View>
+                            <Text style={styles.botTitle}>Fee (10km)</Text>
+                        </View>
+
+                        <View style={styles.inputTitleTop}>
+                            <View style={styles.inputText}>
+                                <TextInput
+                                    placeholder = "e.g. RMXXX"
+                                    keyboardType = 'numeric' 
+                                    onChangeText={(fee) => this.setState({regisFee_10km:fee})}
+                                    value = {this.state.regisFee_10km}
+                                />
+                            </View>
+                        </View>
+
+                        <View>
+                            <Text style={styles.botTitle}>Fee (21km)</Text>
+                        </View>
+
+                        <View style={styles.inputTitleTop}>
+                            <View style={styles.inputText}>
+                                <TextInput
+                                    placeholder = "e.g. RMXXX"
+                                    keyboardType = 'numeric' 
+                                    onChangeText={(fee) => this.setState({regisFee_21km:fee})}
+                                    value = {this.state.regisFee_21km}
+                                />
+                            </View>
+                        </View>
+
+                        <View>
+                            <Text style={styles.botTitle}>Fee (42km)</Text>
+                        </View>
+
+                        <View style={styles.inputTitleTop}>
+                            <View style={styles.inputText}>
+                                <TextInput
+                                    placeholder = "e.g. RMXXX"
+                                    keyboardType = 'numeric' 
+                                    onChangeText={(fee) => this.setState({regisFee_42km:fee})}
+                                    value = {this.state.regisFee_42km}
+                                />
+                            </View>
+                        </View>
+
+                        <View>
+                            <Text style={styles.botTitle}>Registration Start Date</Text>
                         </View>
                         <View style={styles.pickerTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration date"
-                                date={this.state.sampleDate} 
+                                date={this.state.regisDate} 
                                 minDate={new Date()} 
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
@@ -284,12 +281,12 @@ export default class addEvent extends Component {
                         </View>
                         
                         <View>
-                            <Text style={styles.botTitle}>REGISTRATION END DATE</Text>
+                            <Text style={styles.botTitle}>Registration End Date</Text>
                         </View>
                         <View style={styles.pickerTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
-                                date={this.state.sampleDate} 
+                                date={this.state.regisDueDate} 
                                 minDate={new Date()} 
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
@@ -301,23 +298,54 @@ export default class addEvent extends Component {
                                 }} 
                                 onDateChange={(date) => { this.setState({ regisDueDate: date }) }} />
                         </View>
+
                         <View>
-                            <Text style={styles.botTitle}>RUN SUBMISSION</Text>
+                            <Text style={styles.botTitle}>Event Start Date</Text>
                         </View>
-                        <View style={styles.inputTitleTop}>
-                            <View style={styles.inputText}>
-                            <TextInput
-                                placeholder = "Run Submission"
-                                onChangeText={(sub) => this.setState({runSub:sub})}
-                                value = {this.state.runSub}
-                            />
-                            </View>
+                        <View style={styles.pickerTitleTop}>
+                            <DatePicker style={styles.inputDate}
+                                placeholder="Choose event start date"
+                                date={this.state.startDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
+                                customStyles={{
+                                    dateIcon: { display: 'none' },
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ startDate: date }) }} />
                         </View>
+
                         <View>
-                            <Button style={styles.submitBtn}  onPress={this.create}>
-                                <Text style={styles.btnText}>POST</Text>
-                            </Button>
+                            <Text style={styles.botTitle}>Event End Date</Text>
                         </View>
+                        <View style={styles.pickerTitleTop}>
+                            <DatePicker style={styles.inputDate}
+                                placeholder="Choose registration due date"
+                                date={this.state.endDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
+                                customStyles={{
+                                    dateIcon: { display: 'none' },
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ endDate: date }) }} />
+                        </View>
+                        
+                        <View>
+                            <Text style={styles.botTitle}></Text>
+                            <Button style={styles.submitBtn} onPress={this.create}>
+                                <Text style={styles.btnText}>Create</Text>
+                            </Button>   
+                        </View>
+
+                        
+
                     </View>
                 </View>
             </ScrollView>
@@ -367,6 +395,7 @@ export const styles = StyleSheet.create({
     inputDate:{
         width:"100%",
         marginLeft:"5%",
+        flex:1,
     },
     picker: {
         backgroundColor: '#ECECEC',
@@ -381,17 +410,17 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginTop: 50,
-        marginBottom: 45,
+        marginBottom: 235,
     },
 
     btnText: {
         fontSize: 16,
-        color: 'white',
+        color: 'black',
         textAlign: 'center',
         flex: 1,
         padding: 20,
     },
+
     infoRow:{
         flexDirection:"row",
         marginTop:"10%",
@@ -451,6 +480,7 @@ export const styles = StyleSheet.create({
         fontSize:20,
         flex:1,
         fontWeight:"bold",
+        marginTop: 20,
     },
     inputWithTitleTopBig: {
         backgroundColor: '#ECECEC',

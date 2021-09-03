@@ -56,7 +56,7 @@ class ActivityController extends Controller
 
         $useractivity = new UserActivity;
         $useractivity->user_id = $request->user_ID;
-        $latest = DB::table('activities')->order_by('id', 'desc')->first();
+        $latest = Activity::OrderBy('id', 'desc')->first();
         $useractivity->activity_id = $latest->id;
         $useractivity->save();
 

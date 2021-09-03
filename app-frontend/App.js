@@ -183,7 +183,7 @@ export default class App extends Component {
                         component={addEventScreen}
                         initial={false} options={{headerShown: false}}
                         initial={false}
-                        options={{ headerTitleAlign: 'center', title: 'History' }}
+                        options={{ headerTitleAlign: 'center', title: 'Add Event' }}
                     />
                     <Stack.Screen
                         name="startFreeRunScreen"
