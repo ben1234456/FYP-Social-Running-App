@@ -19,7 +19,7 @@ import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { LogBox } from 'react-native';
+import { LogBox ,Image,StyleSheet,View,Alert} from 'react-native';
 import addRouteScreen from "./screens/addRouteScreen";
 import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
@@ -29,23 +29,41 @@ import editEventScreen from './screens/editEvent';
 import addEventScreen from './screens/addEvent';
 import startFreeRunScreen from "./screens/startFreeRunScreen"
 import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
-import savedRouteScreen from "./screens/savedRouteScreen"
-
+import savedRouteScreen from "./screens/savedRouteScreen";
 import adminEventDetailsScreen from "./screens/adminEventDetails";
 import routeListScreen from './screens/routeListScreen';
 import editRouteScreen from './screens/editRouteScreen';
 import routeDetailsScreen from './screens/routeDetailsScreen';
-import calendarScreen from "./screens/calendarScreen"
+import calendarScreen from "./screens/calendarScreen";
 import ForumDetailsScreen from './screens/ForumDetailsScreen';
-
-
+import calendarEventScreen from './screens/calendarEventScreen';
+import Logo from './images/logo.png'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const Stack = createStackNavigator();
 
 export default class App extends Component {
+    confirmDelete= () => {
+        return Alert.alert(
+          "Do you want to delete this reminder?",
+          "The action cannot be undone",
+          [
+            {
+              text: "Yes",
+              onPress: () => {
+                
+              },
+            },
+            {
+              text: "No",
+            },
+          ]
+        );
+      };
+    
     render() {
         LogBox.ignoreAllLogs = true;
         return (
@@ -279,9 +297,40 @@ export default class App extends Component {
                         options={{ headerTitleAlign: 'center', title: 'Forum View'}}
                         
                     />
+                    <Stack.Screen
+                        name="calendarEventScreen"
+                        component={calendarEventScreen}
+                        initial={false} 
+                        options={{ 
+                            headerTitleAlign: 'center', 
+                            title: 'Event',
+                            
+                            headerRight: () => (
+                                <View style={styles.imageContainer} >
+                                    <Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
+                                    <TouchableOpacity onPress={this.confirmDelete}>
+                                    <Icon name={"delete"} style={styles.icon} size={30} color={"grey"}/>
+                                    </TouchableOpacity>
+                                    
+                                </View>
+                            )
+
+                        }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
     }
 }
-
+export const styles=StyleSheet.create({
+    icon:{
+        
+        marginLeft:15,
+    },
+    imageContainer:{
+        flex:1,
+        flexDirection:"row",
+        alignItems:"center",
+        marginRight:25,
+    },
+});
