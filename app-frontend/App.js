@@ -37,8 +37,8 @@ import adminEventDetailsScreen from "./screens/adminEventDetails";
 import routeListScreen from './screens/routeListScreen';
 import editRouteScreen from './screens/editRouteScreen';
 import routeDetailsScreen from './screens/routeDetailsScreen';
+import calendarScreen from "./screens/calendarScreen"
 import ForumDetailsScreen from './screens/ForumDetailsScreen';
-import Back from './images/left-arrow.png';
 
 
 
@@ -67,9 +67,8 @@ export default class App extends Component {
                 </Scene>               
             </Router>*/
             <NavigationContainer>
+
                 <Stack.Navigator>
-
-
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
@@ -266,7 +265,13 @@ export default class App extends Component {
                         component={routeDetailsScreen}
                         initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Route' }}
-                    />
+                        /> 
+                    <Stack.Screen
+                        name="calendarScreen"
+                        component={calendarScreen}
+                        initial={false} 
+                        options={{ headerTitleAlign: 'center', title: 'Calendar' }}
+                        />
                     <Stack.Screen
                         name="ForumDetailsScreen"
                         component={ForumDetailsScreen}
