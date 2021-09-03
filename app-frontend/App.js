@@ -38,6 +38,10 @@ import routeListScreen from './screens/routeListScreen';
 import editRouteScreen from './screens/editRouteScreen';
 import routeDetailsScreen from './screens/routeDetailsScreen';
 import ForumDetailsScreen from './screens/ForumDetailsScreen';
+import Back from './images/left-arrow.png';
+
+
+
 
 const Stack = createStackNavigator();
 
@@ -69,39 +73,52 @@ export default class App extends Component {
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
-                        initial={true} options={{ headerShown: false }}
+                        initial={true} 
+                        options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="start"
                         component={StartedScreen}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="login"
                         component={LoginScreen}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ 
+                            headerTitleAlign: 'center', 
+                            title: 'Sign In'
+                        }}
                     />
                     <Stack.Screen
                         name="register"
                         component={SignUpScreen}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ 
+                            headerTitleAlign: 'center', 
+                            title: 'Sign Up'
+                        }}
                     />
                     <Stack.Screen
                         name="app"
                         component={AppNavigation}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
                         name="adminapp"
                         component={AdminAppNavigation}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
                         name="profile"
                         component={Profile}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
@@ -250,12 +267,12 @@ export default class App extends Component {
                         initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Route' }}
                     />
-
                     <Stack.Screen
                         name="ForumDetailsScreen"
                         component={ForumDetailsScreen}
                         initial={false} options={{ headerShown: false }}
-                        options={{ headerTitleAlign: 'center', title: 'Forum View' }}
+                        options={{ headerTitleAlign: 'center', title: 'Forum View'}}
+                        
                     />
                 </Stack.Navigator>
             </NavigationContainer>

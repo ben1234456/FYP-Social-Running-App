@@ -182,10 +182,6 @@ export default class SignUpScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <TouchableOpacity  onPress={() => this.props.navigation.navigate('start')}>
-                        <Image style={styles.image} source={Back} />
-                    </TouchableOpacity>
-
                     <View>
                         <Text style={styles.heading}>Create Account</Text>
                         <View >
@@ -305,15 +301,16 @@ export default class SignUpScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        padding: 30,
         display: 'flex',
         flex: 1,
+        paddingTop:0,
         backgroundColor: 'white',
     },
 
     contentContainer: {
         flex: 1,
-        padding: 20,
+        paddingTop:0,
     },
 
     image: {
