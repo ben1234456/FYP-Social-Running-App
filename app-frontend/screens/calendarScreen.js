@@ -50,8 +50,8 @@ export default class calendarScreen extends Component {
                 
                 rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
                 theme={{
-                    agendaDayTextColor: 'green',
-                    agendaDayNumColor: 'green',
+                    agendaDayTextColor: '#424242',
+                    agendaDayNumColor: '#424242',
                     agendaTodayColor: 'red',
                   }}
                 
@@ -63,7 +63,7 @@ export default class calendarScreen extends Component {
         };
         //trigger when user select an activity
         select=(item)=>{
-            this.props.navigation.navigate('calendarDetailScreen');
+            this.props.navigation.navigate('calendarEventScreen');
         };
 }
 const styles = StyleSheet.create({
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     //text when no activity scheduled
     noItemText:{
-        color:"grey",
+        color:"#808080",
         fontSize:20,
     },
   });

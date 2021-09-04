@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Logo from '../images/logo.png';
 import Event from '../images/event.png';
@@ -11,61 +11,71 @@ export default class HomeScreen extends Component {
 
     constructor(props) {
         super(props);
+
+        var today = new Date()
+        var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+        var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+        var day = today.getDay()
+        var day = weekdays[day]
+
         this.state = {
-            id:"",
-            name:"",  
-            eventdata:"",   
+            id: "",
+            name: "",
+            eventdata: "",
+            currenDate: date,
+            currentDay: day
         };
 
 
         const getData = async () => {
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
-                if(userJson !== null) {
+                if (userJson !== null) {
                     const user = JSON.parse(userJson);
                     this.setState({
-                        name:user.first_name,
+                        name: user.first_name,
                     });
                 }
 
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
 
             fetch('http://192.168.0.192:8000/api/events', {
                 headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success')
-                this.setState({
-                    eventdata:data
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success')
+                    this.setState({
+                        eventdata: data
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
         }
 
         getData();
-        
+
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         const getData = async () => {
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
-                if(userJson !== null) {
+                if (userJson !== null) {
                     const user = JSON.parse(userJson);
                     this.setState({
-                        name:user.first_name,
+                        name: user.first_name,
                     });
                 }
 
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -73,8 +83,8 @@ export default class HomeScreen extends Component {
         getData();
     };
 
-    renderItemComponent = (data) => 
-        <TouchableOpacity  onPress={() => this.props.navigation.navigate('eventDetails',{'eventid':data.item.id})}>
+    renderItemComponent = (data) =>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
                     <Image style={styles.image2} source={Event} />
@@ -85,7 +95,7 @@ export default class HomeScreen extends Component {
                 </View>
             </View>
         </TouchableOpacity>
-    
+
 
 
     render() {
@@ -94,25 +104,58 @@ export default class HomeScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
-                        <Text style={styles.name}> {this.state.name}</Text>
+                        {/* <Text style={styles.name}> {this.state.name}</Text> */}
+                        <Text style={styles.name}> Jun</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
-                            <Image style={styles.image} source={Logo}/>
+                            <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('calendarScreen')}>
+                        <View style={styles.rowContainer}>
+                            <Text style={{ color: '#8352F2', fontSize: 18, fontWeight: 'bold' }}>{this.state.currenDate},</Text>
+                            <Text style={{ color: '#8352F2', marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>{this.state.currentDay}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Events</Text>
-                        <Text style={styles.more}>{"View More >"}</Text>
+                        <Text onPress={() => this.props.navigation.navigate('eventsScreen')} style={styles.more}>{"View More >"}</Text>
                     </View>
                 </View>
 
-                <View style={styles.scrollview}>
+                {/* <View style={styles.scrollview}>
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
                         renderItem={item => this.renderItemComponent(item)}
                     />  
-                </View>
+                </View> */}
 
+                <View>
+                    <ScrollView style={styles.scrollview} horizontal={true}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={Event} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Family Virtual Run</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={Event2} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Spartan Virtual Marathon</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>
