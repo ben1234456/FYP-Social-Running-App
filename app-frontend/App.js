@@ -19,7 +19,7 @@ import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { LogBox ,Image,StyleSheet,View,Alert} from 'react-native';
+import { LogBox, Image, StyleSheet, View, Alert } from 'react-native';
 import addRouteScreen from "./screens/addRouteScreen";
 import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
@@ -39,33 +39,33 @@ import routeDetailsScreen from './screens/routeDetailsScreen';
 import calendarScreen from "./screens/calendarScreen";
 import ForumDetailsScreen from './screens/ForumDetailsScreen';
 import calendarEventScreen from './screens/calendarEventScreen';
-import Logo from './images/logo.png'; 
+import Logo from './images/logo.png';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import addEventCalendarScreen from './screens/addEventCalendarScreen';
 import editEventCalendarScreen from './screens/editEventCalendarScreen';
-
+import BuddiesListScreen from './screens/BuddiesListScreen';
 
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-    confirmDelete= () => {
+    confirmDelete = () => {
         return Alert.alert(
-          "Do you want to delete this reminder?",
-          "The action cannot be undone",
-          [
-            {
-              text: "Yes",
-              onPress: () => {
-                
-              },
-            },
-            {
-              text: "No",
-            },
-          ]
+            "Do you want to delete this reminder?",
+            "The action cannot be undone",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+
+                    },
+                },
+                {
+                    text: "No",
+                },
+            ]
         );
-      };
-    
+    };
+
     render() {
         LogBox.ignoreAllLogs = true;
         return (
@@ -92,51 +92,51 @@ export default class App extends Component {
                     <Stack.Screen
                         name="splash"
                         component={SplashScreen}
-                        initial={true} 
+                        initial={true}
                         options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="start"
                         component={StartedScreen}
-                        initial={false} 
+                        initial={false}
                         options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="login"
                         component={LoginScreen}
-                        initial={false} 
-                        options={{ 
-                            headerTitleAlign: 'center', 
+                        initial={false}
+                        options={{
+                            headerTitleAlign: 'center',
                             title: 'Sign In'
                         }}
                     />
                     <Stack.Screen
                         name="register"
                         component={SignUpScreen}
-                        initial={false} 
-                        options={{ 
-                            headerTitleAlign: 'center', 
+                        initial={false}
+                        options={{
+                            headerTitleAlign: 'center',
                             title: 'Sign Up'
                         }}
                     />
                     <Stack.Screen
                         name="app"
                         component={AppNavigation}
-                        initial={false} 
+                        initial={false}
                         options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
                         name="adminapp"
                         component={AdminAppNavigation}
-                        initial={false} 
+                        initial={false}
                         options={{ headerShown: false }}
                     />
 
                     <Stack.Screen
                         name="profile"
                         component={Profile}
-                        initial={false} 
+                        initial={false}
                         options={{ headerShown: false }}
                     />
 
@@ -285,67 +285,71 @@ export default class App extends Component {
                         component={routeDetailsScreen}
                         initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Route' }}
-                        /> 
+                    />
                     <Stack.Screen
                         name="calendarScreen"
                         component={calendarScreen}
-                        initial={false} 
+                        initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Calendar' }}
-                        />
+                    />
                     <Stack.Screen
                         name="ForumDetailsScreen"
                         component={ForumDetailsScreen}
                         initial={false} options={{ headerShown: false }}
-                        options={{ headerTitleAlign: 'center', title: 'Forum View'}}
-                        
+                        options={{ headerTitleAlign: 'center', title: 'Forum View' }}
+
                     />
                     <Stack.Screen
                         name="calendarEventScreen"
                         component={calendarEventScreen}
-                        initial={false} 
-                        options={{ 
-                            headerTitleAlign: 'center', 
+                        initial={false}
+                        options={{
+                            headerTitleAlign: 'center',
                             title: 'Event',
-                            
+
                             headerRight: () => (
                                 <View style={styles.imageContainer} >
                                     <Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
                                     <TouchableOpacity onPress={this.confirmDelete}>
-                                    <Icon name={"delete"} style={styles.icon} size={30} color={"grey"}/>
+                                        <Icon name={"delete"} style={styles.icon} size={30} color={"grey"} />
                                     </TouchableOpacity>
-                                    
                                 </View>
                             )
-
                         }}
-                    /> 
-                    
+                    />
+
                     <Stack.Screen
                         name="addEventCalendarScreen"
                         component={addEventCalendarScreen}
-                        initial={false} 
+                        initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Create Events' }}
                     />
                     <Stack.Screen
                         name="editEventCalendarScreen"
                         component={editEventCalendarScreen}
-                        initial={false} 
+                        initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
+                    />
+                    <Stack.Screen
+                        name="BuddiesListScreen"
+                        component={BuddiesListScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Buddies List' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
         );
     }
 }
-export const styles=StyleSheet.create({
-    icon:{
-        
-        marginLeft:15,
+export const styles = StyleSheet.create({
+    icon: {
+
+        marginLeft: 15,
     },
-    imageContainer:{
-        flex:1,
-        flexDirection:"row",
-        alignItems:"center",
-        marginRight:25,
+    imageContainer: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 25,
     },
 });
