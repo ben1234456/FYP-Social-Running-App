@@ -41,6 +41,8 @@ import ForumDetailsScreen from './screens/ForumDetailsScreen';
 import calendarEventScreen from './screens/calendarEventScreen';
 import Logo from './images/logo.png'; 
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import addEventCalendarScreen from './screens/addEventCalendarScreen';
+import editEventCalendarScreen from './screens/editEventCalendarScreen';
 
 
 const Stack = createStackNavigator();
@@ -316,6 +318,19 @@ export default class App extends Component {
                             )
 
                         }}
+                    /> 
+                    
+                    <Stack.Screen
+                        name="addEventCalendarScreen"
+                        component={addEventCalendarScreen}
+                        initial={false} 
+                        options={{ headerTitleAlign: 'center', title: 'Create Events' }}
+                    />
+                    <Stack.Screen
+                        name="editEventCalendarScreen"
+                        component={editEventCalendarScreen}
+                        initial={false} 
+                        options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
