@@ -44,6 +44,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import addEventCalendarScreen from './screens/addEventCalendarScreen';
 import editEventCalendarScreen from './screens/editEventCalendarScreen';
 import BuddiesListScreen from './screens/BuddiesListScreen';
+import BuddiesProfileScreen from './screens/BuddiesProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -356,6 +357,12 @@ export default class App extends Component {
                         component={BuddiesListScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Buddies List' }}
+                    />
+                     <Stack.Screen
+                        name="BuddiesProfileScreen"
+                        component={BuddiesProfileScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Buddy Profile' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

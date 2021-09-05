@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList } from 'react-native';
+import { Button } from 'native-base'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Font from 'react-native-vector-icons/FontAwesome5'
@@ -19,7 +20,7 @@ export default class BuddiesListScreen extends Component {
                 { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, first: profileImage },
                 { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, first: profileImage },
                 { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, first: profileImage },
-                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, first: profileImage }
+                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, first: profileImage },
             ],
         };
         this.arrayholder = [];
@@ -121,23 +122,27 @@ export default class BuddiesListScreen extends Component {
                     data={this.state.data}
                     keyExtractor={item => item.first}
                     renderItem={({ item }) => (
-
-                        <View style={styles.cardView}>
-                            <View style={styles.proRow}>
-                                <View style={styles.proTitle}>
-                                    <Image style={styles.proColumnName} source={item.first} />
-                                </View>
-                                <View style={{ marginLeft: 20, flex: 3 }}>
-                                    <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
-                                    <Text style={styles.date}>{`${item.name.title}`}</Text>
-                                </View>
-                                <View style={{ flex: 1 }}>
-                                    <Font name='user-minus' size={20} color={'#808080'} onPress={() => this.delete(item.id)} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen')}>
+                            <View style={styles.cardView}>
+                                <View style={styles.proRow} >
+                                    <View style={styles.proTitle}>
+                                        <Image style={styles.proColumnName} source={item.first} />
+                                    </View>
+                                    <View style={{ marginLeft: 20, flex: 3 }}>
+                                        <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
+                                        <Text style={styles.date}>{`${item.name.title}`}</Text>
+                                    </View>
+                                    <View style={{ flex: 1 }}>
+                                        <Font name='user-minus' size={20} color={'#808080'} onPress={() => this.delete(item.id)} />
+                                    </View>
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )}
                 />
+                <View style={{ flexDirection: 'column', alignItems: 'flex-end', margin: 40 }}>
+                    <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} />
+                </View>
                 {/* <TouchableOpacity><Text onPress={this.share}>Share</Text></TouchableOpacity> */}
             </View>
         );
