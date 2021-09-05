@@ -17,6 +17,7 @@ export default class App extends Component {
             categoryPosition: '',
             categorySelected: '25 March - 01 April 2021',
             activityData:'',
+            eventData:'',
         };
 
 
@@ -44,7 +45,7 @@ export default class App extends Component {
             .then(data => {
                 console.log('Success')
                 this.setState({
-                    activityData:data
+                    eventData:data
                 });
             })
             .catch((error) => {

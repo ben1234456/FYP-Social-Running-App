@@ -122,15 +122,15 @@ export default class HomeScreen extends Component {
                     </View>
                 </View>
 
-                {/* <View style={styles.scrollview}>
+                <View style={styles.scrollview}>
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
                         renderItem={item => this.renderItemComponent(item)}
                     />  
-                </View> */}
+                </View>
 
-                <View>
+                {/* <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
                             <View style={styles.cardView}>
@@ -155,7 +155,7 @@ export default class HomeScreen extends Component {
                             </View>
                         </TouchableOpacity>
                     </ScrollView>
-                </View>
+                </View> */}
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>

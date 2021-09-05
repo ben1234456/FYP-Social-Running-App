@@ -5,10 +5,55 @@ import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
 import Event2 from '../images/marathon.png';
 import Run from '../images/running.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
 
 export default class couponScreen extends Component {
-       
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            user_id:"",   
+            
+        };
+
+
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        user_id:user.id,
+                    });
+                }
+
+            } catch(e) {
+                console.log(e);
+            }
+
+            fetch('http://192.168.0.192:8000/api/events/users/' + this.state.user_id, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    activityData:data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        getData();
+        
+    }
+
     render() {
         return (
             <ScrollView style={styles.background}>

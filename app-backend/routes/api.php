@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\UserEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +23,12 @@ Route::apiResources([
     'users'=> UserController::class,
     'activities'=> ActivityController::class,
     'events'=> EventController::class,
+    'userevents'=> UserEventController::class,
 ]);
 
 
 Route::post('activity', [ActivityController::class, 'store']);
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -34,5 +37,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', [LoginController::class, 'login']);
 
 Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
+
+Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents']);
 
 Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);
