@@ -14,7 +14,7 @@ export default class couponScreen extends Component {
         super(props);
         this.state = {
             user_id:"",   
-            
+            event_data:"",
         };
 
 
@@ -40,9 +40,10 @@ export default class couponScreen extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success')
+                console.log('Successfully get event data')
+                console.log(data)
                 this.setState({
-                    activityData:data
+                    event_data:data
                 });
             })
             .catch((error) => {

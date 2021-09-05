@@ -36,7 +36,6 @@ class UserEventController extends Controller
      */
     public function store(Request $request)
     {
-        error_log("!");
         error_log($request);
 
         $userevent = new UserEvent;
@@ -101,5 +100,7 @@ class UserEventController extends Controller
         error_log($request);
         error_log($user);
         $userevents = UserEvent::where('user_id', $user->id)->get();
+
+        return $userevents->toJson();
     }
 }

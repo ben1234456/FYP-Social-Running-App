@@ -7,6 +7,7 @@ use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 class ActivityController extends Controller
@@ -51,6 +52,11 @@ class ActivityController extends Controller
         $activity->end_lng = floatval($request->end_lng);
         $activity->highest_altitude = 0;
         $activity->total_distance = floatval($request->total_distance);
+        $activity->total_duration = Carbon::createFromFormat('H:i:s', $request->total_duration)->format('H:i:s');
+        $activity->calories_burned = 0;
+        $activity->start_dt = Carbon::createFromFormat('Y-m-d H:i:s', $request->start_dt)->format('Y-m-d H:i:s');
+        // $activity->start_dt = Carbon::now();
+        $activity->end_dt = Carbon::now();
 
         $activity->save();
 

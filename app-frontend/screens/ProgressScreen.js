@@ -17,7 +17,6 @@ export default class App extends Component {
             categoryPosition: '',
             categorySelected: '25 March - 01 April 2021',
             activityData:'',
-            eventData:'',
         };
 
 
@@ -43,9 +42,10 @@ export default class App extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success')
+                console.log('Successfully get activity data')
+                // console.log(data)
                 this.setState({
-                    eventData:data
+                    activityData:data
                 });
             })
             .catch((error) => {

@@ -15,6 +15,11 @@ export default class startFreeRunScreen extends Component {
 
     constructor(props) {
         super(props);
+
+        var vdt = new Date();
+
+        var dt = vdt.getFullYear() + '-' + (vdt.getMonth() + 1) + '-' + vdt.getDate() + " " + vdt.getHours() + ':' + this.setDigit(vdt.getMinutes()) + ':' + this.setDigit(vdt.getSeconds());
+
         this.state = {
             user_ID:"",
 
@@ -28,7 +33,7 @@ export default class startFreeRunScreen extends Component {
             stopwatch:false,
             startPause:"START",
 
-            start_dt:new Date(),
+            start_dt: dt.toLocaleString(),
             end_dt: new Date(),
 
             errorMessage: "",
@@ -77,12 +82,13 @@ export default class startFreeRunScreen extends Component {
             var hour=this.state.hourCount+diffDuration.hours()
             var minute=this.state.minuteCount+diffDuration.minutes()
             var second=this.state.secondCount+diffDuration.seconds()
+
+            
             this.setState({
                  hour: this.setDigit(hour),
                  minute: this.setDigit(minute),
                  second: this.setDigit(second),
-                 start_dt: Date().toLocaleString(),
-
+                 
             });
         }
     };
@@ -202,7 +208,11 @@ export default class startFreeRunScreen extends Component {
         
         clearInterval(this.interval);
 
-        this.setState({end_dt: Date().toLocaleString()});
+        var vdt = new Date();
+
+        var dt = vdt.getFullYear() + '-' + (vdt.getMonth() + 1) + '-' + vdt.getDate() + " " + vdt.getHours() + ':' + this.setDigit(vdt.getMinutes()) + ':' + this.setDigit(vdt.getSeconds());
+
+        this.setState({end_dt: dt.toLocaleString()});
         
 
         const total_duration = String(this.state.hour) + ":" + String(this.state.minute) + ":" + String(this.state.second)
@@ -227,6 +237,9 @@ export default class startFreeRunScreen extends Component {
                 },
                 body: JSON.stringify(data),
         })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
         
         this.props.navigation.navigate('Progress');
     }
