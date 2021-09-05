@@ -19,7 +19,7 @@ import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { LogBox, Image, StyleSheet, View, Alert } from 'react-native';
+import { LogBox, Image, StyleSheet, View, Alert,Text } from 'react-native';
 import addRouteScreen from "./screens/addRouteScreen";
 import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
@@ -48,6 +48,12 @@ import BuddiesListScreen from './screens/BuddiesListScreen';
 const Stack = createStackNavigator();
 
 export default class App extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            own:true,
+        };
+    }
     confirmDelete = () => {
         return Alert.alert(
             "Do you want to delete this reminder?",
@@ -284,7 +290,21 @@ export default class App extends Component {
                         name="routeDetailsScreen"
                         component={routeDetailsScreen}
                         initial={false} options={{ headerShown: false }}
-                        options={{ headerTitleAlign: 'center', title: 'Route' }}
+                        options={{ 
+                            headerTitleAlign: 'center', 
+                            title: 'Route' ,
+                            headerRight: () => (
+                                <View style={styles.imageContainer} >
+                                    {this.state.own==true
+                                    ?<Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
+                                    :<Text style={styles.headerText}>Save</Text>
+                                    }
+                                    <TouchableOpacity onPress={this.confirmDelete}>
+                                        <Icon name={"delete"} style={styles.icon} size={30} color={"grey"} />
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        }}
                     />
                     <Stack.Screen
                         name="calendarScreen"
@@ -309,6 +329,7 @@ export default class App extends Component {
 
                             headerRight: () => (
                                 <View style={styles.imageContainer} >
+                                    {}
                                     <Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
                                     <TouchableOpacity onPress={this.confirmDelete}>
                                         <Icon name={"delete"} style={styles.icon} size={30} color={"grey"} />
@@ -351,5 +372,8 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginRight: 25,
+    },
+    headerText:{
+        fontSize:15,
     },
 });
