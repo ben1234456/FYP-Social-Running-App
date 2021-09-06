@@ -1,54 +1,100 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList, Modal } from 'react-native';
+import { Button } from 'native-base'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Font from 'react-native-vector-icons/FontAwesome'
 import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../images/avatar.jpg';
-import moment from 'moment';
+import Ion from 'react-native-vector-icons/Ionicons';
+import moment, { max } from 'moment';
 
 export default class ForumScreen extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
+            currenDate: new Date().toLocaleString(),
+            viewSection: false,
             id: "",
             name: "",
             eventdata: "",
-            noLike: 5,
-            like: 'heart-o',
-            showLike: true,
-            showComment: true,
+            heart: true,
             comment: "",
             date: "",
+            data: [
+                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 3, comments: '', delete: '' },
+                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 1, comments: '', delete: '' },
+                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 4, comments: '', delete: '' },
+                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 2, comments: '', delete: '' },
+            ],
+            isVisible: false,
+            titleHolder: '',
+            descriptionHolder: '',
         }
+        this.arrayholder = [];
+        // this.titleHolder = '',
+        //     this.descriptionHolder = '',
+        //     this.commentHolder = ''
     }
 
     changeLike = () => {
         let newState;
-        if (this.state.showLike) {
+        if (this.state.data) {
             newState = {
-                like: 'heart',
+                fav: false,
                 noLike: this.state.noLike + 1,
-                showLike: false,
             }
         } else {
             newState = {
-                like: 'heart-o',
-                noLike: this.state.noLike - 1,
-                showLike: true,
+                fav: true,
             }
         }
         // set new state value
         this.setState(newState)
     };
 
-    validation = () => {
+    componentDidMount() {
+        this.arrayholder = this.state.data
+        this.intervalID = setInterval(
+            () => this.tick(),
+            1000
+        );
+    }
 
+    componentWillUnmount() {
+        clearInterval(this.intervalID);
+    }
+
+    tick() {
+        this.setState({
+            currenDate: new Date().toLocaleString()
+        });
+    }
+
+    // send = () => {
+    //     const filteredData = this.state.data.filter(item => item.id !== id);
+    //     this.setState({ data: filteredData });
+    //     this.arrayholder = filteredData
+
+    //     this.setState({ viewSection: !this.state.viewSection })
+    // }
+
+    renderBottomComponent() {
+        if (this.state.viewSection) {
+            return (
+                <Text>{this.state.commentHolder}</Text>
+            )
+        }
+    }
+
+    //Create Post
+    createPost = () => {
         var empty = [];
 
-        if (!(this.state.comment)) {
-            empty.push("comment");
+        if (!(this.state.titleHolder && this.state.descriptionHolder)) {
+            empty.push("title and description");
         }
 
         if (empty.length != 0) {
@@ -80,14 +126,60 @@ export default class ForumScreen extends Component {
         }
 
         else {
-
+            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: this.state.commentHolder, delete: 'delete' });
+            this.arrayholder = this.state.data;
+            this.setState({ isVisible: !this.state.isVisible })
+            this.setState({ titleHolder: '' })
+            this.setState({ descriptionHolder: '' })
             return true;
         }
     }
 
+    //Delete Post
+    deletePost(id) {
+        const filteredData = this.state.data.filter(item => item.id !== id);
+        this.setState({ data: filteredData });
+        this.arrayholder = filteredData
+    }
+
+    delete(id) {
+        Alert.alert(
+            "Are you confirm to remove this post?",
+            '',
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => this.deletePost(id) }
+            ]
+        );
+    };
+
+    updateLike(id) {
+        const index = [this.state.data.findIndex(like => like.id === id)];
+        //const index = this.state.data.map(function (x) { return x.id; }).indexOf(id);
+        
+        this.state.data[index].noLike += 1;
+        this.state.data[index].like = 'heart';
+
+        console.log(this.state.data[index].noLike);
+    }
+
+    // removeLike(id) {
+    //     const index = [this.state.data.findIndex(like => like.id === id)];
+    //     //const index = this.state.data.map(function (x) { return x.id; }).indexOf(id);
+
+    //     this.state.data[index].noLike -= 1;
+    //     this.state.data[index].like = 'heart-o';
+
+    //     console.log(this.state.data[index].noLike);
+    // }
+
     render() {
         return (
-            <ScrollView
+            <View
                 style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
@@ -96,61 +188,110 @@ export default class ForumScreen extends Component {
                         <Icon size={25} name='leaderboard' color='#808080' onPress={() => this.props.navigation.navigate('eventsScreen')} />
                     </View>
                 </View>
-
-                <View style={styles.cardView}>
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Image style={styles.proColumnName} source={profileImage} />
-                        </View>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.title}>John</Text>
-                            {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                            <Text style={styles.date}>Sep 1, 2021</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen')}>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.title}>Title is here.</Text>
-                            <Text style={styles.description}>This is the description that the users want to write.</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Font size={25} name={this.state.like} color='#FF4141' onPress={this.changeLike} />
-                        </View>
-                        <View style={styles.icon}>
-                            <Text>{this.state.noLike}</Text>
-                        </View>
-                        <View style={styles.proTitle}>
-                            <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen')} />
-                        </View>
-                        <View style={styles.icon}>
-                            <Text>2</Text>
-                        </View>
-                    </View>
-
-                    {/* <View style={styles.proTitle}>
+                <FlatList
+                    data={this.state.data}
+                    keyExtractor={item => item.first}
+                    renderItem={({ item }) => (
+                        <View style={styles.cardView}>
                             <View style={styles.proRow}>
-                                <Text style={[styles.text]}>{this.state.showComment ? moment(this.state.date).fromNow() : []}</Text>
-                                <Text>{this.state.showComment ? this.state.comments:[]}</Text>
+                                <View style={styles.proTitle}>
+                                    <Image style={styles.proColumnName} source={item.img} />
+                                </View>
+                                <View style={styles.proTitle}>
+                                    <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
+                                    {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
+                                    <Text style={styles.date}>{`${item.date}`}</Text>
+                                </View>
+                                <View style={styles.proTitle}>
+                                    <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
+                                </View>
                             </View>
-                        </View> */}
+                            <TouchableOpacity  >
+                                <View style={styles.proTitle}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                    <Text style={styles.description}>{item.description}</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <View style={styles.proRow}>
+                                <View style={styles.proTitle}>
+                                    <Font size={25} name={item.like} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                </View>
+                                <View style={styles.icon}>
+                                    <Text>{item.noLike}</Text>
+                                </View>
+                                <View style={styles.proTitle}>
+                                    <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen')} />
+                                </View>
+                                <View style={styles.icon}>
+                                    <Text>{item.comments}</Text>
+                                </View>
+                            </View>
 
-                    <View style={styles.proTitle}>
-                        <View style={styles.proRow}>
-                            <TextInput style={styles.input}
-                                placeholder="Write a comment"
-                                onChangeText={(comment_input) => this.setState({ comment: comment_input })}
-                                value={this.state.comment}
-                            />
-                            <Icon2 size={25} onPress={this.validation} name='send' style={[styles.text, !this.state.comment ? styles.inactive : []]} />
+                            <View style={styles.proTitle}>
+                                <View style={styles.proRow}>
+                                    {/* <Text>{item.comments}</Text> */}
+                                    {/* {this.renderBottomComponent()} */}
+
+
+                                    {/* <Text style={[styles.text]}>{this.state.showComment ? moment(this.state.date).fromNow() : []}</Text>
+                                    <Text>{this.state.showComment ? this.state.comments:[]}</Text> */}
+                                </View>
+                            </View>
+
+                            <View style={styles.proTitle}>
+                                <View style={styles.proRow}>
+                                    <TextInput style={styles.input}
+                                        placeholder="Write a comment"
+                                        onChangeText={comment_input => this.setState({ commentHolder: comment_input })}
+                                        value={item.comment}
+                                    />
+                                    <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.comment ? styles.inactive : []]} />
+                                </View>
+                            </View>
                         </View>
+                    )}
+                />
+                <View style={{ flexDirection: 'row', margin: 40 }}>
+                    <Modal
+                        animationType={"slide"}
+                        transparent={false}
+                        visible={this.state.isVisible}
+                        onRequestClose={() => { console.log("Modal has been closed.") }}>
+                        {/*All views of Modal*/}
+                        <View style={{ flexDirection: 'column' }}>
+                            <View style={{ flexDirection: 'row', backgroundColor: '#8352F2' }} >
+                                <Ion style={{ flex: 1 }} size={45} color='white' name='ios-close-outline' onPress={() => {
+                                    this.setState({ isVisible: !this.state.isVisible })
+                                }} />
+                                <Text style={{ flex: 1, fontSize: 18, marginTop: 10, color: 'white' }}>Create Post</Text>
+                                <TouchableOpacity onPress={this.createPost}>
+                                    <View style={{ borderRadius: 10, backgroundColor: 'white', marginTop: 5, marginRight: 5, }}>
+                                        <Text style={{ color: '#8352F2', alignItems: 'center', padding: 10 }}>
+                                            POST
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                            <TextInput
+                                style={{ margin: 40 }}
+                                placeholder="Title"
+                                onChangeText={data => this.setState({ titleHolder: data })}
+                                underlineColorAndroid='transparent'
+                            />
+                            <TextInput
+                                style={{ margin: 40 }}
+                                placeholder="Write your post here"
+                                onChangeText={data => this.setState({ descriptionHolder: data })}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
+                    </Modal>
+                    <View style={{ flexDirection: 'column', alignItems: 'flex-end', flex: 1 }}>
+                        <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} onPress={() => { this.setState({ isVisible: true }) }} />
                     </View>
                 </View>
-                <View style={{ flexDirection: 'column', alignItems: 'flex-end', margin: 40 }}>
-                    <Ant size={40} name='pluscircle' style={{ marginTop: 90, color: '#8352F2' }} />
-                </View>
-            </ScrollView>
+            </View>
         );
     }
 }
