@@ -1,6 +1,6 @@
 import {Agenda} from 'react-native-calendars';
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 export default class calendarScreen extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ export default class calendarScreen extends Component {
                 '2021-09-03': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}],
                 '2021-09-04': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}],
                 //not scheduled
-                '2021-09-05': [{plan:false}],
+                '2021-09-05': [{time:"10:00AM - 10:30AM",plan:false}],
                 '2021-09-23': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}, {name: 'sample name 2', time:"10:00AM - 10:30AM",plan:true}],
               },
         };
@@ -36,7 +36,7 @@ export default class calendarScreen extends Component {
                         //if item plan property is true
                         ?<Text style={styles.itemText}>{item.time}</Text>
                         //if item plan property is false
-                        :<Text style={styles.noItemText}>No plan today. Tap to create</Text>
+                        :<View><Text style={styles.noitemText}>{item.time}</Text><Text style={styles.noItemText}>No plan today. Tap to create</Text></View>
                         }
                         {item.plan==true
                         //if item plan property is true
@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
     },
     //no activity scheduled
     emptyItem: {
-        
+        backgroundColor: 'white',
         flex: 1,
-        borderRadius: 5,
+        borderRadius: 15,
         justifyContent:"center",
         padding: "5%",
         marginRight: "3%",
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
     //text when no activity scheduled
     noItemText:{
         color:"#808080",
-        fontSize:20,
+        fontSize:16,
     },
   });
