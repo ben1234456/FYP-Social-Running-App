@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList, Modal } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList, Modal, Animated, Easing } from 'react-native';
 import { Button } from 'native-base'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,7 +7,7 @@ import Font from 'react-native-vector-icons/FontAwesome'
 import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../images/avatar.jpg';
 import Ion from 'react-native-vector-icons/Ionicons';
-import moment, { max } from 'moment';
+import moment, { max, relativeTimeThreshold } from 'moment';
 
 export default class ForumScreen extends Component {
 
@@ -21,22 +21,21 @@ export default class ForumScreen extends Component {
             name: "",
             eventdata: "",
             heart: true,
-            comment: "",
             date: "",
             data: [
-                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 3, comments: '', delete: '' },
-                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 1, comments: '', delete: '' },
-                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 4, comments: '', delete: '' },
-                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 2, comments: '', delete: '' },
+                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
+                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
+                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
+                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
             ],
             isVisible: false,
+            commentHolder: '',
             titleHolder: '',
             descriptionHolder: '',
+            fadeAnim: new Animated.Value(0)
         }
         this.arrayholder = [];
-        // this.titleHolder = '',
-        //     this.descriptionHolder = '',
-        //     this.commentHolder = ''
+
     }
 
     changeLike = () => {
@@ -73,21 +72,27 @@ export default class ForumScreen extends Component {
         });
     }
 
-    // send = () => {
-    //     const filteredData = this.state.data.filter(item => item.id !== id);
-    //     this.setState({ data: filteredData });
-    //     this.arrayholder = filteredData
-
-    //     this.setState({ viewSection: !this.state.viewSection })
-    // }
-
-    renderBottomComponent() {
-        if (this.state.viewSection) {
-            return (
-                <Text>{this.state.commentHolder}</Text>
-            )
+    send(id) {
+        // const filteredData = this.state.data.filter(item => item.id !== id);
+        // this.setState({ data: filteredData });
+        // this.arrayholder = filteredData
+        if (this.state.commentHolder) {
+            const index = [this.state.data.findIndex(comment => comment.id === id)];
+            this.state.data[index].comment += 1
+            this.state.data[index].comments = this.state.data[index].comments + this.state.commentHolder + '\n'
+        }
+        else {
+            Alert.alert('Your comment cannot be empty!')
         }
     }
+
+    // renderBottomComponent() {
+    //     if (this.state.commentHolder) {
+    //         return (
+    //             <Text>sd</Text>
+    //         )
+    //     }
+    // }
 
     //Create Post
     createPost = () => {
@@ -126,11 +131,12 @@ export default class ForumScreen extends Component {
         }
 
         else {
-            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: this.state.commentHolder, delete: 'delete' });
+            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: '', delete: 'delete', status: false });
             this.arrayholder = this.state.data;
             this.setState({ isVisible: !this.state.isVisible })
             this.setState({ titleHolder: '' })
             this.setState({ descriptionHolder: '' })
+
             return true;
         }
     }
@@ -160,11 +166,23 @@ export default class ForumScreen extends Component {
     updateLike(id) {
         const index = [this.state.data.findIndex(like => like.id === id)];
         //const index = this.state.data.map(function (x) { return x.id; }).indexOf(id);
-        
-        this.state.data[index].noLike += 1;
-        this.state.data[index].like = 'heart';
+
+        if (this.state.data[index].like == 'heart') {
+            this.state.data[index].noLike -= 1;
+            this.state.data[index].like = 'heart-o'
+        }
+        else {
+            this.state.data[index].noLike += 1;
+            this.state.data[index].like = 'heart'
+        }
 
         console.log(this.state.data[index].noLike);
+
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 1,
+            duration: 5000,
+            easing: Easing.bounce
+        }).start();
     }
 
     // removeLike(id) {
@@ -176,6 +194,22 @@ export default class ForumScreen extends Component {
 
     //     console.log(this.state.data[index].noLike);
     // }
+
+    fadeIn = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 1,
+            duration: 5000
+        }).start();
+    };
+
+    fadeOut = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 0,
+            duration: 3000
+        }).start();
+    };
 
     render() {
         return (
@@ -206,7 +240,7 @@ export default class ForumScreen extends Component {
                                     <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
                                 </View>
                             </View>
-                            <TouchableOpacity  >
+                            <TouchableOpacity>
                                 <View style={styles.proTitle}>
                                     <Text style={styles.title}>{item.title}</Text>
                                     <Text style={styles.description}>{item.description}</Text>
@@ -223,15 +257,24 @@ export default class ForumScreen extends Component {
                                     <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen')} />
                                 </View>
                                 <View style={styles.icon}>
-                                    <Text>{item.comments}</Text>
+                                    <Text>{item.comment}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.proTitle}>
-                                <View style={styles.proRow}>
-                                    {/* <Text>{item.comments}</Text> */}
+                                <View>
                                     {/* {this.renderBottomComponent()} */}
+                                    <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
 
+                                    {/* <FlatList
+                                        data={this.state.comment}
+                                        keyExtractor={item => item.comments}
+                                        renderItem={({ item }) => (
+                                            <View>
+                                                <Text>{item.comments}</Text>
+                                            </View>
+                                        )}
+                                    /> */}
 
                                     {/* <Text style={[styles.text]}>{this.state.showComment ? moment(this.state.date).fromNow() : []}</Text>
                                     <Text>{this.state.showComment ? this.state.comments:[]}</Text> */}
@@ -244,8 +287,9 @@ export default class ForumScreen extends Component {
                                         placeholder="Write a comment"
                                         onChangeText={comment_input => this.setState({ commentHolder: comment_input })}
                                         value={item.comment}
+                                        multiline={true}
                                     />
-                                    <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.comment ? styles.inactive : []]} />
+                                    <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.commentHolder ? styles.inactive : []]} />
                                 </View>
                             </View>
                         </View>
@@ -335,7 +379,7 @@ export const styles = StyleSheet.create({
     },
     proRow: {
         flexDirection: "row",
-        alignItems: 'center'
+        alignItems: 'center',
     },
     proTitle: {
         marginLeft: 20,
