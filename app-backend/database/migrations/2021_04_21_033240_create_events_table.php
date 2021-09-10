@@ -17,16 +17,17 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('event_name');
             $table->integer('no_of_participants');
-            $table->datetime('start');
-            $table->datetime('end');
-            $table->datetime('registration_start');
-            $table->datetime('registration_end');
+            $table->date('start');
+            $table->date('end');
+            $table->date('registration_start');
+            $table->date('registration_end');
             $table->text('description');
             $table->decimal('fee_5km',5,2);
             $table->decimal('fee_10km',5,2);
             $table->decimal('fee_21km',5,2);
             $table->decimal('fee_42km',5,2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

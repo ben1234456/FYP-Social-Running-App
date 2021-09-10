@@ -71,13 +71,15 @@ export default class LoginScreen extends Component {
 
     login = () => {
 
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        
         if (this.validation()) {
             const data = {
                 email: this.state.email,
                 password: this.state.password
             };
 
-            fetch('http://192.168.0.192:8000/api/login', {
+            fetch( baseUrl +'/api/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -119,7 +121,7 @@ export default class LoginScreen extends Component {
             //this.props.navigation.navigate('adminapp');
         }
 
-        this.props.navigation.navigate('app');
+        // this.props.navigation.navigate('app');
 
     }
 

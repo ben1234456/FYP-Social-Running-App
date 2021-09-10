@@ -6,6 +6,7 @@ import DatePicker from 'react-native-datepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import addImage from '../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
+import moment from 'moment';
 
 
 export default class addEvent extends Component {
@@ -20,7 +21,7 @@ export default class addEvent extends Component {
             eventName: "",
             regisDate: "",
             regisDueDate:"",
-            startDate:"",
+            startDate: "",
             endDate:"",
             regisFee_5km:0,
             regisFee_10km:0,
@@ -62,6 +63,12 @@ export default class addEvent extends Component {
         }
         if (!(this.state.regisDueDate)){
             empty.push("registration due date");
+        }
+        if (!(this.state.startDate)){
+            empty.push("start date");
+        }
+        if (!(this.state.endDate)){
+            empty.push("end date");
         }
         if (!(this.state.regisFee_5km)){
             empty.push("registration fee (5km)");
@@ -137,15 +144,29 @@ export default class addEvent extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                // console.log('Success:',data);
-                Alert.alert(
-                    'Event Succesfully Created!',
-                    '',
-                    [
-                        { text: "Ok", onPress: () => console.log("OK Pressed") }
-                    ]
-                );
-                this.props.navigation.navigate('adminapp');
+                //success
+                if (data.status == "success") {
+                    //Alert the user
+                    Alert.alert(
+                        data.message,
+                        '',
+                        [
+                            { text: "Ok", onPress: () => this.props.navigation.push('adminapp') }
+                        ]
+                    );
+                }
+
+                //fail 
+                else if (data.status == "fail") {
+                    //alert fail message
+                    Alert.alert(
+                        data.message,
+                        '',
+                        [
+                            { text: "Ok", onPress: () => console.log("OK Pressed") }
+                        ]
+                    );
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -269,6 +290,7 @@ export default class addEvent extends Component {
                                 placeholder="Choose registration date"
                                 date={this.state.regisDate} 
                                 minDate={new Date()} 
+                                maxDate = {this.state.regisDueDate ? moment(this.state.regisDueDate).subtract(1, 'day').format('YYYY-MM-DD') : new Date("2023-12-31")}
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
@@ -287,7 +309,7 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.regisDueDate} 
-                                minDate={new Date()} 
+                                minDate={this.state.regisDate ? moment(this.state.regisDate).add(1, 'day').format('YYYY-MM-DD') : new Date()} 
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
@@ -306,7 +328,8 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose event start date"
                                 date={this.state.startDate} 
-                                minDate={new Date()} 
+                                minDate={this.state.regisDueDate ? moment(this.state.regisDueDate).add(1, 'day').format('YYYY-MM-DD') : new Date()} 
+                                maxDate = {this.state.endDate ? moment(this.state.endDate).subtract(1, 'day').format('YYYY-MM-DD') : new Date("2023-12-31")}
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
@@ -325,7 +348,7 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.endDate} 
-                                minDate={new Date()} 
+                                minDate={this.state.startDate ? moment(this.state.startDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 

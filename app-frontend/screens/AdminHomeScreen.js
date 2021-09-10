@@ -75,7 +75,7 @@ export default class AdminHomeScreen extends Component {
     };
 
     renderItemComponent = (data) =>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
                     <Image style={styles.image2} source={Event} />
@@ -95,8 +95,8 @@ export default class AdminHomeScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
-                        {/* <Text style={styles.name}> {this.state.name}</Text> */}
-                        <Text style={styles.name}> Admin</Text>
+                        <Text style={styles.name}> {this.state.name}</Text>
+                        {/* <Text style={styles.name}> Admin</Text> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
@@ -107,45 +107,19 @@ export default class AdminHomeScreen extends Component {
                     </View>
                 </View>
 
-                {/* <View style={styles.scrollview}>
-                    <FlatList horizontal={true}
-                        data={this.state.eventdata}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderItemComponent(item)}
-                    />  
-                </View> */}
                 <View style={{
                     marginLeft: 8,
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
                     <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
-                    <View>
-                        <ScrollView style={styles.scrollview} horizontal={true}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
-                                <View style={styles.cardView}>
-                                    <View style={styles.view1}>
-                                        <Image style={styles.image2} source={Event} />
-                                    </View>
-                                    <View style={styles.view2}>
-                                        <Text style={styles.title}>Family Virtual Run</Text>
-                                        <Text style={styles.venue}>Anywhere</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
-                                <View style={styles.cardView}>
-                                    <View style={styles.view1}>
-                                        <Image style={styles.image2} source={Event2} />
-                                    </View>
-                                    <View style={styles.view2}>
-                                        <Text style={styles.title}>Spartan Virtual Marathon</Text>
-                                        <Text style={styles.venue}>Anywhere</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </ScrollView>
-                    </View>
+                    <View style={styles.scrollview}>
+                    <FlatList horizontal={true}
+                        data={this.state.eventdata}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderItemComponent(item)}
+                    />  
+                </View>
                 </View>
 
                 <View style={styles.contentContainer1}>

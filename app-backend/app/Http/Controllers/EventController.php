@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -41,18 +42,24 @@ class EventController extends Controller
 
         $event->event_name = $request->event_name;
         $event->no_of_participants = 0;
-        // $event->start =  new DateTime();
-        // $event->end =  new DateTime();
-        // $event->registration_start =  new DateTime();
-        // $event->registration_end =  new DateTime();
-        
+        $event->start =  Carbon::createFromFormat('Y-m-d', $request->start)->format('Y-m-d');
+        $event->end =  Carbon::createFromFormat('Y-m-d', $request->end)->format('Y-m-d');
+        $event->registration_start =  Carbon::createFromFormat('Y-m-d', $request->regisDate)->format('Y-m-d');
+        $event->registration_end =  Carbon::createFromFormat('Y-m-d', $request->regisDueDate)->format('Y-m-d');
         $event->description =  $request->description;
         $event->fee_5km =  floatval($request->fee_5km);
         $event->fee_10km =  floatval($request->fee_10km);
         $event->fee_21km =  floatval($request->fee_21km);
         $event->fee_42km =  floatval($request->fee_42km);
 
-        $event->save();
+        $status = $event->save();
+
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Event succesfully added']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
 
     }
 
@@ -87,7 +94,25 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $event->event_name = $request->event_name;
+        $event->start =  Carbon::createFromFormat('Y-m-d', $request->start)->format('Y-m-d');
+        $event->end =  Carbon::createFromFormat('Y-m-d', $request->end)->format('Y-m-d');
+        $event->registration_start =  Carbon::createFromFormat('Y-m-d', $request->regisDate)->format('Y-m-d');
+        $event->registration_end =  Carbon::createFromFormat('Y-m-d', $request->regisDueDate)->format('Y-m-d');
+        $event->description =  $request->description;
+        $event->fee_5km =  floatval($request->fee_5km);
+        $event->fee_10km =  floatval($request->fee_10km);
+        $event->fee_21km =  floatval($request->fee_21km);
+        $event->fee_42km =  floatval($request->fee_42km);
+
+        $status = $event->save();
+
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Event succesfully edited']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
     }
 
     /**
@@ -98,6 +123,14 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+
+        $status = $event->delete();
+
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Event succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
     }
 }

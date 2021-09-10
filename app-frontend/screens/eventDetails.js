@@ -250,11 +250,11 @@ export default class eventDetails extends Component {
                             </View>
                             <View style={styles.about}>    
                                 <Text style={styles.aboutHeading}>REGISTRATION START DATE</Text>
-                                <Text style={styles.aboutText}>{this.state.start_date} (GMT +8:00)</Text>
+                                <Text style={styles.aboutText}>{this.state.registration_start_date} (GMT +8:00)</Text>
                             </View>
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>REGISTRATION END DATE</Text>
-                                <Text style={styles.aboutText}>{this.state.end_date} (GMT +8:00)</Text>
+                                <Text style={styles.aboutText}>{this.state.registration_end_date} (GMT +8:00)</Text>
                             </View>
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>RUN SUBMISSION</Text>

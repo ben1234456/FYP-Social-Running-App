@@ -104,8 +104,8 @@ export default class HomeScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
-                        {/* <Text style={styles.name}> {this.state.name}</Text> */}
-                        <Text style={styles.name}> Jun</Text>
+                        <Text style={styles.name}> {this.state.name}</Text>
+                        {/* <Text style={styles.name}> Jun</Text> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>

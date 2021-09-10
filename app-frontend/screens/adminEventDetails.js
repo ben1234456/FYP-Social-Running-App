@@ -13,41 +13,43 @@ export default class adminEventDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // eventid: props.route.params.eventid,
+            eventid: props.route.params.eventid,
             event_name:"",
             start_date:"",
             end_date:"",  
-            registeration_start_date:"",   
-            registeration_end_date:"",
+            registration_start_date:"",   
+            registration_end_date:"",
             fee_5km:0,
             fee_10km:0,
             fee_21km:0,
             fee_42km:0,
+            description:"",
         };
 
-        // fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
-        //         headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json'
-        //         },
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         this.setState({
-        //             event_name: data.event_name,
-        //             start_date: data.start,
-        //             end_date: data.end,  
-        //             registeration_start_date: data.registeration_start,   
-        //             registeration_end_date: data.registeration_end,
-        //             fee_5km: data.fee_5km,
-        //             fee_10km: data.fee_10km,
-        //             fee_21km: data.fee_21km,
-        //             fee_42km: data.fee_42km,
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
+        fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    event_name: data.event_name,
+                    start_date: data.start,
+                    end_date: data.end,  
+                    registration_start_date: data.registration_start,   
+                    registration_end_date: data.registration_end,
+                    fee_5km: data.fee_5km,
+                    fee_10km: data.fee_10km,
+                    fee_21km: data.fee_21km,
+                    fee_42km: data.fee_42km,
+                    description: data.description
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         
     }
 
@@ -121,33 +123,99 @@ export default class adminEventDetails extends Component {
     
     //     return null;
     // }
+
     edit=()=>{
-        this.props.navigation.navigate('editEventsScreen');
+        this.props.navigation.navigate('editEventsScreen', { 
+            'eventid': this.state.eventid,
+            'event_name': this.state.event_name,
+            "start_date": this.state.start_date,
+            "end_date": this.state.end_date,  
+            "registration_start": this.state.registration_start_date,   
+            "registration_end": this.state.registration_end_date,
+            "fee_5km": this.state.fee_5km,
+            "fee_10km": this.state.fee_10km,
+            "fee_21km": this.state.fee_21km,
+            "fee_42km": this.state.fee_42km,
+            "description": this.state.description,
+
+        });
     };
-    delete=()=>{};
-    register = () =>{
 
-        const data = {
-            user_ID: String(this.state.user_ID),
-        };
-
-        fetch('http://192.168.0.192:8000/api/events', {
-                method: 'POST',
+    delete_event=()=>{
+        fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
+                method: 'DELETE',
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data),
-        })
+    
+            })
+            .then(response => response.json())
+            .then(data => {
+                //success
+                if (data.status == "success") {
+                    //Alert the user
+                    Alert.alert(
+                        data.message,
+                        '',
+                        [
+                            { text: "Ok", onPress: () => this.props.navigation.push('adminapp') }
+                        ]
+                    );
+                }
 
+                //fail 
+                else if (data.status == "fail") {
+                    //alert fail message
+                    Alert.alert(
+                        data.message,
+                        '',
+                        [
+                            { text: "Ok", onPress: () => console.log("OK Pressed") }
+                        ]
+                    );
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    delete=()=>{
         Alert.alert(
-            'You have successfully signed-up for the event',
+            'Are you sure you want to delete this event?',
             '',
             [
-              { text: "Ok", onPress: () => this.props.navigation.navigate('Coupon') }
+                { text: "Yes", onPress: this.delete_event },
+                { text: "No"}
             ]
-        );   
-    }
+        );
+    };
+
+    // register = () =>{
+
+    //     const data = {
+    //         user_ID: String(this.state.user_ID),
+    //     };
+
+    //     fetch('http://192.168.0.192:8000/api/events', {
+    //             method: 'POST',
+    //             headers: {
+    //                 Accept: 'application/json',
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(data),
+    //     })
+
+    //     Alert.alert(
+    //         'You have successfully signed-up for the event',
+    //         '',
+    //         [
+    //           { text: "Ok", onPress: () => this.props.navigation.navigate('Coupon') }
+    //         ]
+    //     );   
+    // }
 
     render() {
         return (
@@ -215,11 +283,11 @@ export default class adminEventDetails extends Component {
                             </View>
                             <View style={styles.about}>    
                                 <Text style={styles.aboutHeading}>REGISTRATION START DATE</Text>
-                                <Text style={styles.aboutText}>{this.state.start_date} (GMT +8:00)</Text>
+                                <Text style={styles.aboutText}>{this.state.registration_start_date} (GMT +8:00)</Text>
                             </View>
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>REGISTRATION END DATE</Text>
-                                <Text style={styles.aboutText}>{this.state.end_date} (GMT +8:00)</Text>
+                                <Text style={styles.aboutText}>{this.state.registration_end_date} (GMT +8:00)</Text>
                             </View>
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>RUN SUBMISSION</Text>
