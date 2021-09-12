@@ -46,6 +46,7 @@ import editEventCalendarScreen from './screens/editEventCalendarScreen';
 import BuddiesListScreen from './screens/BuddiesListScreen';
 import BuddiesProfileScreen from './screens/BuddiesProfileScreen';
 import resetPasswordScreen from './screens/resetPasswordScreen';
+import addSearchUserScreen from './screens/addSearchUserScreen';
 
 const Stack = createStackNavigator();
 
@@ -371,6 +372,12 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
                     />
+                    <Stack.Screen
+                        name="addSearchUserScreen"
+                        component={addSearchUserScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
+                    /> 
                 </Stack.Navigator>
             </NavigationContainer>
         );
