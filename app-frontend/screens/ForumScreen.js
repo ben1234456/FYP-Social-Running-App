@@ -23,10 +23,10 @@ export default class ForumScreen extends Component {
             heart: true,
             date: "",
             data: [
-                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
-                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
-                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
-                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', delete: '', status: false },
+                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
             ],
             isVisible: false,
             commentHolder: '',
@@ -131,7 +131,7 @@ export default class ForumScreen extends Component {
         }
 
         else {
-            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: '', delete: 'delete', status: false });
+            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: '', edit: 'edit', delete: 'delete', status: false });
             this.arrayholder = this.state.data;
             this.setState({ isVisible: !this.state.isVisible })
             this.setState({ titleHolder: '' })
@@ -177,39 +177,7 @@ export default class ForumScreen extends Component {
         }
 
         console.log(this.state.data[index].noLike);
-
-        Animated.timing(this.state.fadeAnim, {
-            toValue: 1,
-            duration: 5000,
-            easing: Easing.bounce
-        }).start();
     }
-
-    // removeLike(id) {
-    //     const index = [this.state.data.findIndex(like => like.id === id)];
-    //     //const index = this.state.data.map(function (x) { return x.id; }).indexOf(id);
-
-    //     this.state.data[index].noLike -= 1;
-    //     this.state.data[index].like = 'heart-o';
-
-    //     console.log(this.state.data[index].noLike);
-    // }
-
-    fadeIn = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
-        Animated.timing(this.state.fadeAnim, {
-            toValue: 1,
-            duration: 5000
-        }).start();
-    };
-
-    fadeOut = () => {
-        // Will change fadeAnim value to 0 in 3 seconds
-        Animated.timing(this.state.fadeAnim, {
-            toValue: 0,
-            duration: 3000
-        }).start();
-    };
 
     render() {
         return (
@@ -236,7 +204,10 @@ export default class ForumScreen extends Component {
                                     {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
                                     <Text style={styles.date}>{`${item.date}`}</Text>
                                 </View>
-                                <View style={styles.proTitle}>
+                                <View>
+                                    <TouchableOpacity><Icon size={25} name={item.edit} color='#808080' /></TouchableOpacity>
+                                </View>
+                                <View>
                                     <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
                                 </View>
                             </View>
@@ -265,19 +236,6 @@ export default class ForumScreen extends Component {
                                 <View>
                                     {/* {this.renderBottomComponent()} */}
                                     <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
-
-                                    {/* <FlatList
-                                        data={this.state.comment}
-                                        keyExtractor={item => item.comments}
-                                        renderItem={({ item }) => (
-                                            <View>
-                                                <Text>{item.comments}</Text>
-                                            </View>
-                                        )}
-                                    /> */}
-
-                                    {/* <Text style={[styles.text]}>{this.state.showComment ? moment(this.state.date).fromNow() : []}</Text>
-                                    <Text>{this.state.showComment ? this.state.comments:[]}</Text> */}
                                 </View>
                             </View>
 

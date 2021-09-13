@@ -47,6 +47,7 @@ import BuddiesListScreen from './screens/BuddiesListScreen';
 import BuddiesProfileScreen from './screens/BuddiesProfileScreen';
 import resetPasswordScreen from './screens/resetPasswordScreen';
 import addSearchUserScreen from './screens/addSearchUserScreen';
+import CheckEmailScreen from './screens/CheckEmailScreen';
 
 const Stack = createStackNavigator();
 
@@ -377,6 +378,15 @@ export default class App extends Component {
                         component={addSearchUserScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
+                    /> 
+                    <Stack.Screen
+                        name="CheckEmailScreen"
+                        component={CheckEmailScreen}
+                        initial={false}
+                        screenOptions={{
+                            headerShown: false
+                          }}
+                        //options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
                     /> 
                 </Stack.Navigator>
             </NavigationContainer>

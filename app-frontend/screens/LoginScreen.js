@@ -121,7 +121,7 @@ export default class LoginScreen extends Component {
             //this.props.navigation.navigate('adminapp');
         }
 
-        // this.props.navigation.navigate('app');
+        //this.props.navigation.navigate('app');
 
     }
 
@@ -173,7 +173,7 @@ export default class LoginScreen extends Component {
                                 <Text style={styles.btnText}>SIGN IN</Text>
                             </Button>
                         </View>
-                        <Text style={styles.signin}>
+                        <Text style={styles.signin} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
                             <Text style={styles.link}>Forgot Your Password? </Text>
                         </Text>
                     </View>

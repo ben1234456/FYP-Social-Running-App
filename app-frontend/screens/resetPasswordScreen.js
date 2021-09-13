@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View,Image, TextInput} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Alert } from 'react-native';
 import Logo from '../images/logo.png';
-
 
 export default class resetPasswordScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email:"",
+            email: "",
+            isVisible: false,
         };
     };
-    render(){
-        return(
+
+    sendEmail = () => {
+        if (!this.state.email) {
+            Alert.alert('Your email cannot be empty')
+        }
+        else {
+            Alert.alert(
+                'The password reset email has been sent!',
+                '',
+                [
+                    { text: "Ok", onPress: () => this.props.navigation.navigate('CheckEmailScreen') }
+                ]
+            );
+        }
+    }
+
+    render() {
+        return (
             <View style={styles.wholeContainer}>
                 <View style={styles.topInfoContainer}>
                     <View style={styles.topInfo}>
@@ -29,20 +45,18 @@ export default class resetPasswordScreen extends Component {
                         <Text style={styles.botTitle}>
                             Email address
                         </Text>
-                        <TextInput 
-                                style={styles.emailInput}
-                                placeholder="Email" 
-                                keyboardType = 'email-address'                                
-                                onChangeText={(emailInput) => this.setState({email:emailInput})}
-                                value = {this.state.email}
-                            />
-                        <View style={styles.botSend}>
-                            <TouchableOpacity>
+                        <TextInput
+                            style={styles.emailInput}
+                            placeholder="Email"
+                            keyboardType='email-address'
+                            onChangeText={(emailInput) => this.setState({ email: emailInput })}
+                            value={this.state.email}
+                        />
+                        <TouchableOpacity onPress={this.sendEmail}>
+                            <View style={styles.botSend}>
                                 <Text style={styles.sendText}>SEND INSTRUCTIONS</Text>
-                            </TouchableOpacity>
-                            
-                        </View>
-                            
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -50,60 +64,61 @@ export default class resetPasswordScreen extends Component {
     }
 }
 export const styles = StyleSheet.create({
-    wholeContainer:{
-        flex:1,
-        backgroundColor:"white",
-        padding:"10%",
+    wholeContainer: {
+        flex: 1,
+        backgroundColor: "white",
+        padding: "10%",
     },
-    botInfoContainer:{
-        flex:2,
+    botInfoContainer: {
+        flex: 2,
     },
-    topInfoContainer:{
-        flex:1,
-        
+    topInfoContainer: {
+        flex: 1,
+
     },
-    img:{
+    img: {
         width: '30%',
         height: undefined,
         aspectRatio: 1,
     },
-    topInfo:{
-        flex:1,
-        padding:"5%",
-        alignItems:"center",
-        justifyContent:"flex-end",
+    topInfo: {
+        flex: 1,
+        padding: "5%",
+        alignItems: "center",
+        justifyContent: "flex-end",
     },
-    bigTitle:{
-        fontWeight:"bold",
-        fontSize:25,
-        textAlign:"center",
-        marginBottom:"2%",
+    bigTitle: {
+        fontWeight: "bold",
+        fontSize: 25,
+        textAlign: "center",
+        marginBottom: "2%",
     },
-    smallTextUnderTitle:{
-        textAlign:"center",
-        color:"grey",
+    smallTextUnderTitle: {
+        textAlign: "center",
+        color: "grey",
 
     },
-    botInfo:{
-        flex:1,
+    botInfo: {
+        flex: 1,
     },
-    emailInput:{
+    emailInput: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
-        padding:"5%",
-        marginTop:"5%",
+        padding: "5%",
+        marginTop: "5%",
     },
-    botTitle:{
-        color:"grey",
+    botTitle: {
+        color: "grey",
+        marginTop: "10%"
     },
     botSend: {
         backgroundColor: '#8352F2',
         borderRadius: 30,
-        marginTop:"5%",
-        alignItems:"center",
-        padding:"5%",
+        marginTop: "5%",
+        alignItems: "center",
+        padding: "5%",
     },
-    sendText:{
-        color:"white",
+    sendText: {
+        color: "white",
     },
 });
