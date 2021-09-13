@@ -118,8 +118,11 @@ export default class addEvent extends Component {
     }
 
     create = () => {
+        
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-        if (this.validation()) {
+        if (this.validation()){
             const data = {
                 event_name: this.state.eventName,
                 description: this.state.description,
@@ -132,9 +135,9 @@ export default class addEvent extends Component {
                 fee_21km: this.state.regisFee_21km,
                 fee_42km: this.state.regisFee_42km,
             };
-
-
-            fetch('http://192.168.0.192:8000/api/events', {
+    
+            
+            fetch( baseUrl + '/api/events', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

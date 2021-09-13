@@ -122,6 +122,9 @@ export default class editEvent extends Component {
 
     edit = () => {
         
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         if (this.validation()){
             const data = {
                 event_name: this.state.eventName,
@@ -138,7 +141,7 @@ export default class editEvent extends Component {
             };
     
             
-            fetch('http://192.168.0.192:8000/api/events/' + this.state.event_id, {
+            fetch( baseUrl + '/api/events/' + this.state.event_id, {
                 method: 'PUT',
                 headers: {
                   Accept: 'application/json',

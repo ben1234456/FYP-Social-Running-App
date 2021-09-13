@@ -160,13 +160,16 @@ export default class eventDetails extends Component {
 
     register = () =>{
 
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         const data = {
             user_id: String(this.state.user_id),
             event_id: String(this.state.eventid),
 
         };
 
-        fetch('http://192.168.0.192:8000/api/userevents', {
+        fetch(baseUrl + '/api/userevents', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',

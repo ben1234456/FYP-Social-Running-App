@@ -206,6 +206,9 @@ export default class startFreeRunScreen extends Component {
 
     stopTracking = () =>{
         
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         clearInterval(this.interval);
 
         var vdt = new Date();
@@ -229,7 +232,7 @@ export default class startFreeRunScreen extends Component {
             end_dt: this.state.end_dt
         };
 
-        fetch('http://192.168.0.192:8000/api/activity', {
+        fetch( baseUrl + '/api/activity', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

@@ -117,7 +117,10 @@ export default class SignUpScreen extends Component {
     }
 
     register = () => {
-        
+
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         if (this.validation()){
             const data = {
                 user_name: this.state.user_name,
@@ -129,7 +132,7 @@ export default class SignUpScreen extends Component {
             };
     
             
-            fetch('http://192.168.0.192:8000/api/users', {
+            fetch(baseUrl + '/api/users', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',

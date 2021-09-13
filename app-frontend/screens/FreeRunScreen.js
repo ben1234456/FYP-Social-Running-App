@@ -112,6 +112,9 @@ export default class FreeRunScreen extends Component {
 
     tracking = () => {
 
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         this.toggle();
 
         if (this.state.tracking == false) {
@@ -155,7 +158,7 @@ export default class FreeRunScreen extends Component {
                 secondCount:0,
             });
 
-            fetch('http://192.168.0.192:8000/api/activity', {
+            fetch(baseUrl + '/api/activity', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

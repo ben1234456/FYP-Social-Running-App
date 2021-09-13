@@ -51,7 +51,8 @@ export default class editProfileScreen extends Component {
 
     edit = async () =>{
 
-        const ip = "192.168.0.192";
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
         const data = {
             name: this.state.name,
@@ -61,9 +62,7 @@ export default class editProfileScreen extends Component {
             gender: this.state.gender
         };
 
-        const apilink = 'http://' + ip + ':8000/api/users/' + this.state.id ;
-        console.log(apilink);
-        fetch(apilink, {
+        fetch(baseUrl + 'api/users/' + this.state.id, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',

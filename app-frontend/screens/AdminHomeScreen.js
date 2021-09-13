@@ -20,6 +20,10 @@ export default class AdminHomeScreen extends Component {
 
 
         const getData = async () => {
+
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
                 if (userJson !== null) {
@@ -33,7 +37,7 @@ export default class AdminHomeScreen extends Component {
                 console.log(e);
             }
 
-            fetch('http://192.168.0.192:8000/api/events', {
+            fetch(baseUrl + '/api/events', {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
