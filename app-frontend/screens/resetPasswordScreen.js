@@ -40,13 +40,7 @@ export default class resetPasswordScreen extends Component {
                 console.error('Error:', error);
             });
                 
-            Alert.alert(
-                'The password reset email has been sent!',
-                '',
-                [
-                    { text: "Ok", onPress: () => this.props.navigation.navigate('CheckEmailScreen') }
-                ]
-            );
+            this.props.navigation.navigate('VerificationScreen')
         }
     }
 
@@ -66,9 +60,6 @@ export default class resetPasswordScreen extends Component {
                 </View>
                 <View style={styles.botInfoContainer}>
                     <View style={styles.botInfo}>
-                        <Text style={styles.botTitle}>
-                            Email address
-                        </Text>
                         <TextInput
                             style={styles.emailInput}
                             placeholder="Email"
@@ -78,7 +69,7 @@ export default class resetPasswordScreen extends Component {
                         />
                         <TouchableOpacity onPress={this.sendEmail}>
                             <View style={styles.botSend}>
-                                <Text style={styles.sendText}>SEND INSTRUCTIONS</Text>
+                                <Text style={styles.sendText}>SEND EMAIL</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

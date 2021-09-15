@@ -48,7 +48,8 @@ import BuddiesListScreen from './screens/BuddiesListScreen';
 import BuddiesProfileScreen from './screens/BuddiesProfileScreen';
 import resetPasswordScreen from './screens/resetPasswordScreen';
 import addSearchUserScreen from './screens/addSearchUserScreen';
-import CheckEmailScreen from './screens/CheckEmailScreen';
+import VerificationScreen from './screens/VerificationScreen';
+import CreateNewPasswordScreen from './screens/CreateNewPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -388,13 +389,16 @@ export default class App extends Component {
                         options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
                     /> 
                     <Stack.Screen
-                        name="CheckEmailScreen"
-                        component={CheckEmailScreen}
+                        name="VerificationScreen"
+                        component={VerificationScreen}
                         initial={false}
-                        screenOptions={{
-                            headerShown: false
-                          }}
-                        //options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
+                        options={{ headerTitleAlign: 'center', title: 'Verification' }}
+                    /> 
+                    <Stack.Screen
+                        name="CreateNewPasswordScreen"
+                        component={CreateNewPasswordScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
                     /> 
                 </Stack.Navigator>
             </NavigationContainer>
