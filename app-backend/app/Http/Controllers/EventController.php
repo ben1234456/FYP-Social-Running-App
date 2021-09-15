@@ -47,10 +47,7 @@ class EventController extends Controller
         $event->registration_start =  Carbon::createFromFormat('Y-m-d', $request->regisDate)->format('Y-m-d');
         $event->registration_end =  Carbon::createFromFormat('Y-m-d', $request->regisDueDate)->format('Y-m-d');
         $event->description =  $request->description;
-        $event->fee_5km =  floatval($request->fee_5km);
-        $event->fee_10km =  floatval($request->fee_10km);
-        $event->fee_21km =  floatval($request->fee_21km);
-        $event->fee_42km =  floatval($request->fee_42km);
+
 
         $status = $event->save();
 

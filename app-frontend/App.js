@@ -14,6 +14,7 @@ import submitRun from "./screens/submitRun";
 import FreeRun from "./screens/FreeRunScreen";
 import Progress from "./screens/ProgressScreen";
 import Profile from "./screens/ProfileScreen";
+import ForumScreen from "./screens/ForumScreen";
 
 import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
@@ -315,6 +316,13 @@ export default class App extends Component {
                         component={calendarScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Calendar' }}
+                    />
+                    <Stack.Screen
+                        name="forumScreen"
+                        component={ForumScreen}
+                        initial={false} options={{ headerShown: false }}
+                        options={{ headerTitleAlign: 'center', title: 'Forum' }}
+
                     />
                     <Stack.Screen
                         name="ForumDetailsScreen"

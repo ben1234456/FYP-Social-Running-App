@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'native-base'
-import { Actions } from 'react-native-router-flux';
+import { Actions, Reducer } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -84,6 +84,11 @@ export default class App extends Component {
                     <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('editProfileScreen')}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
+
+                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
+                        <Text style={styles.btnText}>Change password</Text>
+                    </Button>
+
                 </View>
                 <View style={styles.cardView}>
                     <View style={styles.proRow}>
@@ -195,6 +200,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         marginTop: 50,
+    },
+
+    changePassword: {
+        display: 'flex',
+        backgroundColor: '#FF0000',
+        borderRadius: 30,
+        marginTop: 50,
+        marginLeft:10,
     },
 
     btnText: {

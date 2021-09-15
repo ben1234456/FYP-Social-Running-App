@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView, Alert, Dimensions} from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, Alert, Dimensions, FlatList} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
@@ -19,14 +19,15 @@ export default class adminEventDetails extends Component {
             end_date:"",  
             registration_start_date:"",   
             registration_end_date:"",
-            fee_5km:0,
-            fee_10km:0,
-            fee_21km:0,
-            fee_42km:0,
             description:"",
+            event_distance: "",
         };
+        
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-        fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
+        //get events' details
+        fetch( baseUrl + '/api/events/' + this.state.eventid, {
                 headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -50,6 +51,24 @@ export default class adminEventDetails extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+        //get event distances
+        fetch(baseUrl + '/api/events/'  + this.state.eventid + '/distance', {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get event distances + fee')
+            this.setState({
+                event_distance: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
         
     }
 
@@ -115,14 +134,8 @@ export default class adminEventDetails extends Component {
         }
     }
 
-    // static getDerivedStateFromProps(props, state) {
-        
-    //     var start_Date = formatDateTime(state.start_date,1); 
-    //     console.log(start_Date);
-
-    
-    //     return null;
-    // }
+    renderItemComponent = (data) =>
+        <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
 
     edit=()=>{
         this.props.navigation.navigate('editEventsScreen', { 
@@ -250,10 +263,11 @@ export default class adminEventDetails extends Component {
                                 <Text style={styles.eventTitle}>Price</Text>
                             </View>
                             <View style={styles.infoColumnInfo}>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_5km} (5km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_10km} (10km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_21km} (21km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_42km} (42km)</Text>
+                            <FlatList 
+                                data={this.state.event_distance}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={item => this.renderItemComponent(item)}
+                            /> 
                             </View>
                         </View>
                         <View style={styles.infoRow}>

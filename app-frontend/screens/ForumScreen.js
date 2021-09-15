@@ -7,6 +7,7 @@ import Font from 'react-native-vector-icons/FontAwesome'
 import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../images/avatar.jpg';
 import Ion from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment, { max, relativeTimeThreshold } from 'moment';
 
 export default class ForumScreen extends Component {
@@ -23,18 +24,60 @@ export default class ForumScreen extends Component {
             heart: true,
             date: "",
             data: [
-                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '1', name: "User 1", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '2', name: "User 2", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '3', name: "User 3", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+                { id: '4', name: "User 4", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
             ],
             isVisible: false,
             commentHolder: '',
             titleHolder: '',
             descriptionHolder: '',
-            fadeAnim: new Animated.Value(0)
+            fadeAnim: new Animated.Value(0),
+            posts: '',
+            user_id: '',
         }
+
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        user_id: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        getData();
+
         this.arrayholder = [];
+
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get forum posts' details
+        fetch(baseUrl + '/api/forumposts', {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get forum posts')
+            console.log(data)
+            this.setState({
+                posts: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
     }
 
@@ -131,13 +174,59 @@ export default class ForumScreen extends Component {
         }
 
         else {
-            this.state.data.push({ id: id += 1, name: { "title": "Male", "first": "My", "last": "Name" }, img: profileImage, date: moment(this.state.currenDate).fromNow(), like: 'heart-o', noLike: 0, title: this.state.titleHolder, description: this.state.descriptionHolder, comment: 0, comments: '', edit: 'edit', delete: 'delete', status: false });
-            this.arrayholder = this.state.data;
-            this.setState({ isVisible: !this.state.isVisible })
-            this.setState({ titleHolder: '' })
-            this.setState({ descriptionHolder: '' })
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-            return true;
+            const data = {
+                user_id : this.state.user_id,
+                title : this.state.titleHolder,
+                description : this.state.descriptionHolder,
+            };
+
+            //get forum posts' details
+            fetch(baseUrl + '/api/forumposts', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == "success"){
+                    console.log("Succesfully saved post");
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            this.setState({
+                title : '',
+                description : '',
+                isVisible: !this.state.isVisible ,
+            })
+
+            //get forum posts' details
+            fetch(baseUrl + '/api/forumposts', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get forum posts')
+                console.log(data)
+                this.setState({
+                    posts: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
         }
     }
 
@@ -191,18 +280,18 @@ export default class ForumScreen extends Component {
                     </View>
                 </View>
                 <FlatList
-                    data={this.state.data}
-                    keyExtractor={item => item.first}
+                    data={this.state.posts}
+                    keyExtractor={item => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.cardView}>
                             <View style={styles.proRow}>
                                 <View style={styles.proTitle}>
-                                    <Image style={styles.proColumnName} source={item.img} />
+                                    <Image style={styles.proColumnName} source={profileImage} />
                                 </View>
                                 <View style={styles.proTitle}>
-                                    <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
+                                    <Text style={styles.title}>{item.name}</Text>
                                     {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                                    <Text style={styles.date}>{`${item.date}`}</Text>
+                                    <Text style={styles.date}>{item.datetime}</Text>
                                 </View>
                                 <View>
                                     <TouchableOpacity><Icon size={25} name={item.edit} color='#808080' /></TouchableOpacity>
@@ -225,10 +314,10 @@ export default class ForumScreen extends Component {
                                     <Text>{item.noLike}</Text>
                                 </View>
                                 <View style={styles.proTitle}>
-                                    <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen')} />
+                                    <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })} />
                                 </View>
                                 <View style={styles.icon}>
-                                    <Text>{item.comment}</Text>
+                                    <Text>{item.comments}</Text>
                                 </View>
                             </View>
 

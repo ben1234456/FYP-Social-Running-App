@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -8,23 +8,116 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../images/avatar.jpg';
 import moment from 'moment';
 
+
 export default class ForumDetailsScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            user_id: "",
             id: "",
+            post_id: props.route.params.postid,
             name: "",
-            eventdata: "",
-            noLike: 5,
+            title: "",
+            description: "",
+            noLike: "",
             like: 'heart-o',
             showLike: true,
             showComment: true,
-            comment: "",
-            date: "",
+            noComment: "",
+            datetime: "",
+            comments: "",
         }
+
+        //get data from async storage
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                
+                if(userJson !== null) {
+                    const user = JSON.parse(userJson);
+
+                    this.setState({
+                        user_id: user.id,
+                    });  
+                }
+    
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    
+        getData();
+
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get post details
+        fetch(baseUrl + '/api/forumposts/' + this.state.post_id, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    title: data.title,
+                    description: data.description,
+                    name: data.name,
+                    datetime: data.datetime,
+                    noLike: data.noLike,
+                    noComment: data.comments,
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        //get comments
+        fetch(baseUrl + '/api/forumposts/' + this.state.post_id + '/comments', {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Succesfully get comments")
+            this.setState({
+                comments:data,
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 
+    componentDidMount() {
+
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get comments
+        fetch(baseUrl + '/api/forumposts/' + this.state.post_id + '/comments', {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Succesfully get comments")
+            this.setState({
+                comments:data,
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+    
+    
     changeLike = () => {
         let newState;
         if (this.state.showLike) {
@@ -82,9 +175,69 @@ export default class ForumDetailsScreen extends Component {
 
         else {
 
-            return true;
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            const data = {
+                user_id: this.state.user_id,
+                post_id: this.state.post_id,
+                comment: this.state.comment
+            };
+
+            fetch(baseUrl + '/api/postcomments', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:',data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            this.setState({
+                comment:'',
+            })
+
+            //get comments
+            fetch(baseUrl + '/api/forumposts/' + this.state.post_id + '/comments', {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Succesfully get comments")
+                this.setState({
+                    comments:data,
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
     }
+
+    renderItemComponent = (data) =>
+        <View style={styles.proRow}>
+            <View style={styles.proTitle}>
+                <Image style={styles.proColumnName} source={profileImage} />
+            </View>
+            <View style={{ marginTop: 20, marginLeft: 20, flex: 2 }}>
+                <Text style={styles.title}>{data.item.name}</Text>
+                {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
+                <Text style={styles.date}>{data.item.comment}</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+                <Text style={{color:'#AEAEAE', fontSize: 14}}>{data.item.datetime}</Text>
+            </View>
+        </View>
 
     render() {
         return (
@@ -95,15 +248,15 @@ export default class ForumDetailsScreen extends Component {
                         <Image style={styles.proColumnName} source={profileImage} />
                     </View>
                     <View style={styles.proTitle}>
-                        <Text style={styles.title}>John</Text>
+                        <Text style={styles.title}>{this.state.name}</Text>
                         {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                        <Text style={styles.date}>Sep 1, 2021</Text>
+                        <Text style={styles.date}>{this.state.datetime}</Text>
                     </View>
                 </View>
 
                 <View style={styles.proTitle}>
-                    <Text style={styles.title}>Title is here.</Text>
-                    <Text style={styles.description}>This is the description that the users want to write.</Text>
+                    <Text style={styles.title}>{this.state.title}</Text>
+                    <Text style={styles.description}>{this.state.description}</Text>
                 </View>
                 <View style={styles.proRow}>
                     <View style={styles.proTitle}>
@@ -116,7 +269,7 @@ export default class ForumDetailsScreen extends Component {
                         <Icon2 size={25} name='comment-outline' color='#808080' />
                     </View>
                     <View style={styles.icon}>
-                        <Text>2</Text>
+                        <Text>{this.state.noComment}</Text>
                     </View>
                 </View>
 
@@ -136,18 +289,14 @@ export default class ForumDetailsScreen extends Component {
                 </View>
 
                 <View style={styles.proRow}>
-                    <View style={styles.proTitle}>
-                        <Image style={styles.proColumnName} source={profileImage} />
-                    </View>
-                    <View style={{ marginTop: 20, marginLeft: 20, flex: 2 }}>
-                        <Text style={styles.title}>Gordon</Text>
-                        {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                        <Text style={styles.date}>Cool</Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{color:'#AEAEAE', fontSize: 14}}>1 hour ago</Text>
-                    </View>
+                    <FlatList 
+                        data={this.state.comments}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderItemComponent(item)}
+                    />  
                 </View>
+                
+                            
             </ScrollView>
         );
     }

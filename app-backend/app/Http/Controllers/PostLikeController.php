@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserEvent;
+use App\Models\PostLike;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
-class UserEventController extends Controller
+class PostLikeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,38 +35,27 @@ class UserEventController extends Controller
      */
     public function store(Request $request)
     {
-        error_log($request);
-
-        $userevent = new UserEvent;
-
-        $userevent->user_id = $request->user_id;
-        $userevent->event_id = $request->event_id;
-        $userevent->registration_dt = Carbon::now();
-        $userevent->distance = 5;
-        $userevent->distance_ran = 0;
-        $userevent->status = 'in-progress';
-
-        $userevent->save();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserEvent  $userEvent
+     * @param  \App\Models\PostLike  $postLike
      * @return \Illuminate\Http\Response
      */
-    public function show(UserEvent $userEvent)
+    public function show(PostLike $postLike)
     {
-        return $userEvent->toJson();
+        return $postLike->toJson();
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\UserEvent  $userEvent
+     * @param  \App\Models\PostLike  $postLike
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserEvent $userEvent)
+    public function edit(PostLike $postLike)
     {
         //
     }
@@ -76,10 +64,10 @@ class UserEventController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserEvent  $userEvent
+     * @param  \App\Models\PostLike  $postLike
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserEvent $userEvent)
+    public function update(Request $request, PostLike $postLike)
     {
         //
     }
@@ -87,20 +75,11 @@ class UserEventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserEvent  $userEvent
+     * @param  \App\Models\PostLike  $postLike
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserEvent $userEvent)
+    public function destroy(PostLike $postLike)
     {
         //
-    }
-
-    public function showUserEvents(Request $request, User $user)
-    {
-        error_log($request);
-        error_log($user);
-        $userevents = UserEvent::where('user_id', $user->id)->get();
-
-        return $userevents->toJson();
     }
 }

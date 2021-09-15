@@ -23,13 +23,11 @@ export default class addEvent extends Component {
             endDate: "",
             description: "",
             imageSource: addImage,
-            data: [
-                { id: 1, distance: 'Distance', fee: 'Fee', delete: '' },
-            ],
-            distanceHolder: '',
-            feeHolder: '',
+            textInput : [],
+            feeArray: [],
+            distanceArray : []
         }
-        this.arrayholder = [];
+
     }
     chooseImage = async () => {
         try {
@@ -70,19 +68,7 @@ export default class addEvent extends Component {
         if (!(this.state.endDate)) {
             empty.push("end date");
         }
-        if (!(this.state.regisFee_5km)) {
-            empty.push("registration fee (5km)");
-        }
-        if (!(this.state.regisFee_10km)) {
-            empty.push("registration fee (10km)");
-        }
-        if (!(this.state.regisFee_21km)) {
-            empty.push("registration fee (21km)");
-        }
-        if (!(this.state.regisFee_42km)) {
-            empty.push("registration fee (42km)");
-        }
-
+        
         if (empty.length != 0) {
 
             console.log(empty[0]);
@@ -130,11 +116,12 @@ export default class addEvent extends Component {
                 end: this.state.endDate,
                 regisDate: this.state.regisDate,
                 regisDueDate: this.state.regisDueDate,
-                fee_5km: this.state.regisFee_5km,
-                fee_10km: this.state.regisFee_10km,
-                fee_21km: this.state.regisFee_21km,
-                fee_42km: this.state.regisFee_42km,
             };
+
+            const disData = {
+                distance: this.state.distanceArray,
+                fee: this.state.feeArray
+            }
     
             
             fetch( baseUrl + '/api/events', {
@@ -149,6 +136,21 @@ export default class addEvent extends Component {
                 .then(data => {
                     //success
                     if (data.status == "success") {
+
+                        //save the event distance
+                        fetch( baseUrl + '/api/eventdistances', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(disData),
+                        })
+                        .then(response => response.json())
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+
                         //Alert the user
                         Alert.alert(
                             data.message,
@@ -179,33 +181,102 @@ export default class addEvent extends Component {
 
     }
 
-    addRow = () => {
-        this.state.data.push({ id: 2, distance: 'Distance', fee: 'Fee', delete: 'delete' },);
-        this.arrayholder = this.state.data;
-        this.setState({ distanceHolder: '' })
-        this.setState({ feeHolder: '' })
-    }
+    //function to add TextInput dynamically
+    addTextInput = (index) => {
+        let textInput = this.state.textInput;
+        textInput.push(
+            <View>
+                
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.botTitle}>Distance (KM)</Text>
+                    <TouchableOpacity onPress={() => this.removeTextInput(index)}><Icon2 style={{ marginTop: 20 }} size={25} name="delete" color='#808080' /></TouchableOpacity>
+                </View>
+                <View style={styles.inputTitleTop}>
 
-    deleteRow(id) {
-        const filteredData = this.state.data.filter(item => item.id !== id);
-        this.setState({ data: filteredData });
-        this.arrayholder = filteredData
-    }
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. 5"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addValues(text, index)}
+                        />
+                    </View>
+                </View>
 
-    delete(id) {
-        Alert.alert(
-            "Are you confirm to remove this row?",
-            '',
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                { text: "OK", onPress: () => this.deleteRow(id) }
-            ]
+                <Text style={styles.botTitle}>Fee (RM)</Text>
+                <View style={styles.inputTitleTop}>
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. RMXXX"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addFee(text, index)}
+                        />
+                    </View>
+                </View>
+            </View>
         );
-    };
+        this.setState({ textInput });
+    }
+
+    //function to remove TextInput dynamically
+    removeTextInput = (index) => {
+        let textInput = this.state.textInput;
+        let distanceArray = this.state.distanceArray;
+        let feeArray = this.state.feeArray;
+        textInput.splice(index,1);
+        distanceArray.splice(index,1);
+        feeArray.splice(index,1);
+        this.setState({ textInput,distanceArray,feeArray });
+    }
+
+    //function to add text from TextInputs into single array
+    addFee = (text, index) => {
+        let dataArray = this.state.feeArray;
+        let checkBool = false;
+        if (dataArray.length !== 0){
+        dataArray.forEach(element => {
+            if (element.index === index ){
+            element.text = text;
+            checkBool = true;
+            }
+        });
+        }
+        if (checkBool){
+        this.setState({
+            feeArray: dataArray
+        });
+    }
+    else {
+        dataArray.push({'text':text,'index':index});
+        this.setState({
+            feeArray: dataArray
+        });
+    }
+    }
+
+    //function to add text from TextInputs into single array
+    addValues = (text, index) => {
+        let dataArray = this.state.distanceArray;
+        let checkBool = false;
+        if (dataArray.length !== 0){
+        dataArray.forEach(element => {
+            if (element.index === index ){
+            element.text = text;
+            checkBool = true;
+            }
+        });
+        }
+        if (checkBool){
+        this.setState({
+        distanceArray: dataArray
+        });
+    }
+    else {
+        dataArray.push({'text':text,'index':index});
+        this.setState({
+        distanceArray: dataArray
+        });
+    }
+    }
 
     render() {
         return (
@@ -250,48 +321,25 @@ export default class addEvent extends Component {
                                 />
                             </View>
                         </View>
-
+                        
                         <View>
-                            <FlatList
-                                data={this.state.data}
-                                keyExtractor={item => item.id}
-                                renderItem={({ item }) => (
-                                    <View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={styles.botTitle}>{item.distance}</Text>
-                                            <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 style={{ marginTop: 20 }} size={25} name={item.delete} color='#808080' /></TouchableOpacity>
-                                        </View>
-                                        <View style={styles.inputTitleTop}>
-
-                                            <View style={styles.inputText}>
-                                                <TextInput
-                                                    placeholder="e.g. 5"
-                                                    keyboardType='numeric'
-                                                    onChangeText={() => item.distance}
-                                                    value={this.state.distance}
-                                                />
-                                            </View>
-                                        </View>
-
-                                        <Text style={styles.botTitle}>{item.fee}</Text>
-                                        <View style={styles.inputTitleTop}>
-                                            <View style={styles.inputText}>
-                                                <TextInput
-                                                    placeholder="e.g. RMXXX"
-                                                    keyboardType='numeric'
-                                                    onChangeText={() => item.fee}
-                                                    value={this.state.fee}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View>
-                                )}
-                            />
+                            <Text style={styles.botTitle}>Distances and Fees</Text>
                         </View>
-                        <Button style={styles.addRow} onPress={this.addRow}>
-                            <Text style={{ color: 'white', fontSize: 14 }}>Add more rows</Text>
-                        </Button>
 
+                        {this.state.textInput.map((value) => {
+                        return value
+                        })}
+                        
+                        <View>
+                  
+                            <Button style={styles.addRow} title='Add' onPress={() => this.addTextInput(this.state.textInput.length)}>
+                                <Text style={{ color: 'white', fontSize: 14 }}>Add row</Text>
+                            </Button>
+                           
+                              
+                        </View>
+                        
+                        
                         <View>
                             <Text style={styles.botTitle}>Registration Start Date</Text>
                         </View>

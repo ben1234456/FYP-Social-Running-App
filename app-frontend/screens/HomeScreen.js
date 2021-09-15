@@ -46,22 +46,26 @@ export default class HomeScreen extends Component {
                 console.log(e);
             }
 
+            //get event details
             fetch(baseUrl + '/api/events', {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success')
-                    this.setState({
-                        eventdata: data
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get event data')
+                // console.log(data)
+                this.setState({
+                    eventdata: data
                 });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            
         }
 
         getData();

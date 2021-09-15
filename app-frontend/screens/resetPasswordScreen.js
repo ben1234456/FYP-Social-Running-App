@@ -12,10 +12,34 @@ export default class resetPasswordScreen extends Component {
     };
 
     sendEmail = () => {
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
         if (!this.state.email) {
             Alert.alert('Your email cannot be empty')
         }
         else {
+
+            const data = {
+                email: String(this.state.email)   
+            };
+
+            fetch(baseUrl + '/api/password/forgot-password', {
+                method: 'POST',   
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+                
             Alert.alert(
                 'The password reset email has been sent!',
                 '',

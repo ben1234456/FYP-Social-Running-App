@@ -141,7 +141,7 @@ export default class BuddiesListScreen extends Component {
                     )}
                 />
                 <View style={{ flexDirection: 'column', alignItems: 'flex-end', margin: 40 }}>
-                    <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} />
+                    <Ant onPress={() => this.props.navigation.navigate('addSearchUserScreen')} size={40} name='pluscircle' style={{ color: '#8352F2' }} />
                 </View>
                 {/* <TouchableOpacity><Text onPress={this.share}>Share</Text></TouchableOpacity> */}
             </View>

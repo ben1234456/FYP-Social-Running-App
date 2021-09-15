@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView, Alert, Dimensions} from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, Alert, Dimensions, FlatList} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
@@ -27,7 +27,11 @@ export default class eventDetails extends Component {
             fee_42km:0,
         };
 
-        fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get events' details
+        fetch(baseUrl + '/api/events/' + this.state.eventid, {
                 headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -39,8 +43,8 @@ export default class eventDetails extends Component {
                     event_name: data.event_name,
                     start_date: data.start,
                     end_date: data.end,  
-                    registeration_start_date: data.registeration_start,   
-                    registeration_end_date: data.registeration_end,
+                    registeration_start_date:  data.registration_start,   
+                    registeration_end_date:  data.registration_end,
                     fee_5km: data.fee_5km,
                     fee_10km: data.fee_10km,
                     fee_21km: data.fee_21km,
@@ -50,6 +54,24 @@ export default class eventDetails extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+        //get event distances
+        fetch(baseUrl + '/api/events/'  + this.state.eventid + '/distance', {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get event distances + fee')
+            this.setState({
+                event_distance: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
             const getData = async () => {
                 try {
@@ -71,16 +93,16 @@ export default class eventDetails extends Component {
                         'Content-Type': 'application/json'
                     },
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Success')
-                        this.setState({
-                            eventdata: data
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success')
+                    this.setState({
+                        eventdata: data
                     });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
             }
     
             getData();
@@ -158,6 +180,9 @@ export default class eventDetails extends Component {
     //     return null;
     // }
 
+    renderItemComponent = (data) =>
+        <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
+
     register = () =>{
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -170,12 +195,12 @@ export default class eventDetails extends Component {
         };
 
         fetch(baseUrl + '/api/userevents', {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
         })
 
         Alert.alert(
@@ -220,10 +245,11 @@ export default class eventDetails extends Component {
                                 <Text style={styles.eventTitle}>Price</Text>
                             </View>
                             <View style={styles.infoColumnInfo}>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_5km} (5km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_10km} (10km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_21km} (21km)</Text>
-                                <Text style={styles.eventInfo}>RM{this.state.fee_42km} (42km)</Text>
+                            <FlatList 
+                                data={this.state.event_distance}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={item => this.renderItemComponent(item)}
+                            /> 
                             </View>
                         </View>
                         <View style={styles.infoRow}>
