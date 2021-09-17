@@ -154,6 +154,7 @@ export default class LoginScreen extends Component {
                         <Text style={styles.heading}>Welcome Back.</Text>
                         <View style={styles.input}>
                             <TextInput
+                                style={styles.email}
                                 placeholder="Email"
                                 autoFocus
                                 onChangeText={(email_input) => this.setState({ email: email_input })}
@@ -197,7 +198,9 @@ export const styles = StyleSheet.create({
         flex: 1,
         
     },
-
+    email:{
+        flex:1,
+    },
     image: {
         marginTop: 15,
         marginRight: 15,
