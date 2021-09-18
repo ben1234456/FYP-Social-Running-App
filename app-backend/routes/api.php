@@ -57,7 +57,11 @@ Route::get('forumposts/{forumpost}/comments', [ForumPostController::class, 'show
 
 Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
 
+//get events registered by the user
 Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents']);
+
+//get events (excluded registered)
+Route::get('/events/exclusive/{user}', [EventController::class, 'showUserExclusiveEvents']);
 
 Route::get('/events/{event}/distance', [EventDistanceController::class, 'showEventDistances']);
 

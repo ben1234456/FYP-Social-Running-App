@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../images/event.png';
@@ -13,85 +13,64 @@ export default class couponScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user_id:"",   
+            user_id: props.route.params.user_id,   
             event_data:"",
         };
 
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-        const getData = async () => {
-            try {
-                const userJson = await AsyncStorage.getItem('@userJson')
-                if(userJson !== null) {
-                    const user = JSON.parse(userJson);
-                    this.setState({
-                        user_id:user.id,
-                    });
-                }
-
-            } catch(e) {
-                console.log(e);
-            }
-
-            fetch('http://192.168.0.192:8000/api/events/users/' + this.state.user_id, {
-                headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get event data')
-                console.log(data)
-                this.setState({
-                    event_data:data
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+        fetch(baseUrl + '/api/events/users/' + this.state.user_id, {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get registered event data')
+            console.log(data)
+            this.setState({
+                event_data:data
             });
-        }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
-        getData();
-        
     }
+
+    renderItemComponent = (data) =>
+        
+    <View style={styles.coupon}>
+        <View style={styles.couponDate}>
+            <Text style={styles.eventDate}>{data.item.start_date} until {data.item.end_date}</Text>
+        </View>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('couponDetails')}>
+            <View style={styles.couponRow}  onPress={() => this.props.navigation.navigate('couponDetails')}>
+                <View style={styles.couponImg}>
+                    <Image style={styles.image} source={Event} />
+                </View>
+                <View style={styles.couponInfo}>
+                    <Text style={styles.eventTitle}>{data.item.event_name} </Text>
+                    <Text style={styles.eventDatail}>Progress: {data.item.distance_ran}km / {data.item.distance}km</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+    </View>
+
 
     render() {
         return (
             <ScrollView style={styles.background}>
                 <View style={styles.container}>
-                    <View style={styles.coupon}>
-                            <View style={styles.couponDate}>
-                                <Text style={styles.eventDate}>7 July - 12 August 2021</Text>
-                            </View>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('couponDetails')}>
-                                <View style={styles.couponRow}  onPress={() => this.props.navigation.navigate('couponDetails')}>
-                                    <View style={styles.couponImg}>
-                                        <Image style={styles.image} source={Event} />
-                                    </View>
-                                    <View style={styles.couponInfo}>
-                                        <Text style={styles.eventTitle}>Virtual Half Marathon</Text>
-                                        <Text style={styles.eventDatail}>Progress: 2.75 /5km</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                    </View>
-                    <View style={styles.coupon}>
-                        
-                            <View style={styles.couponDate}>
-                                <Text style={styles.eventDate}>19 May - 25 June 2021</Text>
-                            </View>
-                            <View style={styles.couponRow}>
-                                <View style={styles.couponImg}>
-                                    <Image style={styles.image} source={Event2} />
-                                </View>
-                                <View style={styles.couponInfo}>
-                                    <Text style={styles.eventTitle}>Spartan Virtual Marathon</Text>
-                                    <Text style={styles.eventDatail}>Progress: 13.34 /21km</Text>
-                                </View>
-                            </View>
-                        
-                    </View>
-                    
+
+                <FlatList 
+                    data={this.state.event_data}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={item => this.renderItemComponent(item)}
+                /> 
+
                 </View>
             </ScrollView>
         );
@@ -142,6 +121,8 @@ export const styles = StyleSheet.create({
         color: "#373737",
     },
     eventDate:{
+        fontWeight:"bold",
+        fontSize:16,
         color:"#808080",
     },
     image: {

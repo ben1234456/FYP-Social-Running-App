@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserEvent;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -55,7 +56,6 @@ class ActivityController extends Controller
         $activity->total_duration = Carbon::createFromFormat('H:i:s', $request->total_duration)->format('H:i:s');
         $activity->calories_burned = 0;
         $activity->start_dt = Carbon::createFromFormat('Y-m-d H:i:s', $request->start_dt)->format('Y-m-d H:i:s');
-        // $activity->start_dt = Carbon::now();
         $activity->end_dt = Carbon::now();
 
         $activity->save();
@@ -65,6 +65,29 @@ class ActivityController extends Controller
         $latest = Activity::OrderBy('id', 'desc')->first();
         $useractivity->activity_id = $latest->id;
         $useractivity->save();
+
+        $userevents = UserEvent::where('user_id',  $request->user_ID)->get();
+
+        error_log($userevents);
+
+        foreach($userevents as $userevent){
+            $added_distance = $userevent->distance_ran + floatval($request->total_distance);
+
+            if ($added_distance > $userevent->distance){
+                $userevent->distance_ran = $userevent->distance;
+                $userevent->status = "completed";
+                error_log("1");
+            }
+
+            else{
+                $userevent->distance_ran = $added_distance;
+                error_log("2");
+            }
+
+            $userevent->save();
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Event succesfully edited']);
 
     }
 

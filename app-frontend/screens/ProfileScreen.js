@@ -12,7 +12,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: "",
+            user_id: "",
             name: "",
             gender: "",
             city: "",
@@ -33,6 +33,7 @@ export default class App extends Component {
                     
                     //update state
                     this.setState({
+                        user_id:user.id,
                         name:user.first_name,
                         email:user.email,
                         gender:genderText,
@@ -72,7 +73,7 @@ export default class App extends Component {
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Coupon')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
                             <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
                         </TouchableOpacity>
                     </View>

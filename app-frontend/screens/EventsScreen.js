@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Logo from '../images/logo.png';
 import Event from '../images/event.png';
 import Event2 from '../images/marathon.png';
@@ -8,31 +8,64 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class EventsScreen extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user_id: props.route.params.user_id,
+            name: "",
+            eventdata: "",
+        };
+
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get event details
+        fetch(baseUrl + '/api/events/exclusive/' + this.state.user_id, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get event data')
+            // console.log(data)
+            this.setState({
+                eventdata: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+        
+    }
+
+    renderItemComponent = (data) =>
+        
+        <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+            <View style={styles.cardView}>
+                <View style={styles.view1}>
+                    <Image style={styles.image} source={Event} />
+                </View>
+                <View style={styles.view2}>
+                    <Text style={styles.title}>{data.item.event_name}</Text>
+                    <Text style={styles.venue}>Anywhere</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+
     render() {
         return (
             <ScrollView style={styles.container}>
-                <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('eventDetails')}>
-                    <View style={styles.cardView}>
-                        <View style={styles.view1}>
-                            <Image style={styles.image} source={Event} />
-                        </View>
-                        <View style={styles.view2}>
-                            <Text style={styles.title}>Virtual Half Marathon</Text>
-                            <Text style={styles.venue}>Anywhere</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('eventDetails')}>
-                    <View style={styles.cardView}>
-                        <View style={styles.view1}>
-                            <Image style={styles.image} source={Event2} />
-                        </View>
-                        <View style={styles.view2}>
-                            <Text style={styles.title}>Spartan Virtual Marathon</Text>
-                            <Text style={styles.venue}>Anywhere</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
+
+                <FlatList 
+                    data={this.state.eventdata}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={item => this.renderItemComponent(item)}
+                />  
+                
             </ScrollView >
         );
     }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserEvent;
+use App\Models\User;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -97,9 +99,15 @@ class UserEventController extends Controller
 
     public function showUserEvents(Request $request, User $user)
     {
-        error_log($request);
-        error_log($user);
+
         $userevents = UserEvent::where('user_id', $user->id)->get();
+
+        foreach($userevents as $userevent){
+            $event = Event::where('id', '=', $userevent->event_id)->first();
+            $userevent->start_date = $event->start;
+            $userevent->end_date = $event->end;
+            $userevent->event_name = $event->event_name;
+        }
 
         return $userevents->toJson();
     }

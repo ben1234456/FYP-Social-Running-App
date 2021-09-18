@@ -21,6 +21,7 @@ export default class HomeScreen extends Component {
 
         this.state = {
             id: "",
+            user_id: "",
             name: "",
             eventdata: "",
             currenDate: date,
@@ -39,6 +40,7 @@ export default class HomeScreen extends Component {
                     const user = JSON.parse(userJson);
                     this.setState({
                         name: user.first_name,
+                        user_id: user.id,
                     });
                 }
 
@@ -47,7 +49,7 @@ export default class HomeScreen extends Component {
             }
 
             //get event details
-            fetch(baseUrl + '/api/events', {
+            fetch(baseUrl + '/api/events/exclusive/' + this.state.user_id, {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
@@ -56,7 +58,7 @@ export default class HomeScreen extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log('Successfully get event data')
-                // console.log(data)
+                console.log(data)
                 this.setState({
                     eventdata: data
                 });
@@ -113,7 +115,6 @@ export default class HomeScreen extends Component {
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
                         <Text style={styles.name}> {this.state.name}</Text>
-                        {/* <Text style={styles.name}> Jun</Text> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
@@ -126,7 +127,7 @@ export default class HomeScreen extends Component {
                     </TouchableOpacity>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Events</Text>
-                        <Text onPress={() => this.props.navigation.navigate('eventsScreen')} style={styles.more}>{"View More >"}</Text>
+                        <Text onPress={() => this.props.navigation.navigate('eventsScreen', { 'user_id': this.state.user_id })} style={styles.more}>{"View More >"}</Text>
                     </View>
                 </View>
 
@@ -174,7 +175,7 @@ export default class HomeScreen extends Component {
                 </View>
                 <View>
                     <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'user_id': this.state.user_id })}>
                             <View style={styles.cardView}>
                                 <View style={styles.view1}>
                                     <Image style={styles.image2} source={UpcomingEvent} />

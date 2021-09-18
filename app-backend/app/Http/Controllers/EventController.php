@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
+use App\Models\UserEvent;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -130,4 +132,17 @@ class EventController extends Controller
             return response()->json(['status' => 'fail']);
         }
     }
+
+    public function showUserExclusiveEvents(User $user)
+    {
+        $user_id = $user->id;
+
+        $user_events = UserEvent::where('user_id','=', $user_id)->get();
+
+        $user_exclusive_events = Event::whereNotIn('id', $user_events)->get();
+
+        return $user_exclusive_events->toJson();
+
+    }
+
 }

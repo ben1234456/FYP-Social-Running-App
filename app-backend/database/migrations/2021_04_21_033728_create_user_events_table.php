@@ -18,7 +18,7 @@ class CreateUserEventsTable extends Migration
             $table->integer('user_id');
             $table->integer('event_id');
             $table->datetime('registration_dt');
-            $table->integer('distance');
+            $table->decimal('distance');
             $table->decimal('distance_ran');
             $table->enum('status', array('in-progress','completed'));
             $table->timestamps();
