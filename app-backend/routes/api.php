@@ -51,9 +51,9 @@ Route::post('password/reset', [ResetPasswordController::class, 'sendResetRespons
 //custom functions
 Route::post('login', [LoginController::class, 'login']);
 
-Route::get('forumposts/{forumpost}', [ForumPostController::class, 'showPost']);
+Route::get('/forumposts/{forumpost}', [ForumPostController::class, 'showPost']);
 
-Route::get('forumposts/{forumpost}/comments', [ForumPostController::class, 'showComments']);
+Route::get('/forumposts/{forumpost}/comments', [ForumPostController::class, 'showComments']);
 
 Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
 
@@ -63,6 +63,10 @@ Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents'
 //get events (excluded registered)
 Route::get('/events/exclusive/{user}', [EventController::class, 'showUserExclusiveEvents']);
 
+//get event distances
 Route::get('/events/{event}/distance', [EventDistanceController::class, 'showEventDistances']);
+
+//update event distances
+Route::post('/eventdistances/update', [EventDistanceController::class, 'updateDistanceFee']);
 
 Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);

@@ -58,7 +58,7 @@ class EventDistanceController extends Controller
      */
     public function show(EventDistance $eventDistance)
     {
-        //
+        return $eventDistance->toJson();
     }
 
     /**
@@ -102,4 +102,20 @@ class EventDistanceController extends Controller
         error_log($eventDistances);
         return $eventDistances->toJson();
     }
+
+    public function updateDistanceFee(Request $request){
+
+        error_log($request);
+
+        for ($i = 0; $i < count($request->distanceFee); $i++){
+            $eventDistance = EventDistance::where('id', $request->distanceFee[$i]["id"])->first();
+            $eventDistance->distance = $request->distanceFee[$i]["distance"];
+            $eventDistance->fee= $request->distanceFee[$i]["fee"];
+            $eventDistance->save();
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    
 }

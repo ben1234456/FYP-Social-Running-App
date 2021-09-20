@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet, Alert, Picker} from 'react-native';
+import { View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet, Alert, FlatList, Picker} from 'react-native';
 import { Button, Left } from 'native-base'
 
 import DatePicker from 'react-native-datepicker';
@@ -22,17 +22,38 @@ export default class editEvent extends Component {
             regisDueDate: props.route.params.registration_end,
             startDate: props.route.params.start_date,
             endDate: props.route.params.end_date,
-            regisFee_5km: props.route.params.fee_5km,
-            regisFee_10km: props.route.params.fee_10km,
-            regisFee_21km: props.route.params.fee_21km,
-            regisFee_42km: props.route.params.fee_42km,
             description: props.route.params.description,
             imageSource: addImage,
+            eventDistance: [],
+            textInput : [],
+            feeArray: [],
+            distanceArray : []
         }
 
-        console.log(this.state.regisDate);
-        console.log(this.state.regisDueDate);
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get event distances
+        fetch(baseUrl + '/api/events/'  + this.state.event_id + '/distance', {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get event distances + fee')
+            this.setState({
+                eventDistance: data
+            });
+            console.log(this.state.eventDistance)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
     }
+
     chooseImage=async()=>{
         try{
           permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -71,20 +92,7 @@ export default class editEvent extends Component {
         }
         if (!(this.state.endDate)){
             empty.push("end date");
-        }
-        if (!(this.state.regisFee_5km)){
-            empty.push("registration fee (5km)");
-        }
-        if (!(this.state.regisFee_10km)){
-            empty.push("registration fee (10km)");
-        }
-        if (!(this.state.regisFee_21km)){
-            empty.push("registration fee (21km)");
-        }
-        if (!(this.state.regisFee_42km)){
-            empty.push("registration fee (42km)");
-        }
-        
+        }        
 
         if (empty.length != 0){
            
@@ -133,12 +141,29 @@ export default class editEvent extends Component {
                 end: this.state.endDate,
                 regisDate: this.state.regisDate,
                 regisDueDate: this.state.regisDueDate,
-                fee_5km: this.state.regisFee_5km,
-                fee_10km: this.state.regisFee_10km,
-                fee_21km: this.state.regisFee_21km,
-                fee_42km: this.state.regisFee_42km,
-
+            
             };
+
+            const distanceFeeData = {
+                distanceFee : this.state.eventDistance,
+            }
+
+            //get event details
+            fetch(baseUrl + '/api/eventdistances/update', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(distanceFeeData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     
             
             fetch( baseUrl + '/api/events/' + this.state.event_id, {
@@ -182,6 +207,76 @@ export default class editEvent extends Component {
         }
 
     }
+
+    editDistance = (distanceInput, object) =>{
+        
+        //source: https://stackoverflow.com/questions/29537299/react-how-to-update-state-item1-in-state-using-setstate
+        // 1. Make a shallow copy of the items
+        let items = [...this.state.eventDistance];
+        // 2. Make a shallow copy of the item you want to mutate
+        let item = {...items[object.index]};
+        // 3. Replace the property you're intested in
+        item.distance = distanceInput;
+        // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
+        items[object.index] = item;
+        // 5. Set the state to our new copy
+        this.setState({
+            eventDistance:items,
+        });
+
+    }
+
+    editFee = (feeInput, object) =>{
+        
+        //source: https://stackoverflow.com/questions/29537299/react-how-to-update-state-item1-in-state-using-setstate
+        // 1. Make a shallow copy of the items
+        let items = [...this.state.eventDistance];
+        // 2. Make a shallow copy of the item you want to mutate
+        let item = {...items[object.index]};
+        // 3. Replace the property you're intested in
+        item.fee= feeInput;
+        // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
+        items[object.index] = item;
+        // 5. Set the state to our new copy
+        this.setState({
+            eventDistance:items,
+        });
+
+    }
+
+    renderItemComponent = (data) =>
+    
+    <View>
+                
+        <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.botTitle}>Distance (KM) </Text>
+        </View>
+
+        <View style={styles.inputTitleTop}>
+
+            <View style={styles.inputText}>
+                <TextInput
+                    placeholder="e.g. 5"
+                    keyboardType='numeric'
+                    onChangeText={(text) => this.editDistance(text, data)}
+                    value = {data.item.distance}
+                />
+            </View>
+        </View>
+
+        <Text style={styles.botTitle}>Fee (RM)</Text>
+        <View style={styles.inputTitleTop}>
+            <View style={styles.inputText}>
+                <TextInput
+                    placeholder="e.g. RMXXX"
+                    keyboardType='numeric'
+                    onChangeText={(text) => this.editFee(text, data)}
+                    value = {data.item.fee}
+                />
+            </View>
+        </View>
+    </View>
+
 
     render() {
         return (
@@ -228,65 +323,16 @@ export default class editEvent extends Component {
                         </View>  
 
                         <View>
-                            <Text style={styles.botTitle}>Fee (5km)</Text>
+                            <Text style={styles.botTitle}>Distances and Fees</Text>
                         </View>
 
-                        <View style={styles.inputTitleTop}>
-                            <View style={styles.inputText}>
-                                <TextInput
-                                    placeholder = "e.g. RMXXX"
-                                    keyboardType = 'numeric' 
-                                    onChangeText={(fee) => this.setState({regisFee_5km:fee})}
-                                    value = {this.state.regisFee_5km}
-                                />
-                            </View>
-                        </View>
+                        <FlatList 
+                            data={this.state.eventDistance}
+                            renderItem={item => this.renderItemComponent(item)}
+                            keyExtractor={(item) => item.toString()}
+                        />
 
-                        <View>
-                            <Text style={styles.botTitle}>Fee (10km)</Text>
-                        </View>
-
-                        <View style={styles.inputTitleTop}>
-                            <View style={styles.inputText}>
-                                <TextInput
-                                    placeholder = "e.g. RMXXX"
-                                    keyboardType = 'numeric' 
-                                    onChangeText={(fee) => this.setState({regisFee_10km:fee})}
-                                    value = {this.state.regisFee_10km}
-                                />
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={styles.botTitle}>Fee (21km)</Text>
-                        </View>
-
-                        <View style={styles.inputTitleTop}>
-                            <View style={styles.inputText}>
-                                <TextInput
-                                    placeholder = "e.g. RMXXX"
-                                    keyboardType = 'numeric' 
-                                    onChangeText={(fee) => this.setState({regisFee_21km:fee})}
-                                    value = {this.state.regisFee_21km}
-                                />
-                            </View>
-                        </View>
-
-                        <View>
-                            <Text style={styles.botTitle}>Fee (42km)</Text>
-                        </View>
-
-                        <View style={styles.inputTitleTop}>
-                            <View style={styles.inputText}>
-                                <TextInput
-                                    placeholder = "e.g. RMXXX"
-                                    keyboardType = 'numeric' 
-                                    onChangeText={(fee) => this.setState({regisFee_42km:fee})}
-                                    value = {this.state.regisFee_42km}
-                                />
-                            </View>
-                        </View>
-
+                        
                         <View>
                             <Text style={styles.botTitle}>Registration Start Date</Text>
                         </View>

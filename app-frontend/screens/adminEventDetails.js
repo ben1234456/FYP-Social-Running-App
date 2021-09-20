@@ -41,10 +41,7 @@ export default class adminEventDetails extends Component {
                     end_date: data.end,  
                     registration_start_date: data.registration_start,   
                     registration_end_date: data.registration_end,
-                    fee_5km: data.fee_5km,
-                    fee_10km: data.fee_10km,
-                    fee_21km: data.fee_21km,
-                    fee_42km: data.fee_42km,
+
                     description: data.description
                 });
             })
@@ -145,10 +142,6 @@ export default class adminEventDetails extends Component {
             "end_date": this.state.end_date,  
             "registration_start": this.state.registration_start_date,   
             "registration_end": this.state.registration_end_date,
-            "fee_5km": this.state.fee_5km,
-            "fee_10km": this.state.fee_10km,
-            "fee_21km": this.state.fee_21km,
-            "fee_42km": this.state.fee_42km,
             "description": this.state.description,
 
         });

@@ -138,33 +138,7 @@ export default class HomeScreen extends Component {
                         renderItem={item => this.renderItemComponent(item)}
                     />  
                 </View>
-
-                {/* <View>
-                    <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
-                            <View style={styles.cardView}>
-                                <View style={styles.view1}>
-                                    <Image style={styles.image2} source={Event} />
-                                </View>
-                                <View style={styles.view2}>
-                                    <Text style={styles.title}>Family Virtual Run</Text>
-                                    <Text style={styles.venue}>Anywhere</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
-                            <View style={styles.cardView}>
-                                <View style={styles.view1}>
-                                    <Image style={styles.image2} source={Event2} />
-                                </View>
-                                <View style={styles.view2}>
-                                    <Text style={styles.title}>Spartan Virtual Marathon</Text>
-                                    <Text style={styles.venue}>Anywhere</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </ScrollView>
-                </View> */}
+                
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>

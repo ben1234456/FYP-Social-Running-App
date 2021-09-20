@@ -177,11 +177,10 @@ export default class startFreeRunScreen extends Component {
             var totalnewdistance = (haversine(previousgeo, currentgeo));
 
             //distance checker, if >10m then the distance won't be added to the total distance 
-            // if (totalnewdistance < 0.01) {
-            //     this.setState({ distanceTravelled: totaldistance + totalnewdistance });
-            // }
+            if (totalnewdistance < 0.01) {
+                this.setState({ distanceTravelled: totaldistance + totalnewdistance });
+            }
 
-            this.setState({ distanceTravelled: totaldistance + totalnewdistance });
         }    
 
     }
