@@ -135,6 +135,7 @@ export default class addEvent extends Component {
                 .then(response => response.json())
                 .then(data => {
                     //success
+                    console.log(data)
                     if (data.status == "success") {
 
                         //save the event distance
