@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use App\Models\Users;
+use App\Models\UserList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -96,5 +98,25 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+    public function showUserList(User $user)
+    {
+        
+        $userID = $user->id;
+        
+        $allUser=User::where("role","=","user")->where("id","!=",$userID)->take(10)->get();
+
+        return $allUser->toJson();
+
+    }
+    public function searchUserByName(User $user,string $userName)
+    {
+        
+        $userID = $user->id;
+        $keyword="%".$userName."%";
+        $searchedUser=User::where("first_name","LIKE",$keyword)->where("role","=","user")->where("id","!=",$userID)->get();
+
+        return $searchedUser->toJson();
+
     }
 }

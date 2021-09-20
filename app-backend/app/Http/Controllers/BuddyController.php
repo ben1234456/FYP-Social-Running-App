@@ -36,6 +36,8 @@ class BuddyController extends Controller
     public function store(Request $request)
     {
         //
+        $buddy=new Buddy;
+        $buddy->buddyID = $request->buddyID;
     }
 
     /**
@@ -47,6 +49,7 @@ class BuddyController extends Controller
     public function show(Buddy $buddy)
     {
         //
+        return $buddy->toJson();
     }
 
     /**
@@ -70,6 +73,7 @@ class BuddyController extends Controller
     public function update(Request $request, Buddy $buddy)
     {
         //
+        $buddy->buddyID = $request->buddyID;
     }
 
     /**
@@ -82,4 +86,5 @@ class BuddyController extends Controller
     {
         //
     }
+    
 }
