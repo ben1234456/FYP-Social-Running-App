@@ -1,16 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\UserEventController;
-use App\Http\Controllers\EventDistanceController;
-use App\Http\Controllers\ForumPostController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostLikeController;
-use App\Http\Controllers\API\ForgotPasswordController;
-use App\Http\Controllers\API\ResetPasswordController;
+use App\Actions\JsonApiAuth\AuthKit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,48 +15,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResources([
-    'users'=> UserController::class,
-    'activities'=> ActivityController::class,
-    'events'=> EventController::class,
-    'userevents'=> UserEventController::class,
-    'eventdistances'=> EventDistanceController::class,
-    'forumposts'=> ForumPostController::class,
-    'postcomments'=> PostCommentController::class,
-    'postlikes'=> PostLikeController::class,
-]);
-
-
-Route::post('activity', [ActivityController::class, 'store']);
-
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('password/forgot-password', [ForgotPasswordController::class, 'sendResetLinkResponse'])->name('passwords.sent');
+require __DIR__ . '/json-api-auth.php';
 
-Route::post('password/reset', [ResetPasswordController::class, 'sendResetResponse'])->name('passwords.reset');
+/*
+|--------------------------------------------------------------------------
+| An example of how to use the verified email feature with api endpoints
+|--------------------------------------------------------------------------
+|
+| Here examples of a route using Sanctum middleware and verified middleware.
+| And another route using Passport middleware and verified middleware.
+| You can install and use one of this official packages.
+|
+*/
 
-//custom functions
-Route::post('login', [LoginController::class, 'login']);
+//Route::get('/verified-middleware-example', function () {
+//    return response()->json([
+//        'message' => 'the email account is already confirmed now you are able to see this message...',
+//    ]);
+//})->middleware('auth:sanctum', 'verified');
 
-Route::get('/forumposts/{forumpost}', [ForumPostController::class, 'showPost']);
-
-Route::get('/forumposts/{forumpost}/comments', [ForumPostController::class, 'showComments']);
-
-Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
-
-//get events registered by the user
-Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents']);
-
-//get events (excluded registered)
-Route::get('/events/exclusive/{user}', [EventController::class, 'showUserExclusiveEvents']);
-
-//get event distances
-Route::get('/events/{event}/distance', [EventDistanceController::class, 'showEventDistances']);
-
-//update event distances
-Route::post('/eventdistances/update', [EventDistanceController::class, 'updateDistanceFee']);
-
-Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);
+//Route::get('/verified-middleware-example', function () {
+//    return response()->json([
+//        'message' => 'the email account is already confirmed now you are able to see this message...',
+//    ]);
+//})->middleware('auth:api', 'verified');

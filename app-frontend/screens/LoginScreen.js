@@ -80,7 +80,7 @@ export default class LoginScreen extends Component {
                 password: this.state.password
             };
 
-            fetch( baseUrl +'/api/login', {
+            fetch( baseUrl +'/api/register', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -90,30 +90,34 @@ export default class LoginScreen extends Component {
             })
                 .then(response => response.json())
                 .then(data => {
-                    //success
-                    if (data.status == "success") {
+                    console.log(data);
+
+                    if (data.message == "success"){
                         //save JSON data to local storage
                         AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
                         //navigate to home page
-                        if (data.role == "user"){
+                        if (data.user.role == "user"){
                             this.props.navigation.navigate('app');
-                        }else if (data.role == "admin"){
+                        }else if (data.user.role == "admin"){
                             this.props.navigation.navigate('adminapp');
                         }
-                        
                     }
 
-                    //fail 
-                    else if (data.status == "fail") {
-                        //alert fail message
+                    else {
+                        removeLastChar = data.message.slice(0, data.message.length - 1);
+
                         Alert.alert(
                             data.message,
-                            '',
+                            ''
                             [
-                                { text: "Ok", onPress: () => console.log("OK Pressed") }
+                              { text: "OK" }
                             ]
                         );
                     }
+
+
+                    
+                             
                 })
                 .catch((error) => {
                     console.error('Error:', error);
