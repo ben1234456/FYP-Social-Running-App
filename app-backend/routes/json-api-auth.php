@@ -8,6 +8,8 @@ use App\Http\Controllers\JsonApiAuth\NewPasswordController;
 use App\Http\Controllers\JsonApiAuth\PasswordResetLinkController;
 use App\Http\Controllers\JsonApiAuth\RegisterController;
 use App\Http\Controllers\JsonApiAuth\VerifyEmailController;
+
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserEventController;
