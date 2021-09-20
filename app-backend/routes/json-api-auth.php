@@ -19,6 +19,7 @@ use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\ResetPasswordController;
+use App\Http\Controllers\BuddyController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResources([
@@ -93,3 +94,9 @@ Route::get('/users/list/{user}', [UserController::class, "showUserList"]);
 
 //search user by name
 Route::get('/users/list/{user}/{userName}', [UserController::class, "searchUserByName"]);
+
+//search user buddy list
+Route::get('/buddy/buddyList/{user}', [BuddyController::class, "searchUserBuddyList"]);
+
+//search buddy by name
+Route::get('/buddy/buddyList/{user}/{userName}', [BuddyController::class, "searchBuddyByName"]);

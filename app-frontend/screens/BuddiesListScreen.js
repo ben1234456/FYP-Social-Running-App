@@ -9,6 +9,9 @@ import profileImage from '../images/avatar.jpg';
 import moment from 'moment';
 import { SearchBar } from 'react-native-elements'
 import { Share } from 'react-native';
+import Logo from '../images/logo.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default class BuddiesListScreen extends Component {
 
@@ -16,13 +19,50 @@ export default class BuddiesListScreen extends Component {
         super(props);
 
         this.state = {
-            data: [
-                { id: '1', name: { "title": "Male", "first": "Alan", "last": "Walker" }, first: profileImage },
-                { id: '2', name: { "title": "Male", "first": "Tom", "last": "Holland" }, first: profileImage },
-                { id: '3', name: { "title": "Female", "first": "Billie", "last": "Elish" }, first: profileImage },
-                { id: '4', name: { "title": "Male", "first": "John", "last": "Cena" }, first: profileImage },
-            ],
+            userID:"",
+            data: "",
+            userList:"",
+            searchWord:"",
         };
+        const getData = async () => {
+
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+            fetch(baseUrl + '/api/buddy/buddyList/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddylist data')
+                console.log(data)
+                this.setState({
+                    userList: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
+            
+        }
+
+        getData();
         this.arrayholder = [];
     }
     componentDidMount() {
@@ -86,7 +126,47 @@ export default class BuddiesListScreen extends Component {
             alert(error.message);
         }
     };
-
+    renderItemComponent = (data) =>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen')}>
+            <View style={styles.cardView}>
+                <View style={styles.proRow} >
+                    <View style={styles.proTitle}>
+                        <Image style={styles.proColumnName} source={Logo} />
+                    </View>
+                    <View style={{ marginLeft: 20, flex: 3 }}>
+                        <Text style={styles.title}>{data.item.first_name}</Text>
+                        <Text style={styles.date}>{data.item.gender}</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Font name='user-minus' size={20} color={'#808080'} onPress={() => this.delete(item.id)} />
+                    </View>
+                </View>
+            </View>
+        </TouchableOpacity>
+    
+        
+    search=(value)=>{
+        this.setState({searchWord:value});
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        //get 10 user
+        fetch(baseUrl + '/api/buddy/buddyList/' + this.state.userID +"/"+ value, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get user list data')
+            console.log(data)
+            this.setState({
+                userList: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    };
     render() {
 
         return (
@@ -97,49 +177,16 @@ export default class BuddiesListScreen extends Component {
                     containerStyle={{ backgroundColor: 'white' }}
                     lightTheme
                     round
-                    onChangeText={text => this.searchFilterFunction(text)}
+                    onChangeText={this.search}
                     autoCorrect={false}
-                    value={this.state.value}
+                    value={this.state.searchWord}
                 />
-                {/* <TextInput
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    clearButtonMode="always"
-                    value={this.state.value}
-                    onChangeText={text => this.searchFilterFunction(text)}
-                    placeholder="Search"
-                    style={{
-                        borderRadius: 25,
-                        borderColor: '#808080',
-                        borderTopWidth: 1,
-                        boderLeftWidth: 1,
-                        borderRightWidth: 1,
-                        borderBottomWidth: 1,
-                        backgroundColor: '#fff'
-                    }}
-                /> */}
-                <FlatList
-                    data={this.state.data}
-                    keyExtractor={item => item.first}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen')}>
-                            <View style={styles.cardView}>
-                                <View style={styles.proRow} >
-                                    <View style={styles.proTitle}>
-                                        <Image style={styles.proColumnName} source={item.first} />
-                                    </View>
-                                    <View style={{ marginLeft: 20, flex: 3 }}>
-                                        <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
-                                        <Text style={styles.date}>{`${item.name.title}`}</Text>
-                                    </View>
-                                    <View style={{ flex: 1 }}>
-                                        <Font name='user-minus' size={20} color={'#808080'} onPress={() => this.delete(item.id)} />
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
+                <FlatList horizontal={false}
+                    data={this.state.userList}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={item => this.renderItemComponent(item)}
+                />  
+                
                 <View style={{ flexDirection: 'column', alignItems: 'flex-end', margin: 40 }}>
                     <Ant onPress={() => this.props.navigation.navigate('addSearchUserScreen')} size={40} name='pluscircle' style={{ color: '#8352F2' }} />
                 </View>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buddy;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BuddyController extends Controller
@@ -37,6 +38,9 @@ class BuddyController extends Controller
     {
         //
         $buddy=new Buddy;
+        //current user id
+        $buddy->userID = $request->userID;
+        //buddy user id
         $buddy->buddyID = $request->buddyID;
     }
 
@@ -74,6 +78,7 @@ class BuddyController extends Controller
     {
         //
         $buddy->buddyID = $request->buddyID;
+        $buddy->userID = $request->userID;
     }
 
     /**
@@ -85,6 +90,42 @@ class BuddyController extends Controller
     public function destroy(Buddy $buddy)
     {
         //
+    }
+    
+    // public function searchUserBuddyList(User $user)
+    // {
+        
+    //     $userID = $user->id;
+    //     $userList=Buddy::find($userID)->users;
+    //     return $userList;
+    // }
+    public function searchUserBuddyList(User $user)
+    {
+        
+        $userID = $user->id;
+        $buddies=Buddy::where("userID","=",$userID)->get();
+        // 
+        $idList=array();
+        foreach($buddies as $buddy){
+            array_push($idList,$buddy->buddyID);
+        }
+        $buddyList = User::whereIn('id', $idList)->get();
+        return $buddyList;
+    }
+    public function searchBuddyByName(User $user,string $userName)
+    {
+
+        $userID = $user->id;
+        $keyword="%".$userName."%";
+        $buddies=Buddy::where("userID","=",$userID)->get();
+        // 
+        $idList=array();
+        foreach($buddies as $buddy){
+            array_push($idList,$buddy->buddyID);
+        }
+        $buddyList = User::where("first_name","LIKE",$keyword)->whereIn('id', $idList)->get();
+        return $buddyList;
+
     }
     
 }
