@@ -17,6 +17,8 @@ class CreateBuddiesTable extends Migration
             $table->id();
             //friend user id
             $table->integer('buddyID');
+            //current user id
+            $table->integer('userID');
             $table->rememberToken();
             $table->timestamps();
         });

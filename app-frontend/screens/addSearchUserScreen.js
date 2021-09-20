@@ -58,35 +58,34 @@ export default class addSearchUserScreen extends Component {
     };
     renderItemComponent = (data) =>
         
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+    <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
 
-                {this.state.searchWord!=""
-                ?
-                <View style={styles.cardContainer}>
-                    <View style={styles.imgContainer}>
-                        {/* nid change to user profile pic */}
-                        <Image style={styles.img} source={Logo} />
-                    </View>
-                    <View style={styles.userInfoContainer}>
-                        <Text style={styles.userInfoTop}>
-                            {data.item.first_name}
-                        </Text>
-                        <Text style={styles.userInfoBot}>
-                            {data.item.gender}
-                        </Text>
-                    </View>
-                    <View style={styles.iconContainer}>
-                        <Icon name="person-add" size={20} color={"#8352F2"} />
-                    </View>
+            {this.state.searchWord!=""
+            ?
+            <View style={styles.cardContainer}>
+                <View style={styles.imgContainer}>
+                    {/* nid change to user profile pic */}
+                    <Image style={styles.img} source={Logo} />
                 </View>
-                :
-                <View>
-
+                <View style={styles.userInfoContainer}>
+                    <Text style={styles.userInfoTop}>
+                        {data.item.first_name}
+                    </Text>
+                    <Text style={styles.userInfoBot}>
+                        {data.item.gender}
+                    </Text>
                 </View>
-                }
-                
+                <View style={styles.iconContainer}>
+                    <Icon name="person-add" size={20} color={"#8352F2"} />
+                </View>
+            </View>
+            :
+            <View>
 
-        </TouchableOpacity>
+            </View>
+            }
+            
+    </TouchableOpacity>
     search=(value)=>{
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';

@@ -101,7 +101,7 @@ export default class App extends Component {
             <NavigationContainer>
 
                 <Stack.Navigator>
-                    {/* <Stack.Screen
+                    <Stack.Screen
                         name="splash"
                         component={SplashScreen}
                         initial={true}
@@ -363,7 +363,7 @@ export default class App extends Component {
                         component={editEventCalendarScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
-                    /> */}
+                    />
                     <Stack.Screen
                         name="BuddiesListScreen"
                         component={BuddiesListScreen}
