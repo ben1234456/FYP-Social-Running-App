@@ -140,24 +140,24 @@ export default class SignUpScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log('Success:',data);
-            // })
-            // .catch((error) => {
-            //     console.error('Error:', error);
-            // });  
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });  
             
-            Alert.alert(
-                data.message,
-                'Account Succesfully Registered!',
-                ''
-                [
-                    { text: "Ok", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            // Alert.alert(
+            //     data.message,
+            //     'Account Succesfully Registered!',
+            //     ''
+            //     [
+            //         { text: "Ok", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
 
-            this.props.navigation.navigate('login');
+            // this.props.navigation.navigate('login');
         }
 
     }
