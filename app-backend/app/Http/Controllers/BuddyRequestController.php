@@ -15,6 +15,7 @@ class BuddyRequestController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**
@@ -25,6 +26,7 @@ class BuddyRequestController extends Controller
     public function create()
     {
         //
+        
     }
 
     /**
@@ -36,6 +38,11 @@ class BuddyRequestController extends Controller
     public function store(Request $request)
     {
         //
+        $buddyReq=new BuddyRequest();
+        //reciever id
+        $buddyReq->userID = $request->userID;
+        //sender id
+        $buddyReq->reqID = $request->reqID;
     }
 
     /**
@@ -47,6 +54,7 @@ class BuddyRequestController extends Controller
     public function show(BuddyRequest $buddyRequest)
     {
         //
+        return $buddyRequest->toJson();
     }
 
     /**
@@ -70,6 +78,9 @@ class BuddyRequestController extends Controller
     public function update(Request $request, BuddyRequest $buddyRequest)
     {
         //
+        $buddyRequest->userID = $request->userID;
+        $buddyRequest->reqID = $request->reqID;
+
     }
 
     /**

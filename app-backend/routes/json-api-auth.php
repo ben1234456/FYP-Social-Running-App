@@ -87,3 +87,9 @@ Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
 Route::post('/confirm-password', ConfirmablePasswordController::class)
     ->middleware('auth:sanctum')
     ->name('json-api-auth.password.confirm');
+
+//get user list exclude current user
+Route::get('/users/list/{user}', [UserController::class, "showUserList"]);
+
+//search user by name
+Route::get('/users/list/{user}/{userName}', [UserController::class, "searchUserByName"]);

@@ -14,7 +14,13 @@ class CreateBuddyRequestsTable extends Migration
     public function up()
     {
         Schema::create('buddy_requests', function (Blueprint $table) {
+
             $table->id();
+            //reciever id
+            $table->integer('userID');
+            //sender id
+            $table->integer('reqID');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

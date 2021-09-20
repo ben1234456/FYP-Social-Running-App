@@ -80,7 +80,7 @@ export default class LoginScreen extends Component {
                 password: this.state.password
             };
 
-            fetch( baseUrl +'/api/register', {
+            fetch( baseUrl +'/api/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',

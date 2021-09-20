@@ -15,6 +15,9 @@ class CreateBuddiesTable extends Migration
     {
         Schema::create('buddies', function (Blueprint $table) {
             $table->id();
+            //friend user id
+            $table->integer('buddyID');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -1,17 +1,113 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View,Image} from 'react-native';
+import { StyleSheet, Text, View,Image, FlatList,TouchableOpacity} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Icon from "react-native-vector-icons/Ionicons";
 import Logo from '../images/logo.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default class addSearchUserScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userName:"",
+            userID:"",
+            userList:"",
+            searchWord:"",
         };
+        const getData = async () => {
+
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+            //get 10 user
+            fetch(baseUrl + '/api/users/list/' + this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user list data')
+                console.log(data)
+                this.setState({
+                    userList: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            
+        }
+
+        getData();
     };
-    search=()=>{
+    renderItemComponent = (data) =>
+        
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+
+                {this.state.searchWord!=""
+                ?
+                <View style={styles.cardContainer}>
+                    <View style={styles.imgContainer}>
+                        {/* nid change to user profile pic */}
+                        <Image style={styles.img} source={Logo} />
+                    </View>
+                    <View style={styles.userInfoContainer}>
+                        <Text style={styles.userInfoTop}>
+                            {data.item.first_name}
+                        </Text>
+                        <Text style={styles.userInfoBot}>
+                            {data.item.gender}
+                        </Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <Icon name="person-add" size={20} color={"#8352F2"} />
+                    </View>
+                </View>
+                :
+                <View>
+
+                </View>
+                }
+                
+
+        </TouchableOpacity>
+    search=(value)=>{
+        this.setState({searchWord:value});
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        //get 10 user
+        fetch(baseUrl + '/api/users/list/' + this.state.userID +"/"+ value, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get user list data')
+            console.log(data)
+            this.setState({
+                userList: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     };
     render(){
         return(
@@ -19,48 +115,22 @@ export default class addSearchUserScreen extends Component {
                 <View style={styles.infoContainer}>
                     <SearchBar
                         placeholder="Search"
-                        onChangeText={(name) => this.setState({userName:name})}
-                        value={this.state.userName}
+                        onChangeText={this.search}
+                        value={this.state.searchWord}
                         inputStyle={{backgroundColor: 'white'}}
                         containerStyle={{backgroundColor: 'white', borderRadius: 20,borderWidth:1,borderColor:"grey",borderBottomColor:"grey",borderTopColor:"grey"}}
                         leftIconContainerStyle={{backgroundColor: 'white'}}
                         inputContainerStyle={{backgroundColor: 'white'}}
                         
                     />
-                    <View style={styles.cardContainer}>
-                        <View style={styles.imgContainer}>
-                            {/* nid change to user profile pic */}
-                            <Image style={styles.img} source={Logo} />
-                        </View>
-                        <View style={styles.userInfoContainer}>
-                            <Text style={styles.userInfoTop}>
-                                Johnathan
-                            </Text>
-                            <Text style={styles.userInfoBot}>
-                                Male
-                            </Text>
-                        </View>
-                        <View style={styles.iconContainer}>
-                            <Icon name="person-add" size={20} color={"#8352F2"} />
-                        </View>
-                    </View>
-                    <View style={styles.cardContainer}>
-                        <View style={styles.imgContainer}>
-                            {/* nid change to user profile pic */}
-                            <Image style={styles.img} source={Logo} />
-                        </View>
-                        <View style={styles.userInfoContainer}>
-                            <Text style={styles.userInfoTop}>
-                                Johnny
-                            </Text>
-                            <Text style={styles.userInfoBot}>
-                                Female
-                            </Text>
-                        </View>
-                        <View style={styles.iconContainer}>
-                            <Icon name="person-add" size={20} color={"#8352F2"} />
-                        </View>
-                    </View>
+                    <View style={styles.scrollview}>
+                        <FlatList horizontal={false}
+                            data={this.state.userList}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={item => this.renderItemComponent(item)}
+                        />  
+                    </View>  
+                    
                 </View>
             </View>
         );
@@ -109,5 +179,8 @@ export const styles = StyleSheet.create({
     },
     userInfoBot:{
         color:"grey",
+    },
+    cardInner:{
+        flexDirection:"column",
     },
 });
