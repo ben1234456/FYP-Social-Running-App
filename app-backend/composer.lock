@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "021dc802e1b0b9bf55a1649f44b5b26a",
+    "content-hash": "240be20741c11938219235c6f5303bad",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1026,16 +1026,16 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v2.10.0",
+            "version": "v2.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "a08cfee365c6b6df3e91c8f43b92f7163ffc8a94"
+                "reference": "b21e65cbe13896946986cb0868180cd69e1bd5d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/a08cfee365c6b6df3e91c8f43b92f7163ffc8a94",
-                "reference": "a08cfee365c6b6df3e91c8f43b92f7163ffc8a94",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/b21e65cbe13896946986cb0868180cd69e1bd5d3",
+                "reference": "b21e65cbe13896946986cb0868180cd69e1bd5d3",
                 "shasum": ""
             },
             "require": {
@@ -1086,7 +1086,7 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2021-04-20T16:20:46+00:00"
+            "time": "2021-06-15T15:56:21+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -4893,6 +4893,67 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "arielmejiadev/json-api-auth",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ArielMejiaDev/json-api-auth.git",
+                "reference": "69f9460920b635c3f2152dc185dbf9c7b9ab262c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ArielMejiaDev/json-api-auth/zipball/69f9460920b635c3f2152dc185dbf9c7b9ab262c",
+                "reference": "69f9460920b635c3f2152dc185dbf9c7b9ab262c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ArielMejiaDev\\JsonApiAuth\\JsonApiAuthServiceProvider"
+                    ],
+                    "aliases": {
+                        "JsonApiAuth": "ArielMejiaDev\\JsonApiAuth\\JsonApiAuthFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ArielMejiaDev\\JsonApiAuth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ariel Mejia Dev",
+                    "email": "arielmejiadev@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "It adds authentication scaffold for api authentication by tokens for packages like Passport or Sanctum.",
+            "homepage": "https://github.com/arielmejiadev/json-api-auth",
+            "keywords": [
+                "arielmejiadev",
+                "json-api-auth"
+            ],
+            "support": {
+                "issues": "https://github.com/ArielMejiaDev/json-api-auth/issues",
+                "source": "https://github.com/ArielMejiaDev/json-api-auth/tree/1.0.3"
+            },
+            "time": "2021-07-15T01:14:28+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.0",
