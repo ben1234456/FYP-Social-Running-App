@@ -21,6 +21,7 @@ class CreateBuddiesTable extends Migration
             $table->integer('userID');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
