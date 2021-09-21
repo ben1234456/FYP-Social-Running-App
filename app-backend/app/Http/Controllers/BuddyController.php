@@ -42,6 +42,7 @@ class BuddyController extends Controller
         $buddy->userID = $request->userID;
         //buddy user id
         $buddy->buddyID = $request->buddyID;
+        return $buddy->save();
     }
 
     /**

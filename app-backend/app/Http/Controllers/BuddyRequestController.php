@@ -17,18 +17,6 @@ class BuddyRequestController extends Controller
     public function index()
     {
         //
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        
     }
 
     /**
@@ -63,17 +51,6 @@ class BuddyRequestController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\BuddyRequest  $buddyRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BuddyRequest $buddyRequest)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -97,7 +74,16 @@ class BuddyRequestController extends Controller
     public function destroy(BuddyRequest $buddyRequest)
     {
         //
-        return $buddyRequest->delete();
+
+        error_log($buddyRequest);
+        $status = $buddyRequest->delete();
+
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Buddy request succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
     }
     public function searchUserBuddyReqList(User $user)
     {
@@ -111,5 +97,43 @@ class BuddyRequestController extends Controller
         }
         $buddyList = User::whereIn('id', $idList)->get();
         return $buddyList;
+    }
+    public function getID(User $user,User $buddy)
+    {
+        $userID=$user->id;
+
+        $buddyID=$buddy->id;
+
+        $buddyReqGet=BuddyRequest::where("buddyID","=",$buddyID)->where("userID","=",$userID)->first();
+
+        return $buddyReqGet->toJson();
+    }
+    // public function deleteBuddyReqByID(User $buddy,User $user)
+    // {
+
+    //     $userID=$user->id;
+
+    //     $buddyID=$buddy->id;
+
+    //     $buddyReqGet=BuddyRequest::where("buddyID","=",$buddyID)->where("userID","=",$userID)->get();
+
+    //     $buddyReqGet->delete();
+
+    //     return $buddy->toJson();
+    // }
+    public function deleteBuddyReqByID($id)
+    {
+        
+
+        $buddyRequest=BuddyRequest::where("id",$id)->first();
+        $status = $buddyRequest->delete();
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Buddy request succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
+
+    
     }
 }

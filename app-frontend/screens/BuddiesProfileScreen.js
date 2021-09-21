@@ -110,7 +110,7 @@ export default class BuddiesProfileScreen extends Component {
             buddyID:this.state.buddyID,
         };
 
-        fetch( baseUrl + '/api/buddyReq', {
+        fetch( baseUrl + '/api/buddyrequest', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -181,7 +181,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.dob}</Text>
+                            <Text style={styles.proDetails}>{data.item.id}</Text>
                         </View>
                     </View>
                 </View>

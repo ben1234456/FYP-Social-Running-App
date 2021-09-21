@@ -23,6 +23,7 @@ class CreateBuddyRequestsTable extends Migration
             $table->enum('status',array('accepted','pending',"declined"));
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
