@@ -90,15 +90,8 @@ class BuddyController extends Controller
     public function destroy(Buddy $buddy)
     {
         //
+        return $buddy->delete();
     }
-    
-    // public function searchUserBuddyList(User $user)
-    // {
-        
-    //     $userID = $user->id;
-    //     $userList=Buddy::find($userID)->users;
-    //     return $userList;
-    // }
     public function searchUserBuddyList(User $user)
     {
         
@@ -127,5 +120,14 @@ class BuddyController extends Controller
         return $buddyList;
 
     }
-    
+    public function getID(User $user,User $buddy)
+    {
+        $userID=$user->id;
+
+        $buddyID=$buddy->id;
+
+        $buddyGet=Buddy::where("buddyID","=",$buddyID)->where("userID","=",$userID)->first();
+
+        return $buddyGet->toJson();
+    }
 }

@@ -17,7 +17,7 @@ export default class BuddiesListScreen extends Component {
 
     constructor(props) {
         super(props);
-
+        
         this.state = {
             userID:"",
             data: "",
@@ -61,12 +61,13 @@ export default class BuddiesListScreen extends Component {
             
             
         }
-
+        
         getData();
         this.arrayholder = [];
     }
     componentDidMount() {
-        this.arrayholder = this.state.data
+        this.arrayholder = this.state.data;
+
     }
 
     deleteUser(id) {
