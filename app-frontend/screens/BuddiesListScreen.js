@@ -23,6 +23,7 @@ export default class BuddiesListScreen extends Component {
             data: "",
             userList:"",
             searchWord:"",
+            testing:0,
         };
         const getData = async () => {
 
@@ -127,8 +128,8 @@ export default class BuddiesListScreen extends Component {
             alert(error.message);
         }
     };
-    renderItemComponent = (data) =>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id })}>
+    renderItemComponent = (data) =>        
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id ,"view":"false"})}>
             <View style={styles.cardView}>
                 <View style={styles.proRow} >
                     <View style={styles.proTitle}>
@@ -144,9 +145,12 @@ export default class BuddiesListScreen extends Component {
                 </View>
             </View>
         </TouchableOpacity>
+       
+        
     
         
     search=(value)=>{
+        console.log(this.state.userList.length);
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         //get 10 user
@@ -182,11 +186,19 @@ export default class BuddiesListScreen extends Component {
                     autoCorrect={false}
                     value={this.state.searchWord}
                 />
+                {this.state.userList.length!=0
+                ?
                 <FlatList horizontal={false}
                     data={this.state.userList}
                     keyExtractor={item => item.id.toString()}
                     renderItem={item => this.renderItemComponent(item)}
                 />  
+                :
+                <View style={styles.noBuddyView}>
+                    <Text style={styles.noBuddyText}>No Buddy Found</Text>
+                </View>
+                }
+                
                 
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', margin: 40 }}>
                     <Icon onPress={() => this.props.navigation.navigate('BuddiesRequestList')} size={40} name='person-add' style={{ color: '#8352F2', flex:1 }} />
@@ -239,5 +251,14 @@ export const styles = StyleSheet.create({
     date: {
         fontSize: 14,
         color: '#808080',
+    },
+    noBuddyView:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        paddingTop:"10%",
+    },
+    noBuddyText:{
+        fontSize:16,
     },
 });

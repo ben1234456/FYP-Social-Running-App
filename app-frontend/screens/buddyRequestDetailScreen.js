@@ -9,6 +9,7 @@ export default class buddyRequestDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            //selected user id
             buddyID: props.route.params.userID,
             userID:"",
             user:"",
@@ -54,7 +55,7 @@ export default class buddyRequestDetailScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            fetch(baseUrl + '/api/buddyrequest/' + this.state.userID +'/'+this.state.buddyID, {
+            fetch(baseUrl + '/api/buddyrequest/' + this.state.buddyID +'/'+this.state.userID, {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
@@ -96,8 +97,7 @@ export default class buddyRequestDetailScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        
-        //fetch(baseUrl + '/api/buddyReq/' + this.state.buddyID+"/"+this.state.userID, {
+            this.props.navigation.navigate('BuddiesRequestList');
                 
                 
 
@@ -128,6 +128,8 @@ export default class buddyRequestDetailScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });  
+        this.decline();
+        
         
     }
     renderItemComponent = (data) =>
