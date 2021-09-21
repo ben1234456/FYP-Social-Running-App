@@ -20,6 +20,7 @@ use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\ResetPasswordController;
 use App\Http\Controllers\BuddyController;
+use App\Http\Controllers\BuddyRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResources([
@@ -31,6 +32,7 @@ Route::apiResources([
     'forumposts'=> ForumPostController::class,
     'postcomments'=> PostCommentController::class,
     'postlikes'=> PostLikeController::class,
+    "buddyReq"=>BuddyRequestController::class,
 ]);
 
 
@@ -100,3 +102,7 @@ Route::get('/buddy/buddyList/{user}', [BuddyController::class, "searchUserBuddyL
 
 //search buddy by name
 Route::get('/buddy/buddyList/{user}/{userName}', [BuddyController::class, "searchBuddyByName"]);
+
+//search user by id
+Route::get('/users/{user}', [UserController::class, "searchUserById"]);
+

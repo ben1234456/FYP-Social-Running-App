@@ -127,7 +127,7 @@ export default class BuddiesListScreen extends Component {
         }
     };
     renderItemComponent = (data) =>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.proRow} >
                     <View style={styles.proTitle}>

@@ -16,10 +16,11 @@ class CreateBuddyRequestsTable extends Migration
         Schema::create('buddy_requests', function (Blueprint $table) {
 
             $table->id();
-            //reciever id
-            $table->integer('userID');
             //sender id
-            $table->integer('reqID');
+            $table->integer('userID');
+            //reciever id
+            $table->integer('buddyID');
+            $table->enum('status',array('accepted','pending',"declined"));
             $table->rememberToken();
             $table->timestamps();
         });

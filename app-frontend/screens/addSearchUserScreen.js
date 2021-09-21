@@ -58,10 +58,10 @@ export default class addSearchUserScreen extends Component {
     };
     renderItemComponent = (data) =>
         
-    <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+    <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id })}>
 
-            {this.state.searchWord!=""
-            ?
+            {/* {this.state.searchWord!=""
+            ? */}
             <View style={styles.cardContainer}>
                 <View style={styles.imgContainer}>
                     {/* nid change to user profile pic */}
@@ -79,11 +79,11 @@ export default class addSearchUserScreen extends Component {
                     <Icon name="person-add" size={20} color={"#8352F2"} />
                 </View>
             </View>
-            :
+            {/* :
             <View>
 
             </View>
-            }
+            } */}
             
     </TouchableOpacity>
     search=(value)=>{
