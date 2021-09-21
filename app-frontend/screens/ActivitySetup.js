@@ -1,63 +1,71 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet, ScrollView, List, TouchableOpacity } from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, List, TouchableOpacity, Picker } from 'react-native';
 import { Button, ListItem } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 //import { createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class ActivitySetup extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activitySelected: '',
+            routeSelected: '',
+            musicSelected: ''
+        }
+    }
 
     render() {
         return (
             <ScrollView style={styles.background}>
                 <View style={styles.container}>
-                    <TouchableOpacity>
-                        <View style={styles.activityRow}>
-                            <View style={styles.activityInfo}>
-                                <Text style={styles.activityType}>Activity Type</Text>
-                                <Text style={styles.activityDetail}>Running</Text>
-                            </View>
-                            <View style={styles.editIcon}>
-                                <Icon name="mode-edit" size={20} color={'#8352F2'} />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                    <View style={styles.activityRow}>
+                        <View style={styles.activityInfo}>
+                            <Text style={styles.activityType}>Choose your Activity Type</Text>
+                            <Picker
+                                selectedValue={this.state.activitySelected}
+                                backgroundColor={'white'}
+                                onValueChange={(itemValue) => this.setState({ activitySelected: itemValue })}>
 
-                    <TouchableOpacity>
-                        <View style={styles.activityRow}>
-                            <View style={styles.activityInfo}>
-                                <Text style={styles.activityType}>Route</Text>
-                                <Text style={styles.activityDetail}>Select your route</Text>
-                            </View>
-                            <View style={styles.editIcon}>
-                                <Icon name="mode-edit" size={20} color={'#8352F2'} />
-                            </View>
+                                <Picker.Item label="Running" value="Running" color='#373737' />
+                                <Picker.Item label="Walking" value="Walking" color='#373737' />
+                                <Picker.Item label="Cycling" value="Cycling" color='#373737' />
+                                <Picker.Item label="Hiking" value="Hiking" color='#373737' />
+                            </Picker>
                         </View>
-                    </TouchableOpacity>
+                        {/* <View style={styles.editIcon}>
+                            <Icon name="mode-edit" size={20} color={'#8352F2'} />
+                        </View> */}
+                    </View>
 
-                    <TouchableOpacity>
-                        <View style={styles.activityRow}>
-                            <View style={styles.activityInfo}>
-                                <Text style={styles.activityType}>Goal</Text>
-                                <Text style={styles.activityDetail}>Select your training goal</Text>
-                            </View>
-                            <View style={styles.editIcon}>
-                                <Icon name="mode-edit" size={20} color={'#8352F2'} />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                    <View style={styles.activityRow}>
+                        <View style={styles.activityInfo}>
+                            <Text style={styles.activityType}>Choose your Route</Text>
+                            <Picker
+                                selectedValue={this.state.routeSelected}
+                                backgroundColor={'white'}
+                                onValueChange={(itemValue) => this.setState({ routeSelected: itemValue })}>
 
-                    <TouchableOpacity>
-                        <View style={styles.activityRow}>
-                            <View style={styles.activityInfo}>
-                                <Text style={styles.activityType}>Music</Text>
-                                <Text style={styles.activityDetail}>Select your music player</Text>
-                            </View>
-                            <View style={styles.editIcon}>
-                                <Icon name="mode-edit" size={20} color={'#8352F2'} />
-                            </View>
+                                <Picker.Item label="Route1" value="Route1" color='#373737' />
+                                <Picker.Item label="Route2" value="Route2" color='#373737' />
+                                <Picker.Item label="Route3" value="Route3" color='#373737' />
+                                <Picker.Item label="Route4" value="Route4" color='#373737' />
+                            </Picker>
                         </View>
-                    </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.activityRow}>
+                        <View style={styles.activityInfo}>
+                            <Text style={styles.activityType}>Choose a Music Player</Text>
+                            <Picker
+                                selectedValue={this.state.musicSelected}
+                                backgroundColor={'white'}
+                                onValueChange={(itemValue) => this.setState({ musicSelected: itemValue })}>
+
+                                <Picker.Item label="Spotify" value="Spotify" color='#373737' />
+                            </Picker>
+                        </View>
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -101,6 +109,10 @@ export const styles = StyleSheet.create({
         margin: 10,
         position: 'absolute',
         right: 30,
+    },
+    picker: {
+        backgroundColor: 'white',
+        flex: 1,
     },
 });
 
