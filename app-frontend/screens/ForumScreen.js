@@ -275,7 +275,7 @@ export default class ForumScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>
-                        <Icon size={25} style={{ marginRight: 20 }} name='person-add' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
+                        <Icon size={25} style={{ marginRight: 20 }} name='people' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
                         <Icon size={25} name='leaderboard' color='#808080' onPress={() => this.props.navigation.navigate('eventsScreen')} />
                     </View>
                 </View>

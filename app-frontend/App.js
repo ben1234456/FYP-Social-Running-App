@@ -20,7 +20,7 @@ import musicScreen from "./screens/MusicScreen";
 import activitySetup from "./screens/ActivitySetup";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { LogBox, Image, StyleSheet, View, Alert,Text } from 'react-native';
+import { LogBox, Image, StyleSheet, View, Alert, Text } from 'react-native';
 import addRouteScreen from "./screens/addRouteScreen";
 import editProfileScreen from "./screens/editProfileScreen";
 import eventsScreen from "./screens/EventsScreen";
@@ -50,14 +50,15 @@ import resetPasswordScreen from './screens/resetPasswordScreen';
 import addSearchUserScreen from './screens/addSearchUserScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import CreateNewPasswordScreen from './screens/CreateNewPasswordScreen';
+import BuddiesRequestList from './screens/BuddiesRequestList';
 
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            own:true,
+        this.state = {
+            own: true,
         };
     }
     confirmDelete = () => {
@@ -296,14 +297,14 @@ export default class App extends Component {
                         name="routeDetailsScreen"
                         component={routeDetailsScreen}
                         initial={false} options={{ headerShown: false }}
-                        options={{ 
-                            headerTitleAlign: 'center', 
-                            title: 'Route' ,
+                        options={{
+                            headerTitleAlign: 'center',
+                            title: 'Route',
                             headerRight: () => (
                                 <View style={styles.imageContainer} >
-                                    {this.state.own==true
-                                    ?<Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
-                                    :<Text style={styles.headerText}>Save</Text>
+                                    {this.state.own == true
+                                        ? <Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
+                                        : <Text style={styles.headerText}>Save</Text>
                                     }
                                     <TouchableOpacity onPress={this.confirmDelete}>
                                         <Icon name={"delete"} style={styles.icon} size={30} color={"grey"} />
@@ -342,7 +343,7 @@ export default class App extends Component {
 
                             headerRight: () => (
                                 <View style={styles.imageContainer} >
-                                    {}
+                                    { }
                                     <Icon name={"edit"} style={styles.icon} size={30} color={"grey"} />
                                     <TouchableOpacity onPress={this.confirmDelete}>
                                         <Icon name={"delete"} style={styles.icon} size={30} color={"grey"} />
@@ -370,7 +371,7 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Buddies List' }}
                     />
-                     <Stack.Screen
+                    <Stack.Screen
                         name="BuddiesProfileScreen"
                         component={BuddiesProfileScreen}
                         initial={false}
@@ -387,19 +388,25 @@ export default class App extends Component {
                         component={addSearchUserScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Add Buddies' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="VerificationScreen"
                         component={VerificationScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Verification' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="CreateNewPasswordScreen"
                         component={CreateNewPasswordScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
-                    /> 
+                    />
+                    <Stack.Screen
+                        name="BuddiesRequestList"
+                        component={BuddiesRequestList}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Buddies Request' }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -407,7 +414,6 @@ export default class App extends Component {
 }
 export const styles = StyleSheet.create({
     icon: {
-
         marginLeft: 15,
     },
     imageContainer: {
@@ -416,7 +422,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         marginRight: 25,
     },
-    headerText:{
-        fontSize:15,
+    headerText: {
+        fontSize: 15,
     },
 });
