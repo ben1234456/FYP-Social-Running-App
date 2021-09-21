@@ -119,4 +119,14 @@ class UserController extends Controller
         return $searchedUser->toJson();
 
     }
+    public function searchUserById(User $user)
+    {
+        
+        $userID = $user->id;
+        
+        $searchedUser=User::where("id","=",$userID)->get();
+
+        return $searchedUser->toJson();
+
+    }
 }

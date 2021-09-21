@@ -38,11 +38,14 @@ class BuddyRequestController extends Controller
     public function store(Request $request)
     {
         //
+        error_log($request);
         $buddyReq=new BuddyRequest();
         //reciever id
         $buddyReq->userID = $request->userID;
         //sender id
-        $buddyReq->reqID = $request->reqID;
+        $buddyReq->buddyID = $request->buddyID;
+        $buddyReq->status = "pending";
+        return $buddyReq->save();
     }
 
     /**
@@ -79,8 +82,8 @@ class BuddyRequestController extends Controller
     {
         //
         $buddyRequest->userID = $request->userID;
-        $buddyRequest->reqID = $request->reqID;
-
+        $buddyRequest->buddyID = $request->buddyID;
+        $buddyRequest->status = $request->status;
     }
 
     /**

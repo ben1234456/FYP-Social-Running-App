@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 'react-native';
 import profileImage from '../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default class BuddiesProfileScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            buddyID: props.route.params.userID,
+            userID:"",
+            user:"",
             id: "",
             name: "",
             gender: "",
@@ -17,38 +21,76 @@ export default class BuddiesProfileScreen extends Component {
 
         //get data from async storage
         const getData = async () => {
+
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
-
                 if (userJson !== null) {
                     const user = JSON.parse(userJson);
-
-                    //change to upper case
-                    var gender = user.gender;
-                    var genderText = gender[0].toUpperCase() + gender.substring(1);
-
-                    //update state
                     this.setState({
-                        name: user.first_name,
-                        email: user.email,
-                        gender: genderText,
-                        city: user.city,
-                        dob: user.dob
+                        userID: user.id,
                     });
                 }
 
             } catch (e) {
                 console.log(e);
             }
+            fetch(baseUrl + '/api/users/' + this.state.buddyID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user list data')
+                console.log(data)
+                this.setState({
+                    user: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getData();
+        
 
     }
+    addBuddy=() =>{
 
-    render() {
-        return (
-            <View style={styles.container}>
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        
+        const data = {
+            userID:this.state.userID,
+            buddyID:this.state.buddyID,
+        };
+
+        fetch( baseUrl + '/api/buddyReq', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response =>  response.json())
+        
+        .then(data => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });  
+    }
+    renderItemComponent = (data) =>
+        
+    <View style={styles.container}>
                 <View style={styles.rowContainer}>
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
@@ -70,7 +112,7 @@ export default class BuddiesProfileScreen extends Component {
                             <Text style={styles.proColumnName}>Name:</Text>
                         </View>
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.name}</Text>
+                            <Text style={styles.proDetails}>{data.item.first_name}</Text>
                         </View>
                     </View>
 
@@ -80,7 +122,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.gender}</Text>
+                            <Text style={styles.proDetails}>{data.item.gender}</Text>
                         </View>
                     </View>
 
@@ -90,7 +132,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.city}</Text>
+                            <Text style={styles.proDetails}>{data.item.city}</Text>
                         </View>
                     </View>
 
@@ -100,11 +142,25 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.dob}</Text>
+                            <Text style={styles.proDetails}>{data.item.dob}</Text>
                         </View>
                     </View>
                 </View>
+                <View style={styles.addBtnContainer}>
+                    <TouchableOpacity onPress={this.addBuddy}>
+                        <View style={styles.addBtn} >
+                            <Text style={styles.addText}>ADD BUDDY</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
+    render() {
+        return (
+            <FlatList horizontal={false}
+                data={this.state.user}
+                keyExtractor={item => item.id.toString()}
+                renderItem={item => this.renderItemComponent(item)}
+            />  
         );
     }
 }
@@ -175,5 +231,24 @@ const styles = StyleSheet.create({
     },
     noOfFollower: { 
         textAlign: 'center' 
-    }
+    },
+    addBtnContainer:{
+        flex:1,
+        justifyContent:"flex-end",
+        padding:"5%",
+        paddingLeft:"10%",
+        paddingRight:"10%",
+    },
+    addBtn:{
+        borderRadius:30,
+        alignItems:"center",
+        justifyContent:"flex-end",
+        padding:"5%",
+        backgroundColor: '#8352F2',
+    },
+    addText:{
+        fontSize:16,
+        color: 'white',
+        textAlign: 'center',
+    },
 });
