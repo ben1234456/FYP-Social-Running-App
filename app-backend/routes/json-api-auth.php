@@ -109,3 +109,6 @@ Route::get('/users/{user}', [UserController::class, "searchUserById"]);
 
 //get buddy id
 Route::get('/buddy/{user}/{buddy}', [BuddyController::class, "getID"]);
+
+//search user buddy request list
+Route::get('/buddyReq/list/{user}', [BuddyRequestController::class, "searchUserBuddyReqList"]);

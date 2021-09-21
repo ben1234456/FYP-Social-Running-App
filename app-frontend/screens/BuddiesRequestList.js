@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { Button } from 'native-base'
 import profileImage from '../images/avatar.jpg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default class BuddiesRequestList extends Component {
 
@@ -9,76 +11,76 @@ export default class BuddiesRequestList extends Component {
         super(props);
 
         this.state = {
-            data: [
-                { id: '1', name: { "gender": "Male", "first": "Alan", "last": "Walker" }, first: profileImage },
-                { id: '2', name: { "gender": "Male", "first": "Tom", "last": "Holland" }, first: profileImage },
-                { id: '3', name: { "gender": "Female", "first": "Billie", "last": "Elish" }, first: profileImage },
-                { id: '4', name: { "gender": "Male", "first": "John", "last": "Cena" }, first: profileImage }
-            ],
+            data: "",
+            userID:"",
         };
-        this.arrayholder = [];
-    }
-    componentDidMount() {
-        this.arrayholder = this.state.data
-    }
+        const getData = async () => {
 
-    deleteUser(id) {
-        const filteredData = this.state.data.filter(item => item.id !== id);
-        this.setState({ data: filteredData });
-        this.arrayholder = filteredData
-    }
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-    delete(id) {
-        Alert.alert(
-            "Are you confirm to remove this user?",
-            '',
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+            fetch(baseUrl + '/api/buddyReq/list/'+"1", {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                { text: "OK", onPress: () => this.deleteUser(id) }
-            ]
-        );
-    };
-
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddylist data')
+                console.log(data)
+                this.setState({
+                    data: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
+            
+        }
+        
+        getData();
+    }
+    renderItemComponent = (data) =>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('buddyRequestDetailScreen', { 'userID': data.item.id })}>
+            <View style={styles.cardView}>
+                <View style={styles.proRow}>
+                    <View style={styles.proTitle}>
+                        <Image style={styles.proColumnName} source={profileImage} />
+                    </View>
+                    <View style={{ marginLeft: 20, flex: 3 }}>
+                        <Text style={styles.title}>{data.item.first_name}</Text>
+                        <Text style={styles.date}>{data.item.gender}</Text>
+                    </View>
+                </View>
+            </View>
+        </TouchableOpacity>
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.request}>
                     <Text>Buddies Request: </Text>
-                    <Text style={styles.requestNo}>4</Text>
+                    <Text style={styles.requestNo}>{this.state.data.length}</Text>
                 </View>
-                <FlatList
+                <FlatList horizontal={false}
                     data={this.state.data}
-                    keyExtractor={item => item.first}
-                    renderItem={({ item }) => (
-
-                        <TouchableOpacity>
-                            <View style={styles.cardView}>
-                                <View style={styles.proRow}>
-                                    <View style={styles.proTitle}>
-                                        <Image style={styles.proColumnName} source={item.first} />
-                                    </View>
-                                    <View style={{ marginLeft: 20, flex: 3 }}>
-                                        <Text style={styles.title}>{`${item.name.first} ${item.name.last}`}</Text>
-                                        <Text style={styles.date}>{`${item.name.gender}`}</Text>
-                                        <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                                            <Button style={styles.acceptBtn}>
-                                                <Text style={styles.btnText}>ACCEPT</Text>
-                                            </Button>
-                                            <Button style={styles.deleteBtn} onPress={() => this.delete(item.id)}>
-                                                <Text style={styles.btnText2}>DELETE</Text>
-                                            </Button>
-                                        </View>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-                {/* <TouchableOpacity><Text onPress={this.share}>Share</Text></TouchableOpacity> */}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={item => this.renderItemComponent(item)}
+                /> 
+                
             </View>
         );
     }

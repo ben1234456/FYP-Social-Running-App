@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buddy;
+use App\Models\User;
 use App\Models\BuddyRequest;
 use Illuminate\Http\Request;
 
@@ -98,5 +99,17 @@ class BuddyRequestController extends Controller
         //
         return $buddyRequest->delete();
     }
-    
+    public function searchUserBuddyReqList(User $user)
+    {
+        
+        $userID = $user->id;
+        $buddies=BuddyRequest::where("userID","=",$userID)->get();
+        // 
+        $idList=array();
+        foreach($buddies as $buddy){
+            array_push($idList,$buddy->buddyID);
+        }
+        $buddyList = User::whereIn('id', $idList)->get();
+        return $buddyList;
+    }
 }
