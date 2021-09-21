@@ -9,7 +9,7 @@ export default class buddyRequestDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            buddyID: "3",
+            buddyID: props.route.params.userID,
             userID:"",
             user:"",
             id: "",
