@@ -32,7 +32,7 @@ Route::apiResources([
     'forumposts'=> ForumPostController::class,
     'postcomments'=> PostCommentController::class,
     'postlikes'=> PostLikeController::class,
-    "buddyReq"=>BuddyRequestController::class,
+    "buddyrequest"=>BuddyRequestController::class,
     "buddy"=>BuddyController::class,
 ]);
 
@@ -111,4 +111,11 @@ Route::get('/users/{user}', [UserController::class, "searchUserById"]);
 Route::get('/buddy/{user}/{buddy}', [BuddyController::class, "getID"]);
 
 //search user buddy request list
-Route::get('/buddyReq/list/{user}', [BuddyRequestController::class, "searchUserBuddyReqList"]);
+Route::get('/buddyrequest/list/{user}', [BuddyRequestController::class, "searchUserBuddyReqList"]);
+
+//get buddyrequest id
+Route::get('/buddyrequest/{user}/{buddy}', [BuddyRequestController::class, "getID"]);
+
+//custom delete buddy request by id
+Route::delete('/buddyrequest/list/{id}', [BuddyRequestController::class, "deleteBuddyReqByID"]);
+

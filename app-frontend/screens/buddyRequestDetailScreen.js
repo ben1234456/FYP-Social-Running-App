@@ -54,18 +54,80 @@ export default class buddyRequestDetailScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            
+            fetch(baseUrl + '/api/buddyrequest/' + this.state.userID +'/'+this.state.buddyID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddy req id')
+                console.log(data)
+                this.setState({
+                    id: data.id
+                });
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getData();
         
     }
     decline=()=>{
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        console.log("testing"+this.state.id);
+        fetch(baseUrl + '/api/buddyrequest/list/' + this.state.id, {
+                method:"DELETE",
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+    
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully delete buddy request')
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         
+        //fetch(baseUrl + '/api/buddyReq/' + this.state.buddyID+"/"+this.state.userID, {
+                
+                
 
     }
     accept=() =>{
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
+        
+        const data = {
+            userID:this.state.userID,
+            buddyID:this.state.buddyID,
+        };
+
+        fetch( baseUrl + '/api/buddy', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response =>  response.json())
+        
+        .then(data => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });  
         
     }
     renderItemComponent = (data) =>

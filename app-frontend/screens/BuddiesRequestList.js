@@ -31,7 +31,7 @@ export default class BuddiesRequestList extends Component {
             } catch (e) {
                 console.log(e);
             }
-            fetch(baseUrl + '/api/buddyReq/list/'+"1", {
+            fetch(baseUrl + '/api/buddyrequest/list/'+this.state.userID, {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
