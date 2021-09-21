@@ -45,7 +45,7 @@ export default class BuddiesProfileScreen extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Successfully get user list data')
+                console.log('Successfully get user data')
                 console.log(data)
                 this.setState({
                     user: data
@@ -54,10 +54,49 @@ export default class BuddiesProfileScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+            fetch(baseUrl + '/api/buddy/' + this.state.userID +'/'+this.state.buddyID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddy id')
+                console.log(data)
+                this.setState({
+                    id: data.id
+                });
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getData();
         
+    }
+    deleteBuddy=()=>{
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        console.log("testing"+this.state.id);
+        fetch(baseUrl + '/api/buddy/' + this.state.id, {
+                method: 'DELETE',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+    
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully delete buddy')
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            this.props.navigation.navigate('BuddiesListScreen');
 
     }
     addBuddy=() =>{
@@ -147,11 +186,20 @@ export default class BuddiesProfileScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.addBtnContainer}>
+                    {this.state.id==""
+                    ?
                     <TouchableOpacity onPress={this.addBuddy}>
                         <View style={styles.addBtn} >
                             <Text style={styles.addText}>ADD BUDDY</Text>
                         </View>
                     </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={this.deleteBuddy}>
+                        <View style={styles.addBtn} >
+                            <Text style={styles.addText}>DELETE BUDDY</Text>
+                        </View>
+                    </TouchableOpacity>
+                    }
                 </View>
             </View>
     render() {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buddy;
 use App\Models\BuddyRequest;
 use Illuminate\Http\Request;
 
@@ -95,5 +96,7 @@ class BuddyRequestController extends Controller
     public function destroy(BuddyRequest $buddyRequest)
     {
         //
+        return $buddyRequest->delete();
     }
+    
 }

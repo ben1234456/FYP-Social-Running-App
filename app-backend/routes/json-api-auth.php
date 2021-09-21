@@ -33,6 +33,7 @@ Route::apiResources([
     'postcomments'=> PostCommentController::class,
     'postlikes'=> PostLikeController::class,
     "buddyReq"=>BuddyRequestController::class,
+    "buddy"=>BuddyController::class,
 ]);
 
 
@@ -106,3 +107,5 @@ Route::get('/buddy/buddyList/{user}/{userName}', [BuddyController::class, "searc
 //search user by id
 Route::get('/users/{user}', [UserController::class, "searchUserById"]);
 
+//get buddy id
+Route::get('/buddy/{user}/{buddy}', [BuddyController::class, "getID"]);
