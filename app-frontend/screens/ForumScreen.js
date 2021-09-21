@@ -275,7 +275,7 @@ export default class ForumScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>
-                        <Icon size={25} style={{ marginRight: 20 }} name='person-add' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
+                        <Icon size={25} style={{ marginRight: 20 }} name='people' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
                         <Icon size={25} name='leaderboard' color='#808080' onPress={() => this.props.navigation.navigate('eventsScreen')} />
                     </View>
                 </View>
@@ -354,7 +354,7 @@ export default class ForumScreen extends Component {
                                 <Ion style={{ flex: 1 }} size={45} color='white' name='ios-close-outline' onPress={() => {
                                     this.setState({ isVisible: !this.state.isVisible })
                                 }} />
-                                <Text style={{ flex: 1, fontSize: 18, marginTop: 10, color: 'white' }}>Create Post</Text>
+                                <Text style={{ flex: 1, fontSize: 18, marginTop: 10, color: 'white', marginRight: 15 }}>Create Post</Text>
                                 <TouchableOpacity onPress={this.createPost}>
                                     <View style={{ borderRadius: 10, backgroundColor: 'white', marginTop: 5, marginRight: 5, }}>
                                         <Text style={{ color: '#8352F2', alignItems: 'center', padding: 10 }}>

@@ -188,7 +188,8 @@ export default class BuddiesListScreen extends Component {
                     renderItem={item => this.renderItemComponent(item)}
                 />  
                 
-                <View style={{ flexDirection: 'column', alignItems: 'flex-end', margin: 40 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', margin: 40 }}>
+                    <Icon onPress={() => this.props.navigation.navigate('BuddiesRequestList')} size={40} name='person-add' style={{ color: '#8352F2', flex:1 }} />
                     <Ant onPress={() => this.props.navigation.navigate('addSearchUserScreen')} size={40} name='pluscircle' style={{ color: '#8352F2' }} />
                 </View>
                 {/* <TouchableOpacity><Text onPress={this.share}>Share</Text></TouchableOpacity> */}
