@@ -57,35 +57,26 @@ export default class addSearchUserScreen extends Component {
         getData();
     };
     renderItemComponent = (data) =>
-        
-    <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id })}>
-
-            {/* {this.state.searchWord!=""
-            ? */}
-            <View style={styles.cardContainer}>
-                <View style={styles.imgContainer}>
-                    {/* nid change to user profile pic */}
-                    <Image style={styles.img} source={Logo} />
-                </View>
-                <View style={styles.userInfoContainer}>
-                    <Text style={styles.userInfoTop}>
-                        {data.item.first_name}
-                    </Text>
-                    <Text style={styles.userInfoBot}>
-                        {data.item.gender}
-                    </Text>
-                </View>
-                <View style={styles.iconContainer}>
-                    <Icon name="person-add" size={20} color={"#8352F2"} />
-                </View>
+    <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesProfileScreen', { 'userID': data.item.id ,"view":"true"})}>
+        <View style={styles.cardContainer}>
+            <View style={styles.imgContainer}>
+                {/* nid change to user profile pic */}
+                <Image style={styles.img} source={Logo} />
             </View>
-            {/* :
-            <View>
-
+            <View style={styles.userInfoContainer}>
+                <Text style={styles.userInfoTop}>
+                    {data.item.first_name}
+                </Text>
+                <Text style={styles.userInfoBot}>
+                    {data.item.gender}
+                </Text>
             </View>
-            } */}
-            
+            <View style={styles.iconContainer}>
+                <Icon name="person-add" size={20} color={"#8352F2"} />
+            </View>
+        </View>
     </TouchableOpacity>
+    
     search=(value)=>{
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
@@ -122,13 +113,19 @@ export default class addSearchUserScreen extends Component {
                         inputContainerStyle={{backgroundColor: 'white'}}
                         
                     />
-                    <View style={styles.scrollview}>
-                        <FlatList horizontal={false}
-                            data={this.state.userList}
-                            keyExtractor={item => item.id.toString()}
-                            renderItem={item => this.renderItemComponent(item)}
-                        />  
-                    </View>  
+                    {this.state.userList.length!=0
+                    ?
+                    <FlatList horizontal={false}
+                        data={this.state.userList}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderItemComponent(item)}
+                    /> 
+                    :
+                    <View style={styles.noUserView}>
+                        <Text style={styles.noUserText}>No User Found</Text>
+                    </View>
+                    }
+                         
                     
                 </View>
             </View>
@@ -181,5 +178,14 @@ export const styles = StyleSheet.create({
     },
     cardInner:{
         flexDirection:"column",
+    },
+    noUserView:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        paddingTop:"10%",
+    },
+    noUserText:{
+        fontSize:16,
     },
 });

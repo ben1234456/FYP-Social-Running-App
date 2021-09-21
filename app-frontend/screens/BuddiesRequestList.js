@@ -55,6 +55,7 @@ export default class BuddiesRequestList extends Component {
         getData();
     }
     renderItemComponent = (data) =>
+    
         <TouchableOpacity onPress={() => this.props.navigation.navigate('buddyRequestDetailScreen', { 'userID': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.proRow}>
@@ -75,11 +76,19 @@ export default class BuddiesRequestList extends Component {
                     <Text>Buddies Request: </Text>
                     <Text style={styles.requestNo}>{this.state.data.length}</Text>
                 </View>
-                <FlatList horizontal={false}
+                {this.state.data.length!=0
+                ?
+                <FlatList horizontal={false}                    
                     data={this.state.data}
                     keyExtractor={item => item.id.toString()}
                     renderItem={item => this.renderItemComponent(item)}
                 /> 
+                :
+                <View style={styles.noReqView}>
+                    <Text style={styles.noReqText}>No Buddy Found</Text>
+                </View>
+                }
+                
                 
             </View>
         );
@@ -158,5 +167,14 @@ export const styles = StyleSheet.create({
     },
     requestNo: {
         color: '#8352F2'
-    }
+    },
+    noReqView:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        paddingTop:"10%",
+    },
+    noReqText:{
+        fontSize:16,
+    },
 });

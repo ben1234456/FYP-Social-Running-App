@@ -89,11 +89,11 @@ class BuddyRequestController extends Controller
     {
         
         $userID = $user->id;
-        $buddies=BuddyRequest::where("userID","=",$userID)->get();
+        $buddies=BuddyRequest::where("buddyID","=",$userID)->get();
         // 
         $idList=array();
         foreach($buddies as $buddy){
-            array_push($idList,$buddy->buddyID);
+            array_push($idList,$buddy->userID);
         }
         $buddyList = User::whereIn('id', $idList)->get();
         return $buddyList;

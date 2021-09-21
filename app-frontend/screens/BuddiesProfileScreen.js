@@ -17,6 +17,8 @@ export default class BuddiesProfileScreen extends Component {
             gender: "",
             city: "",
             dob: "",
+            //diff buddy profile and random profile
+            view:props.route.params.view,
         };
 
         //get data from async storage
@@ -54,24 +56,27 @@ export default class BuddiesProfileScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            fetch(baseUrl + '/api/buddy/' + this.state.userID +'/'+this.state.buddyID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get buddy id')
-                console.log(data)
-                this.setState({
-                    id: data.id
+            if(this.state.view!="true"){
+                fetch(baseUrl + '/api/buddy/' + this.state.userID +'/'+this.state.buddyID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get buddy id')
+                    console.log(data)
+                    this.setState({
+                        id: data.id
+                    });
+                    
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-                
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            }
+            
         }
 
         getData();
@@ -126,6 +131,7 @@ export default class BuddiesProfileScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });  
+        this.props.navigation.navigate('addSearchUserScreen');
     }
     renderItemComponent = (data) =>
         
@@ -181,7 +187,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.id}</Text>
+                            <Text style={styles.proDetails}>{data.item.dob}</Text>
                         </View>
                     </View>
                 </View>
@@ -204,11 +210,14 @@ export default class BuddiesProfileScreen extends Component {
             </View>
     render() {
         return (
-            <FlatList horizontal={false}
+            <View style={styles.wholeContainer}>
+                <FlatList horizontal={false}
                 data={this.state.user}
                 keyExtractor={item => item.id.toString()}
                 renderItem={item => this.renderItemComponent(item)}
             />  
+            </View>
+            
         );
     }
 }
@@ -298,5 +307,9 @@ const styles = StyleSheet.create({
         fontSize:16,
         color: 'white',
         textAlign: 'center',
+    },
+    wholeContainer:{
+        flex:1,
+        backgroundColor:"white",
     },
 });
