@@ -50,6 +50,7 @@ import resetPasswordScreen from './screens/resetPasswordScreen';
 import addSearchUserScreen from './screens/addSearchUserScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import CreateNewPasswordScreen from './screens/CreateNewPasswordScreen';
+import buddyRequestDetailScreen from './screens/buddyRequestDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -363,7 +364,7 @@ export default class App extends Component {
                         component={editEventCalendarScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
-                    />
+                    /> 
                     <Stack.Screen
                         name="BuddiesListScreen"
                         component={BuddiesListScreen}
@@ -400,6 +401,12 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
                     /> 
+                    <Stack.Screen
+                        name="buddyRequestDetailScreen"
+                        component={buddyRequestDetailScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Buddy Request' }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
