@@ -1,6 +1,7 @@
 import {Agenda} from 'react-native-calendars';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class calendarScreen extends Component {
     constructor(props) {
@@ -8,112 +9,114 @@ export default class calendarScreen extends Component {
         this.state = {
             currentDate:new Date(),
             currentMonth:new Date().getMonth+1,
-            //load monthly data
-            //load every day even is empty
-
+            userID:"",
+            loadedData:"",
+            refresh:false,
+            //load day even is empty
             data:{
-                //scheduled
-                '2021-09-03': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}],
-                '2021-09-04': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}],
-                //not scheduled
-                '2021-09-05': [{time:"10:00AM - 10:30AM",plan:false}],
-                '2021-09-23': [{name: 'sample name', time:"10:00AM - 10:30AM",plan:true}, {name: 'sample name 2', time:"10:00AM - 10:30AM",plan:true}],
-                '2021-09-07': [],
-                '2021-09-08': [{name: 'Running', time:"10:00AM - 10:30AM",plan:true}],
-                '2021-09-07': [],
-                '2021-09-09': [],
-                '2021-09-10': [],
-                '2021-09-11': [],
-                '2021-09-12': [],
-                '2021-09-13': [],
-                '2021-09-14': [],
-                '2021-09-15': [],
-                '2021-09-16': [],
-                '2021-09-17': [],
-                '2021-09-18': [],
-                '2021-09-19': [],
-                '2021-09-20': [],
-                '2021-09-21': [],
-                '2021-09-22': [],
-                '2021-09-24': [],
-                '2021-09-25': [],
-                '2021-09-26': [],
-                '2021-09-27': [],
-                '2021-09-28': [],
-                '2021-09-29': [],
-                '2021-09-30': [],
+                // '2021-09-21': [{name: 'item 1 - any js object',time:"9-10"}],
               },
         };
+        const getData = async () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+            fetch(baseUrl + '/api/calendar/calendarList/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user calendar data')
+                console.log(data)
+                this.setState({
+                    loadedData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
+        }
+
+        getData();
+        //date format for data
+        console.log(new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate());
         
     }
     render() {
         return (
-            
             <Agenda
                 items={this.state.data}
-
-                
                 selected={this.state.currentDate}
-                onDayPress={this.onDayPress.bind(this)}
-                
- 
-
-                renderEmptyData = {() => {return (
-                
-                <View>
-                    <TouchableOpacity style={styles.emptyItem} onPress={() => this.select(item)}>
-                    //change style based on item plan property
-                    <TouchableOpacity style={item.plan==true?styles.item:styles.emptyItem} onPress={() => this.select(item)}>
-                        {item.plan==true
-                        //if item plan property is true
-                        ?<Text style={styles.itemText}>{item.time}</Text>
-                        //if item plan property is false
-                        :<View><Text style={styles.noitemText}>{item.time}</Text><Text style={styles.noItemText}>No plan today. Tap to create</Text></View>
-                        }
-                        {item.plan==true
-                        //if item plan property is true
-                        ?<Text style={styles.itemText}>{item.name}</Text>
-                        //if item plan property is false
-                        :null
-                        }
-                    </TouchableOpacity>
-                    </TouchableOpacity>
-                </View>
-                    
-                    
-                );}}
-                
-                  // Specify how empty date content with no items should be rendered
+                onDayChange={this.loadData.bind(this)}
+                onDayPress={this.loadData.bind(this)}
+                // Specify how empty date content with no items should be rendered
                 renderEmptyDate={() => {return (
                 <View>
-                    <TouchableOpacity style={styles.emptyItem} onPress={() => this.props.navigation.navigate('addEventCalendarScreen')}>
-                        <View><Text style={styles.noItemText}>No plan today. Tap to create</Text></View>
+                    <TouchableOpacity>
+                        <View style={styles.emptyItem}>
+                            <Text style={styles.noItemText}>Loading</Text>
+                            <Text style={styles.noItemText}>Please wait</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
                 );}}
 
                 renderItem={(item) => {return (
-                    //change style based on item plan property
-                    <TouchableOpacity style={item.plan==true?styles.item:styles.emptyItem} onPress={() => this.select(item)}>
-                        {item.plan==true
-                        //if item plan property is true
-                        ?<Text style={styles.itemText}>{item.time}</Text>
-                        //if item plan property is false
-                        :<View><Text style={styles.noitemText}>{item.time}</Text><Text style={styles.noItemText}>No plan today. Tap to create</Text></View>
+                    <View >
+                        {item.planned==true
+                        ?
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('editEventCalendarScreen', { 'id': item.id})}>
+                            <View style={styles.item}>
+                                <Text style={styles.itemText}>{item.time}</Text>
+                                <Text style={styles.itemText}>{item.name}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        :
+                        <View>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('addEventCalendarScreen', { 'date': item.date})}>
+                                {item.create
+                                ?
+                                <View style={styles.emptyItem}>
+                                    <Text style={styles.noItemText}>No more plan today.</Text>
+                                    <Text style={styles.noItemText}>Tap to create</Text>
+                                </View>
+                                :
+                                <View style={styles.emptyItem}>
+                                    <Text style={styles.noItemText}>No plan today.</Text>
+                                    <Text style={styles.noItemText}>Tap to create</Text>
+                                </View>
+                                }
+                                
+                            </TouchableOpacity>
+                        </View>
                         }
-                        {item.plan==true
-                        //if item plan property is true
-                        ?<Text style={styles.itemText}>{item.name}</Text>
-                        //if item plan property is false
-                        :null
-                        }
-                    </TouchableOpacity>
-                );
-
-                
-                }}
-                
+                        
+                    </View>
+                        
+                )}}
+                showClosingKnob={true}
+                loadItemsForMonth={this.loadData.bind(this)}
                 rowHasChanged={(r1, r2) => {return r1.text !== r2.text}}
+                onRefresh={() => console.log('refreshing...')}
+                refreshing={this.state.refresh}
+                pastScrollRange={200}
+                futureScrollRange={200}
+
                 theme={{
                     agendaDayTextColor: '#424242',
                     agendaDayNumColor: '#424242',
@@ -122,14 +125,64 @@ export default class calendarScreen extends Component {
                 
             />
         );}
-        //trigger when a day in the calendar is pressed
-        onDayPress=(day)=>{
-            //load data based on day.month
-        };
-        //trigger when user select an activity
-        select=(item)=>{
-            this.props.navigation.navigate('calendarEventScreen');
-        };
+        loadData=(day)=>{
+            changeToTwoTimeDecimal=(time)=>{
+                if(time.length==1){
+                    return "0"+time;
+                }
+                else{
+                    return time;
+                }
+            };
+            this.setState({ data: {} });
+            console.log(this.state.data);
+            for (let i =-10; i < 10; i++) {
+                let added=false;
+                let indexFound=[];
+                const time = day.timestamp+ i * 24 * 60 * 60 * 1000;
+                const convertedTime = new Date(time).toISOString().split('T')[0];
+                this.state.data[convertedTime] = [];
+                for (let ind =0; ind < this.state.loadedData.length; ind++) { 
+                    if(this.state.loadedData[ind].date==convertedTime){
+                        added=true;
+                        indexFound.push(ind);
+                    }
+                }
+                if(added){
+                    for(let x of indexFound){
+                        //%60=mins /60=hour
+                        const hourStart=changeToTwoTimeDecimal(parseInt(this.state.loadedData[x].time/60).toString());
+                        const minStart=changeToTwoTimeDecimal((this.state.loadedData[x].time%60).toString());
+                        this.state.data[convertedTime].push({
+                            id:this.state.loadedData[x].id,
+                            name:this.state.loadedData[x].title,
+                            create:false,
+                            time:hourStart+minStart,
+                            planned:true,
+                            date:convertedTime,
+                        });
+                    }
+                    this.state.data[convertedTime].push({
+                        planned:false,
+                        date:convertedTime,
+                        create:true,
+                    });
+                }
+                else{
+                    this.state.data[convertedTime].push({
+                        planned:false,
+                        date:convertedTime,
+                        create:false,
+                    });
+                }
+            }
+            const newItems = {};
+            Object.keys(this.state.data).forEach(key => {
+            newItems[key] = this.state.data[key];
+            });
+            this.setState({ data: newItems });
+            console.log(this.state.data);
+        }
 }
 const styles = StyleSheet.create({
     //activity scheduled
@@ -153,6 +206,7 @@ const styles = StyleSheet.create({
         marginRight: "3%",
         marginTop: "5%",
         marginBottom:"5%",
+        
     },
     //text when activity scheduled
     itemText:{
@@ -162,6 +216,11 @@ const styles = StyleSheet.create({
     //text when no activity scheduled
     noItemText:{
         color:"#808080",
-        fontSize:16,
+        fontSize:15,
+    },
+    noItemContainer:{
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center",
     },
   });

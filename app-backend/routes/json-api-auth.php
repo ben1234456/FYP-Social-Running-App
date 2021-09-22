@@ -21,6 +21,7 @@ use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\ResetPasswordController;
 use App\Http\Controllers\BuddyController;
 use App\Http\Controllers\BuddyRequestController;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResources([
@@ -34,6 +35,7 @@ Route::apiResources([
     'postlikes'=> PostLikeController::class,
     "buddyrequest"=>BuddyRequestController::class,
     "buddy"=>BuddyController::class,
+    "calendar"=>CalendarController::class,
 ]);
 
 
@@ -119,3 +121,8 @@ Route::get('/buddyrequest/{user}/{buddy}', [BuddyRequestController::class, "getI
 //custom delete buddy request by id
 Route::delete('/buddyrequest/list/{id}', [BuddyRequestController::class, "deleteBuddyReqByID"]);
 
+//get user calendar data
+Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchUserCalendarList"]);
+
+//get user calendar data
+Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchUserCalendarList"]);
