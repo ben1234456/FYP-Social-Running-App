@@ -9,6 +9,7 @@ import Green from '../images/green.png';
 import Orange from '../images/orange.png';
 import MapViewDirections from 'react-native-maps-directions';
 import haversine from "haversine";
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default class addRouteScreen extends Component {
 
@@ -287,10 +288,10 @@ export default class addRouteScreen extends Component {
                     <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} />
                 </MapView>
                 <View style={styles.botInfo}>
-
                     <View style={styles.routeInfo}>
                         <Text>Total Distance: 3.55 km</Text>
                     </View>
+                    <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} />
                 </View>
             </View>
         );
@@ -330,13 +331,14 @@ const styles = StyleSheet.create({
     botInfo:{
         flex:0.5,
         justifyContent:"center",
-        width:"100%",
+        flexDirection: 'row',
         paddingLeft:"10%",
         paddingTop:"5%",
         paddingBottom:"5%",
         backgroundColor:"#ffffff",
     },
     routeInfo:{
+        flex:1, 
         marginTop:"1%",
         marginBottom:"1%",
     },

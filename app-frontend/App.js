@@ -208,10 +208,7 @@ export default class App extends Component {
                         name="addRouteScreen"
                         component={addRouteScreen}
                         initial={false}
-                        options={{
-                            headerTitleAlign: 'center', title: 'Add Route', headerRight: () =>
-                                <Icon name="save-sharp" style={{ marginRight: 10 }} size={30} color={'#8352F2'} />
-                        }}
+                        options={{ headerTitleAlign: 'center', title: 'Add Route' }}
                     />
                     <Stack.Screen
                         name="editProfileScreen"
@@ -365,7 +362,7 @@ export default class App extends Component {
                         component={editEventCalendarScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="BuddiesListScreen"
                         component={BuddiesListScreen}
@@ -401,7 +398,7 @@ export default class App extends Component {
                         component={CreateNewPasswordScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="buddyRequestDetailScreen"
                         component={buddyRequestDetailScreen}
