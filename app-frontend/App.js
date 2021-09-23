@@ -31,6 +31,7 @@ import addEventScreen from './screens/addEvent';
 import startFreeRunScreen from "./screens/startFreeRunScreen"
 import AdminSavedRouteScreen from "./screens/AdminSavedRouteScreen";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon1 from "react-native-vector-icons/Ionicons";
 import AdminEditProfileScreen from "./screens/AdminEditProfileScreen";
 import savedRouteScreen from "./screens/savedRouteScreen";
 import adminEventDetailsScreen from "./screens/adminEventDetails";
@@ -208,7 +209,13 @@ export default class App extends Component {
                         name="addRouteScreen"
                         component={addRouteScreen}
                         initial={false}
-                        options={{ headerTitleAlign: 'center', title: 'Add Route' }}
+                        options={{
+                            headerTitleAlign: 'center', title: 'Add Route', headerRight: () =>
+                            <View style={styles.addRouteHeaderContainer}>
+                                <Text style={styles.addRouteHeaderText}>SAVE</Text>
+                            </View>   
+                        }}
+                        
                     />
                     <Stack.Screen
                         name="editProfileScreen"
@@ -285,6 +292,7 @@ export default class App extends Component {
                         initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Routes' }}
                     />
+                    
                     <Stack.Screen
                         name="editRouteScreen"
                         component={editRouteScreen}
@@ -428,5 +436,13 @@ export const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 15,
+    },
+    addRouteHeaderContainer:{
+        justifyContent:"center",
+        alignItems:"center",
+        marginRight:15,
+    },
+    addRouteHeaderText:{
+        fontSize:15,
     },
 });
