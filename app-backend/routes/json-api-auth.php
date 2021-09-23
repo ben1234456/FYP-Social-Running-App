@@ -134,3 +134,6 @@ Route::get('/route/routeList/{user}', [RouteController::class, "searchUserRouteL
 
 //get user route list data
 Route::get('/route/routeList/details/{id}', [RouteController::class, "searchRoute"]);
+
+//get admin route list data
+Route::get('/admin/route/routeList', [RouteController::class, "searchAdminRoute"]);

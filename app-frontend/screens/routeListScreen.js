@@ -25,7 +25,7 @@ export default class routeListScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-            fetch(baseUrl + '/api/route/routeList/'+1, {
+            fetch(baseUrl + '/api/route/routeList/'+this.state.userID, {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
