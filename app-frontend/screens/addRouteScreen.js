@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image,Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image,Text, View, TouchableOpacity,Alert } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Dimensions } from 'react-native';
@@ -8,7 +8,9 @@ import Blue from '../images/blue.png';
 import Green from '../images/green.png';
 import Orange from '../images/orange.png';
 import MapViewDirections from 'react-native-maps-directions';
-import haversine from "haversine";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class addRouteScreen extends Component {
 
@@ -16,10 +18,16 @@ export default class addRouteScreen extends Component {
         super(props);
         this.changeSelection = this.changeSelection.bind(this);
         this.state = {
+            userID:"",
+            routeName:"",
+            distance:"",
             errorMessage:"",
             latitude:0,
             longitude:0,
             totaldistance:0,
+            hour:"00",
+            minute:"00",
+            second:"00",
             defaultMarker:{
                 title:"You are here",
                 coordinates:{
@@ -55,7 +63,7 @@ export default class addRouteScreen extends Component {
                 selected:false,
             },         
             checkMarker2:{
-                title:"Checkpoint 1",
+                title:"Checkpoint 2",
                 coordinate:{
                     latitude:0,
                     longitude:0,
@@ -89,7 +97,26 @@ export default class addRouteScreen extends Component {
             //get Google Maps Directions API https://console.cloud.google.com/apis/dashboard?project=social-running-app&folder=&organizationId=
             googleApi:"AIzaSyB15Wdjt0OdRs09MlU09gENop0nLYtjz_o",
         };
+        const getData = async () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        getData();
     }
+    
     //get user permission and current location
     getLocation=async()=>{
         
@@ -113,8 +140,8 @@ export default class addRouteScreen extends Component {
         console.log(this.state.errorMessage);
         const currentLatitude=currentLocation.coords.latitude;
         const currentLongitude=currentLocation.coords.longitude;
-        
-
+        console.log(currentLatitude);
+        console.log(currentLongitude);
         this.state.reference.current.animateToRegion({
         
             latitude:currentLatitude,
@@ -124,11 +151,11 @@ export default class addRouteScreen extends Component {
             longitudeDelta: 0.05,
           })
         //set all marker to user current location
-        this.setState({ defaultMarker:{coordinates:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ startMarker:{coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ endMarker:{coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ checkMarker1:{coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ checkMarker2:{coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        this.setState({ defaultMarker:{title:"You are here",coordinates:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        this.setState({ startMarker:{title:"Starting point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        this.setState({ endMarker:{title:"Ending point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        this.setState({ checkMarker1:{title:"Checkpoint 1",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        this.setState({ checkMarker2:{title:"Checkpoint 2",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
         this.setState({ startCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
         this.setState({ endCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
     };
@@ -160,20 +187,20 @@ export default class addRouteScreen extends Component {
                 if (resJson && resJson.Response && resJson.Response.View && resJson.Response.View[0] && resJson.Response.View[0].Result && resJson.Response.View[0].Result[0]) {
                     if(this.state.selection==0){
                         this.setState({ startingPoint: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ startMarker:{coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({ startMarker:{title:"Starting point",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                         
                     }
                     if(this.state.selection==1){
                         this.setState({ checkPoint1: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ checkMarker1:{coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({ checkMarker1:{title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
                     if(this.state.selection==2 && this.state.checkMarker1.selected==true){
                         this.setState({ checkPoint2: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ checkMarker2:{coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({ checkMarker2:{title:"Checkpoint 2",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
                     if(this.state.selection==3){
                         this.setState({ endingPoint: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ endMarker:{coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({ endMarker:{title:"Ending point",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
                     console.log(resJson.Response.View[0].Result[0].Location.Address.Label)
                 }
@@ -200,14 +227,7 @@ export default class addRouteScreen extends Component {
                         this.setState({checkPointArray:tempoArray});
                     }
                 }
-
-                // //get total distance
-                // for (var i = 0; i < tempoArray.length - 1; i++){
-
-                // }
-                
                 resolve();
-                
             })
             .catch((e) => {
               console.log(e)
@@ -225,6 +245,53 @@ export default class addRouteScreen extends Component {
         this.getLocation();
     };
 
+    checkSelected=(value,selected)=>{
+        if(selected==false){
+            return null;
+        }
+        else{
+            return value;
+        }
+    }
+    //save route in database
+    create=()=>{
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        
+        const data = {
+            userID: this.state.userID,
+            name:this.state.routeName,
+            start_lat:this.state.startMarker.coordinate.latitude,
+            start_lng:this.state.startMarker.coordinate.longitude,
+            end_lat:this.state.endMarker.coordinate.latitude,
+            end_lng:this.state.endMarker.coordinate.longitude,
+            hour:this.state.hour,
+            minute:this.state.minute,
+            second:this.state.second,
+            total_distance:this.state.distance,
+            check1_lat:this.checkSelected(this.state.checkMarker1.coordinate.latitude,this.state.checkMarker1.selected),
+            check1_lng:this.checkSelected(this.state.checkMarker1.coordinate.longitude,this.state.checkMarker1.selected),
+            check2_lat:this.checkSelected(this.state.checkMarker2.coordinate.latitude,this.state.checkMarker2.selected),
+            check2_lng:this.checkSelected(this.state.checkMarker2.coordinate.latitude,this.state.checkMarker2.selected),
+        };
+        fetch( baseUrl + '/api/route', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                //success
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        //this.props.navigation.navigate('calendarScreen');
+    };
+    
     render() {
         return (
             <View style={styles.container}>
@@ -283,13 +350,62 @@ export default class addRouteScreen extends Component {
                     <Marker coordinate={this.state.endMarker.coordinate} pinColor={"#800080"} title={this.state.endMarker.title}/>
                     <Marker coordinate={this.state.checkMarker1.coordinate} pinColor={"#008000"} title={this.state.checkMarker1.title}/>
                     <Marker coordinate={this.state.checkMarker2.coordinate} pinColor={"#ffcc00"} title={this.state.checkMarker2.title}/>
-                    <MapViewDirections origin={this.state.startCoor} destination={this.state.endCoor} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}/>
+                    <MapViewDirections origin={this.state.startCoor} destination={this.state.endCoor} waypoints={this.state.checkPointArray} apikey={this.state.googleApi} 
+                    onReady={result => {
+                        this.state.distance = result.distance
+                        this.forceUpdate()
+                    }}
+                    />
                     <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} />
                 </MapView>
                 <View style={styles.botInfo}>
-
-                    <View style={styles.routeInfo}>
-                        <Text>Total Distance: 3.55 km</Text>
+                    <View style={styles.botTitleContainer}>
+                        <View style={styles.routeInfo}>
+                            <TextInput
+                                placeholder = "Enter Route Name"
+                                onChangeText={(name) => this.setState({routeName:name})}
+                                value = {this.state.routeName}
+                            />
+                        </View>
+                        <View style={styles.icon}>
+                            <Icon name="mode-edit" size={20} color={'#8352F2'} onPress={this.create}/>
+                        </View>
+                    </View>
+                    
+                    <View style={styles.routeInfoBot}>
+                        <View style={styles.routeInfoBotDetail}>
+                            <Text style={styles.routeInfoTextSmall}>Distance (km)</Text>
+                            <Text style={styles.routeInfoTextBig}>{this.state.distance}</Text>
+                        </View>
+                        <View style={styles.routeInfoBotDetail}>
+                            <Text style={styles.routeInfoTextSmall}>Duration</Text>
+                            <View style={styles.timeContainer}>
+                                <TextInput 
+                                    style={styles.time}
+                                    keyboardType={"numeric"} 
+                                    value={this.state.hour} 
+                                    onChangeText={(hour) => this.setState({hour})}
+                                    maxLength={2} />
+                                <Text style={styles.timeSpacing}>
+                                    :
+                                </Text>
+                                <TextInput 
+                                    style={styles.time}
+                                    keyboardType={"numeric"} 
+                                    value={this.state.minute} 
+                                    onChangeText={(minute) => this.setState({minute})} 
+                                    maxLength={2}/>
+                                <Text style={styles.timeSpacing}>
+                                    :
+                                </Text>
+                                <TextInput 
+                                    style={styles.time}
+                                    keyboardType={"numeric"} 
+                                    value={this.state.second} 
+                                    onChangeText={(second) => this.setState({second})}
+                                    maxLength={2} />
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -302,6 +418,7 @@ const styles = StyleSheet.create({
         flex: 1, 
         justifyContent: "center", 
         alignItems: "center",
+        backgroundColor:"white",
     },
     topInfo:{
         flex:3,
@@ -311,7 +428,6 @@ const styles = StyleSheet.create({
         paddingTop:"1%",
         paddingBottom:"1%",
         width:"100%",
-        marginTop:"5%",
         backgroundColor: '#8352F2',
         justifyContent:"center",
         
@@ -328,7 +444,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
     },
     botInfo:{
-        flex:0.5,
+        flex:2,
         justifyContent:"center",
         width:"100%",
         paddingLeft:"10%",
@@ -337,8 +453,8 @@ const styles = StyleSheet.create({
         backgroundColor:"#ffffff",
     },
     routeInfo:{
-        marginTop:"1%",
-        marginBottom:"1%",
+        flex:1,
+
     },
     image: {
         width: "40%",
@@ -362,5 +478,40 @@ const styles = StyleSheet.create({
     },
     infoText:{
         fontSize:12,
+    },
+    routeInfoBot:{
+        flexDirection:"row",
+        flex:1,
+        marginTop:"5%",
+    },
+    routeInfoBotDetail:{
+        flex:1,
+
+    },
+    routeInfoTextSmall:{
+
+    },
+    routeInfoTextBig:{
+        fontSize:20,
+        fontWeight:"bold",
+    },
+    botTitleContainer:{
+        flexDirection:"row",
+    },
+    icon:{
+        flex:1,
+    },
+    timeContainer:{
+        flexDirection:"row",
+    },
+    timeSpacing:{
+        textAlignVertical:"center",
+        fontSize:20.,
+        fontWeight:"bold",
+    },
+    time:{
+        fontSize:20,
+        fontWeight:"bold",
+        textAlignVertical:"bottom",
     },
 });

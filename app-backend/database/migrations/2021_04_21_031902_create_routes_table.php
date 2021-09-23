@@ -15,14 +15,22 @@ class CreateRoutesTable extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
-            $table->integer('created_by');
+            $table->integer('userID');
+            $table->string('name');
             $table->decimal('start_lat', 11, 8);
             $table->decimal('start_lng', 11, 8);
             $table->decimal('end_lat', 11, 8);
             $table->decimal('end_lng', 11, 8);
-            $table->integer('bo_of_checkpoints');
+            $table->decimal('check1_lat', 11, 8)->nullable();
+            $table->decimal('check1_lng', 11, 8)->nullable();
+            $table->decimal('check2_lat', 11, 8)->nullable();
+            $table->decimal('check2_lng', 11, 8)->nullable();
+            $table->integer('hour');
+            $table->integer('minute');
+            $table->integer('second');
             $table->decimal('total_distance');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

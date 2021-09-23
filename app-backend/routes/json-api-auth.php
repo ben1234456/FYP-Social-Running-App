@@ -22,6 +22,7 @@ use App\Http\Controllers\API\ResetPasswordController;
 use App\Http\Controllers\BuddyController;
 use App\Http\Controllers\BuddyRequestController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\RouteController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResources([
@@ -36,6 +37,7 @@ Route::apiResources([
     "buddyrequest"=>BuddyRequestController::class,
     "buddy"=>BuddyController::class,
     "calendar"=>CalendarController::class,
+    "route"=>RouteController::class,
 ]);
 
 
@@ -126,3 +128,9 @@ Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchU
 
 //get user calendar data
 Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchUserCalendarList"]);
+
+//get user route list data
+Route::get('/route/routeList/{user}', [RouteController::class, "searchUserRouteList"]);
+
+//get user route list data
+Route::get('/route/routeList/details/{id}', [RouteController::class, "searchRoute"]);
