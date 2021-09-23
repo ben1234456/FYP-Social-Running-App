@@ -122,4 +122,15 @@ class RouteController extends Controller
 
         return $routeGet->toJson();
     }
+    public function searchAdminRoute(){
+
+        $adminGet=User::where("role","=","admin")->get();
+
+        $idList=array();
+        foreach($adminGet as $admin){
+            array_push($idList,$admin->id);
+        }
+        $adminRoute = Route::whereIn('userID', $idList)->get();
+        return $adminRoute->toJson();
+    }
 }
