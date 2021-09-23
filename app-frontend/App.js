@@ -215,6 +215,7 @@ export default class App extends Component {
                                 <Text style={styles.addRouteHeaderText}>SAVE</Text>
                             </View>   
                         }}
+                        
                     />
                     <Stack.Screen
                         name="editProfileScreen"
@@ -369,7 +370,7 @@ export default class App extends Component {
                         component={editEventCalendarScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Edit Events' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="BuddiesListScreen"
                         component={BuddiesListScreen}
@@ -405,7 +406,7 @@ export default class App extends Component {
                         component={CreateNewPasswordScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Reset Password' }}
-                    /> 
+                    />
                     <Stack.Screen
                         name="buddyRequestDetailScreen"
                         component={buddyRequestDetailScreen}
