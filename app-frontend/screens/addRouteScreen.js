@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 export default class addRouteScreen extends Component {
 
     constructor(props) {
@@ -407,6 +408,7 @@ export default class addRouteScreen extends Component {
                             </View>
                         </View>
                     </View>
+                    <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} />
                 </View>
             </View>
         );
@@ -446,7 +448,7 @@ const styles = StyleSheet.create({
     botInfo:{
         flex:2,
         justifyContent:"center",
-        width:"100%",
+        flexDirection: 'row',
         paddingLeft:"10%",
         paddingTop:"5%",
         paddingBottom:"5%",
@@ -455,6 +457,7 @@ const styles = StyleSheet.create({
     routeInfo:{
         flex:1,
 
+ 
     },
     image: {
         width: "40%",
