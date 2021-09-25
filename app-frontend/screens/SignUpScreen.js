@@ -15,7 +15,7 @@ export default class SignUpScreen extends Component {
         sampleDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         
         this.state = {  
-            user_name: "",
+            name: "",
             currentDate: sampleDate,
             gender: "",
             user_state: "",
@@ -23,9 +23,10 @@ export default class SignUpScreen extends Component {
             dob: "",
             email: "",
             password: "",
-            confirmpassword: "",
+            password_confirmation: "",
             icEye: 'eye-off',
             showPassword: true,
+            token: '',
         }
     }
 
@@ -34,7 +35,7 @@ export default class SignUpScreen extends Component {
         var empty=[];
 
         //check empty
-        if (!(this.state.user_name)){
+        if (!(this.state.name)){
             empty.push("name");
         }
 
@@ -54,7 +55,7 @@ export default class SignUpScreen extends Component {
             empty.push("email");
         }
 
-        if (!(this.state.password) || !(this.state.confirmpassword)){
+        if (!(this.state.password) || !(this.state.password_confirmation)){
             empty.push("password");
         }
 
@@ -98,7 +99,7 @@ export default class SignUpScreen extends Component {
         //     return false;
         // }
 
-        else if (this.state.password != this.state.confirmpassword ){
+        else if (this.state.password != this.state.password_confirmation ){
             Alert.alert(
                 "Both passwords must be the same",
                 '',
@@ -122,44 +123,102 @@ export default class SignUpScreen extends Component {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
         if (this.validation()){
+
+        
+            var errorMsg = "";
+
+
             const data = {
-                user_name: this.state.user_name,
+                name: this.state.name,
                 dob: this.state.sampleDate,
                 city: this.state.user_state,
                 email: this.state.email,
                 gender: this.state.gender,
-                password: this.state.password
+                password: this.state.password,
+                password_confirmation: this.state.password_confirmation
             };
     
             
-            fetch(baseUrl + '/api/users', {
+            fetch(baseUrl +'/api/register', {
                 method: 'POST',
                 headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+
+                if (data.message == "The given data was invalid."){
+
+                    if (data.errors.name){
+                        for (let x = 0; x < data.errors.name.length; x++){
+                            errorMsg += data.errors.name[x] + "\n";
+                        }
+                    }
+         
+                    if (data.errors.email != ""){
+                        for (let x = 0; x < data.errors.email.length; x++){
+                            errorMsg += data.errors.email[x] + "\n";
+                        }
+                    }
+
+                    if (data.errors.password){
+                        for (let x = 0; x < data.errors.password.length; x++){
+                            errorMsg += data.errors.password[x] + "\n";
+                        }
+                    }
+                    
+                    Alert.alert(
+                        errorMsg,
+                        ''
+                        [
+                            { text: "Ok" }
+                        ]
+                    );
+                }
+
+                else if (data.message == "success"){
+
+                    //special case (chg the ip once hosted)
+
+                    var ip = 'http://192.168.0.192:8000';
+
+                    fetch( ip + '/api/email/verification-notification', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + data.token,
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);            
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });  
+
+                    Alert.alert(
+                        'Account Succesfully Registered!',
+                        ''
+                        [
+                            { text: "Ok"}
+                        ]
+                    );
+
+                    this.props.navigation.navigate('login');
+                }
+
             })
             .catch((error) => {
                 console.error('Error:', error);
             });  
-            
-            // Alert.alert(
-            //     data.message,
-            //     'Account Succesfully Registered!',
-            //     ''
-            //     [
-            //         { text: "Ok", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
-
-            // this.props.navigation.navigate('login');
         }
-
+            
     }
 
     changePasswordType = () => {
@@ -190,8 +249,8 @@ export default class SignUpScreen extends Component {
                         <View >
                             <TextInput
                                 placeholder = "Name"
-                                onChangeText={(name) => this.setState({user_name:name})}
-                                value = {this.state.user_name}
+                                onChangeText={(name) => this.setState({name:name})}
+                                value = {this.state.name}
                                 style={styles.input}
                             />
                         </View>
@@ -285,8 +344,8 @@ export default class SignUpScreen extends Component {
                             <TextInput style={styles.inputRow}
                                 placeholder="Confirm Password" 
                                 secureTextEntry = {this.state.showPassword}
-                                onChangeText={(password_input) => this.setState({confirmpassword:password_input})}
-                                value = {this.state.confirmpassword}
+                                onChangeText={(password_input) => this.setState({password_confirmation:password_input})}
+                                value = {this.state.password_confirmation}
                             />
                             <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType}/>
                         </View>

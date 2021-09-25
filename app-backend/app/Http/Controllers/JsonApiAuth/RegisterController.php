@@ -20,9 +20,14 @@ class RegisterController
 
             /** @var User $user */
             $user = User::query()->create([
-                'name' => $request->get('name'),
+                'first_name' => $request->get('name'),
                 'email' => $request->get('email'),
                 'password' => Hash::make($request->get('password')),
+                'city' => $request->get('city'),
+                $stringdob = strtotime($request->get('dob')),
+                $dob = date('Y-m-d',$stringdob),
+                'dob' => $dob,
+                'role' => 'user',
             ]);
 
             if($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {

@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/verified', function () {
+    return view('verified');
+});
+
+Route::get('/aldVerified', function () {
+    return view('aldVerified');
+});

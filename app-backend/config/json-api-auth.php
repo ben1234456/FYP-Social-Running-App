@@ -84,8 +84,8 @@ return [
     |
     */
 
-    'email_account_was_already_verified_url' =>  env('FRONTEND_APP_URL', 'http://frontend.test') . '/already-verified',
+    'email_account_was_already_verified_url' => 'http://localhost:8000/aldVerified',
 
-    'email_account_just_verified_url' => env('FRONTEND_APP_URL', 'http://frontend.test') . '/verified',
+    'email_account_just_verified_url' => 'http://localhost:8000/verified',
 
 ];

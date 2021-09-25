@@ -18,7 +18,8 @@ export default class LoginScreen extends Component {
             icEye: 'eye-off',
             email: "",
             password: "",
-            showPassword: true
+            showPassword: true,
+            user: "",
         }
 
     }

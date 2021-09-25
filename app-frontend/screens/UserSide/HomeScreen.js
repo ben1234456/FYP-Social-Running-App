@@ -57,7 +57,6 @@ export default class HomeScreen extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log('Successfully get event data')
-                console.log(data)
                 this.setState({
                     eventdata: data
                 });

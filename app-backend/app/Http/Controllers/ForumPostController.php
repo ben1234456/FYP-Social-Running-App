@@ -183,3 +183,4 @@ class ForumPostController extends Controller
         return $comments->toJson();
     }
 }
+
