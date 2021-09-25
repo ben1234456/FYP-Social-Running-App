@@ -67,17 +67,17 @@ export default class ForumScreen extends Component {
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get forum posts')
-            console.log(data)
-            this.setState({
-                posts: data
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get forum posts')
+                console.log(data)
+                this.setState({
+                    posts: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
 
     }
 
@@ -178,9 +178,9 @@ export default class ForumScreen extends Component {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
             const data = {
-                user_id : this.state.user_id,
-                title : this.state.titleHolder,
-                description : this.state.descriptionHolder,
+                user_id: this.state.user_id,
+                title: this.state.titleHolder,
+                description: this.state.descriptionHolder,
             };
 
             //get forum posts' details
@@ -192,20 +192,20 @@ export default class ForumScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status == "success"){
-                    console.log("Succesfully saved post");
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status == "success") {
+                        console.log("Succesfully saved post");
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
 
             this.setState({
-                title : '',
-                description : '',
-                isVisible: !this.state.isVisible ,
+                title: '',
+                description: '',
+                isVisible: !this.state.isVisible,
             })
 
             //get forum posts' details
@@ -215,17 +215,17 @@ export default class ForumScreen extends Component {
                     'Content-Type': 'application/json'
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get forum posts')
-                console.log(data)
-                this.setState({
-                    posts: data
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get forum posts')
+                    console.log(data)
+                    this.setState({
+                        posts: data
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
 
         }
     }
@@ -283,63 +283,64 @@ export default class ForumScreen extends Component {
                     data={this.state.posts}
                     keyExtractor={item => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.cardView}>
-                            <View style={styles.proRow}>
-                                <View style={styles.proTitle}>
-                                    <Image style={styles.proColumnName} source={profileImage} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })}>
+                            <View style={styles.cardView}>
+                                <View style={styles.proRow}>
+                                    <View style={styles.proTitle}>
+                                        <Image style={styles.proColumnName} source={profileImage} />
+                                    </View>
+                                    <View style={styles.proTitle}>
+                                        <Text style={styles.title}>{item.name}</Text>
+                                        {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
+                                        <Text style={styles.date}>{item.datetime}</Text>
+                                    </View>
+                                    <View>
+                                        <TouchableOpacity><Icon size={25} name={item.edit} color='#808080' /></TouchableOpacity>
+                                    </View>
+                                    <View>
+                                        <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View style={styles.proTitle}>
-                                    <Text style={styles.title}>{item.name}</Text>
-                                    {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                                    <Text style={styles.date}>{item.datetime}</Text>
-                                </View>
-                                <View>
-                                    <TouchableOpacity><Icon size={25} name={item.edit} color='#808080' /></TouchableOpacity>
-                                </View>
-                                <View>
-                                    <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
-                                </View>
-                            </View>
-                            <TouchableOpacity>
-                                <View style={styles.proTitle}>
-                                    <Text style={styles.title}>{item.title}</Text>
-                                    <Text style={styles.description}>{item.description}</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <View style={styles.proRow}>
-                                <View style={styles.proTitle}>
-                                    <Font size={25} name={item.like} onPress={() => this.updateLike(item.id)} color='#FF4141' />
-                                </View>
-                                <View style={styles.icon}>
-                                    <Text>{item.noLike}</Text>
-                                </View>
-                                <View style={styles.proTitle}>
-                                    <Icon2 size={25} name='comment-outline' color='#808080' onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })} />
+                                <TouchableOpacity>
+                                    <View style={styles.proTitle}>
+                                        <Text style={styles.title}>{item.title}</Text>
+                                        <Text style={styles.description}>{item.description}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <View style={styles.proRow}>
+                                    <View style={styles.proTitle}>
+                                        <Font size={25} name={item.like} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                    </View>
+                                    <View style={styles.icon}>
+                                        <Text>{item.noLike}</Text>
+                                    </View>
+                                    {/* <View style={styles.proTitle}>
+                                    <Icon2 size={25} name='comment-outline' color='#808080' />
                                 </View>
                                 <View style={styles.icon}>
                                     <Text>{item.comments}</Text>
+                                </View> */}
                                 </View>
-                            </View>
 
-                            <View style={styles.proTitle}>
-                                <View>
-                                    {/* {this.renderBottomComponent()} */}
-                                    <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
-                                </View>
-                            </View>
+                                {/* <View style={styles.proTitle}>
+                                    <View>
+                                        <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
+                                    </View>
+                                </View> */}
 
-                            <View style={styles.proTitle}>
-                                <View style={styles.proRow}>
-                                    <TextInput style={styles.input}
-                                        placeholder="Write a comment"
-                                        onChangeText={comment_input => this.setState({ commentHolder: comment_input })}
-                                        value={item.comment}
-                                        multiline={true}
-                                    />
-                                    <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.commentHolder ? styles.inactive : []]} />
-                                </View>
+                                {/* <View style={styles.proTitle}>
+                                    <View style={styles.proRow}>
+                                        <TextInput style={styles.input}
+                                            placeholder="Write a comment"
+                                            onChangeText={comment_input => this.setState({ commentHolder: comment_input })}
+                                            value={item.comment}
+                                            multiline={true}
+                                        />
+                                        <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.commentHolder ? styles.inactive : []]} />
+                                    </View>
+                                </View> */}
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )}
                 />
                 <View style={{ flexDirection: 'row', margin: 40 }}>
