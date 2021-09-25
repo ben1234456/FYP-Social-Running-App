@@ -3,10 +3,10 @@ import { StyleSheet, Image,Text, View, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Dimensions } from 'react-native';
-import Purple from '../images/purple.png';
-import Blue from '../images/blue.png';
-import Green from '../images/green.png';
-import Orange from '../images/orange.png';
+import Purple from '../../images/purple.png';
+import Blue from '../../images/blue.png';
+import Green from '../../images/green.png';
+import Orange from '../../images/orange.png';
 import MapViewDirections from 'react-native-maps-directions';
 
 export default class routeDetailsScreen extends Component {

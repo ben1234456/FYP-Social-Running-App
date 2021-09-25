@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View,Image, FlatList,TouchableOpacity} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Icon from "react-native-vector-icons/Ionicons";
-import Logo from '../images/logo.png';
+import Logo from '../../images/logo.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

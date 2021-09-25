@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput,Picker} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
-import profileImage from '../images/avatar.jpg';
+import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
-import Logo from '../images/logo.png';
-import Event from '../images/event.png';
-import Event2 from '../images/marathon.png';
-import UpcomingEvent from '../images/family_marathon.jpg';
+import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class EventsScreen extends Component {

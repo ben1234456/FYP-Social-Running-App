@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { Button } from 'native-base'
-import profileImage from '../images/avatar.jpg';
+import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

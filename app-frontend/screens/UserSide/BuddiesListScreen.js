@@ -5,11 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Font from 'react-native-vector-icons/FontAwesome5'
 import Ant from 'react-native-vector-icons/AntDesign'
-import profileImage from '../images/avatar.jpg';
 import moment from 'moment';
 import { SearchBar } from 'react-native-elements'
 import { Share } from 'react-native';
-import Logo from '../images/logo.png';
+import Logo from '../../images/logo.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

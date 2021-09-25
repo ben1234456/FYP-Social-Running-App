@@ -5,7 +5,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons'
-import ProfileScreen from './ProfileScreen';
 import AdminHomeScreen from './AdminHomeScreen';
 import AdminMapScreen from './AdminMapScreen';
 import AdminReportScreen from './AdminReportScreen';

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 'react-native';
-import profileImage from '../images/avatar.jpg';
+import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default class BuddiesProfileScreen extends Component {
+export default class buddyRequestDetailScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            //selected user id
             buddyID: props.route.params.userID,
             userID:"",
             user:"",
@@ -17,8 +18,6 @@ export default class BuddiesProfileScreen extends Component {
             gender: "",
             city: "",
             dob: "",
-            //diff buddy profile and random profile
-            view:props.route.params.view,
         };
 
         //get data from async storage
@@ -56,37 +55,34 @@ export default class BuddiesProfileScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            if(this.state.view!="true"){
-                fetch(baseUrl + '/api/buddy/' + this.state.userID +'/'+this.state.buddyID, {
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Successfully get buddy id')
-                    console.log(data)
-                    this.setState({
-                        id: data.id
-                    });
-                    
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+            fetch(baseUrl + '/api/buddyrequest/' + this.state.buddyID +'/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddy req id')
+                console.log(data)
+                this.setState({
+                    id: data.id
                 });
-            }
-            
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getData();
         
     }
-    deleteBuddy=()=>{
+    decline=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         console.log("testing"+this.state.id);
-        fetch(baseUrl + '/api/buddy/' + this.state.id, {
-                method: 'DELETE',
+        fetch(baseUrl + '/api/buddyrequest/list/' + this.state.id, {
+                method:"DELETE",
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json'
@@ -95,17 +91,18 @@ export default class BuddiesProfileScreen extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Successfully delete buddy')
+                console.log('Successfully delete buddy request')
                 console.log(data)
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-            this.props.navigation.navigate('BuddiesListScreen');
+            this.props.navigation.navigate('BuddiesRequestList');
+                
+                
 
     }
-    addBuddy=() =>{
-
+    accept=() =>{
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
@@ -115,7 +112,7 @@ export default class BuddiesProfileScreen extends Component {
             buddyID:this.state.buddyID,
         };
 
-        fetch( baseUrl + '/api/buddyrequest', {
+        fetch( baseUrl + '/api/buddy', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -131,7 +128,9 @@ export default class BuddiesProfileScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });  
-        this.props.navigation.navigate('addSearchUserScreen');
+        this.decline();
+        
+        
     }
     renderItemComponent = (data) =>
         
@@ -191,33 +190,30 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={styles.addBtnContainer}>
-                    {this.state.id==""
-                    ?
-                    <TouchableOpacity onPress={this.addBuddy}>
-                        <View style={styles.addBtn} >
-                            <Text style={styles.addText}>ADD BUDDY</Text>
+                <View style={styles.btnContainer}>
+                    <TouchableOpacity onPress={this.accept}>
+                        <View style={styles.btn} >
+                            <Text style={styles.btnText}>Accept</Text>
                         </View>
                     </TouchableOpacity>
-                    :
-                    <TouchableOpacity onPress={this.deleteBuddy}>
-                        <View style={styles.addBtn} >
-                            <Text style={styles.addText}>DELETE BUDDY</Text>
+                    <TouchableOpacity onPress={this.decline}>
+                        <View style={styles.btn} >
+                            <Text style={styles.btnText}>Decline</Text>
                         </View>
                     </TouchableOpacity>
-                    }
                 </View>
             </View>
     render() {
         return (
-            <View style={styles.wholeContainer}>
-                <FlatList horizontal={false}
+            <View style={styles.wholeContainer}> 
+
+            
+            <FlatList horizontal={false}
                 data={this.state.user}
                 keyExtractor={item => item.id.toString()}
                 renderItem={item => this.renderItemComponent(item)}
             />  
             </View>
-            
         );
     }
 }
@@ -289,21 +285,25 @@ const styles = StyleSheet.create({
     noOfFollower: { 
         textAlign: 'center' 
     },
-    addBtnContainer:{
+    btnContainer:{
         flex:1,
-        justifyContent:"flex-end",
         padding:"5%",
-        paddingLeft:"10%",
-        paddingRight:"10%",
+        
+        flexDirection:"row",
+        justifyContent:"center",
     },
-    addBtn:{
+    btn:{
         borderRadius:30,
         alignItems:"center",
-        justifyContent:"flex-end",
         padding:"5%",
+        flex:1,
+        marginRight:"2.5%",
+        marginLeft:"2.5%",
+        paddingRight:"12.5%",
+        paddingLeft:"12.5%",
         backgroundColor: '#8352F2',
     },
-    addText:{
+    btnText:{
         fontSize:16,
         color: 'white',
         textAlign: 'center',

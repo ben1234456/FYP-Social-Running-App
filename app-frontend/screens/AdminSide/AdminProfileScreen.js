@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'native-base'
-import { Actions, Reducer } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
-import profileImage from '../images/avatar.jpg';
+import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default class App extends Component {
+export default class AdminProfileScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            user_id: "",
+            id: "",
             name: "",
             gender: "",
             city: "",
@@ -33,7 +33,6 @@ export default class App extends Component {
                     
                     //update state
                     this.setState({
-                        user_id:user.id,
                         name:user.first_name,
                         email:user.email,
                         gender:genderText,
@@ -73,23 +72,15 @@ export default class App extends Component {
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
-                            <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.rowContainer2}>
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
                 <View style={styles.rowContainer2}>
-                    <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('editProfileScreen')}>
+                    <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('AdminEditProfileScreen')}>
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
-
-                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
-                        <Text style={styles.btnText}>Change password</Text>
-                    </Button>
-
                 </View>
                 <View style={styles.cardView}>
                     <View style={styles.proRow}>
@@ -201,14 +192,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         marginTop: 50,
-    },
-
-    changePassword: {
-        display: 'flex',
-        backgroundColor: '#FF0000',
-        borderRadius: 30,
-        marginTop: 50,
-        marginLeft:10,
     },
 
     btnText: {

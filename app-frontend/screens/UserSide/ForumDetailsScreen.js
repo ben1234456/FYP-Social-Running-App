@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Font from 'react-native-vector-icons/FontAwesome'
 import Ant from 'react-native-vector-icons/AntDesign'
-import profileImage from '../images/avatar.jpg';
+import profileImage from '../../images/avatar.jpg';
 import moment from 'moment';
 
 

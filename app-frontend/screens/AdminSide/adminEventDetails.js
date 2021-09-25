@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, Alert, Dimensions, FlatList} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
-import Event from '../images/event.png';
-import Run from '../images/running.jpg';
+import Event from '../../images/event.png';
 //import { createAppContainer } from "react-navigation";
 
 const window = Dimensions.get("window");

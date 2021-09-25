@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView,TouchableOpacity} from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
-import Event from '../images/event.png';
-import Run from '../images/running.jpg';
+import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
 

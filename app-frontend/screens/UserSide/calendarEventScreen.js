@@ -1,7 +1,7 @@
 import React,{ Component } from "react";
 import { View,Text,StyleSheet,Image } from "react-native";
 import { TouchableOpacity } from 'react-native';
-import Logo from '../images/logo.png'; 
+import Logo from '../../images/logo.png'; 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class calendarEventScreen extends Component{

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView,TouchableOpacity} from 'react-native';
 import { Button } from 'native-base'
-import { Actions } from 'react-native-router-flux';
-import Event from '../images/event.png';
 import * as ImagePicker from 'expo-image-picker';
-import addImage from '../images/addImage.png';
-import Run from '../images/running.jpg';
+import addImage from '../../images/addImage.png';
 //import { createAppContainer } from "react-navigation";
 
 export default class submitRun extends Component {

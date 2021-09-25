@@ -3,7 +3,7 @@ import { View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet,
 import { Button, Left } from 'native-base'
 
 import DatePicker from 'react-native-datepicker';
-import addImage from '../images/addImage.png';
+import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
 
 

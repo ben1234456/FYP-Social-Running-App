@@ -1,31 +1,20 @@
 import React, { Component } from 'react';
 import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Logo from '../images/logo.png';
-import Event from '../images/event.png';
-import Event2 from '../images/marathon.png';
-import UpcomingEvent from '../images/family_marathon.jpg';
+import Logo from '../../images/logo.png';
+import Event from '../../images/event.png';
+import UpcomingEvent from '../../images/family_marathon.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ant from 'react-native-vector-icons/AntDesign';
 
-export default class HomeScreen extends Component {
+export default class AdminHomeScreen extends Component {
 
     constructor(props) {
         super(props);
-
-        var today = new Date()
-        var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-        var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
-        var day = today.getDay()
-        var day = weekdays[day]
-
         this.state = {
             id: "",
-            user_id: "",
             name: "",
             eventdata: "",
-            currenDate: date,
-            currentDay: day
         };
 
 
@@ -40,7 +29,6 @@ export default class HomeScreen extends Component {
                     const user = JSON.parse(userJson);
                     this.setState({
                         name: user.first_name,
-                        user_id: user.id,
                     });
                 }
 
@@ -48,26 +36,22 @@ export default class HomeScreen extends Component {
                 console.log(e);
             }
 
-            //get event details
-            fetch(baseUrl + '/api/events/exclusive/' + this.state.user_id, {
+            fetch(baseUrl + '/api/events', {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get event data')
-                console.log(data)
-                this.setState({
-                    eventdata: data
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success')
+                    this.setState({
+                        eventdata: data
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-            
         }
 
         getData();
@@ -94,7 +78,7 @@ export default class HomeScreen extends Component {
     };
 
     renderItemComponent = (data) =>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
                     <Image style={styles.image2} source={Event} />
@@ -115,30 +99,32 @@ export default class HomeScreen extends Component {
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
                         <Text style={styles.name}> {this.state.name}</Text>
+                        {/* <Text style={styles.name}> Admin</Text> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('calendarScreen')}>
-                        <View style={styles.rowContainer}>
-                            <Text style={{ color: '#8352F2', fontSize: 18, fontWeight: 'bold' }}>{this.state.currenDate},</Text>
-                            <Text style={{ color: '#8352F2', marginLeft: 10, fontSize: 18, fontWeight: 'bold' }}>{this.state.currentDay}</Text>
-                        </View>
-                    </TouchableOpacity>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Events</Text>
-                        <Text onPress={() => this.props.navigation.navigate('eventsScreen', { 'user_id': this.state.user_id })} style={styles.more}>{"View More >"}</Text>
+                        <Text onPress={() => this.props.navigation.navigate('eventsScreen')} style={styles.more}>{"View More >"}</Text>
                     </View>
                 </View>
 
-                <View style={styles.scrollview}>
+                <View style={{
+                    marginLeft: 8,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}>
+                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
+                    <View style={styles.scrollview}>
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
                         renderItem={item => this.renderItemComponent(item)}
                     />  
                 </View>
-                
+                </View>
+
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>
@@ -147,20 +133,28 @@ export default class HomeScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View>
-                    <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'user_id': this.state.user_id })}>
-                            <View style={styles.cardView}>
-                                <View style={styles.view1}>
-                                    <Image style={styles.image2} source={UpcomingEvent} />
+
+                <View style={{
+                    marginLeft: 8,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}>
+                    <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
+                    <View>
+                        <ScrollView style={styles.scrollview} horizontal={true}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
+                                <View style={styles.cardView}>
+                                    <View style={styles.view1}>
+                                        <Image style={styles.image2} source={UpcomingEvent} />
+                                    </View>
+                                    <View style={styles.view2}>
+                                        <Text style={styles.title}>Family Virtual Run</Text>
+                                        <Text style={styles.venue}>Anywhere</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.view2}>
-                                    <Text style={styles.title}>Family Virtual Run</Text>
-                                    <Text style={styles.venue}>Anywhere</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </ScrollView>
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -188,7 +182,8 @@ export const styles = StyleSheet.create({
     cardView: {
         height: 210,
         width: 250,
-        marginLeft: 40,
+        marginLeft: 5,
+        marginRight: 35,
         borderRadius: 15,
         backgroundColor: 'white',
 
