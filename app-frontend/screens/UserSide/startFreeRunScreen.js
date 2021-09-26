@@ -48,6 +48,7 @@ export default class startFreeRunScreen extends Component {
             endLat: 0,
             latitude: 0,
             longitude: 0,
+            altitude: 0,
             tracking: false,
             distanceTravelled: 0,
             routeCoordinates: [],
@@ -87,9 +88,9 @@ export default class startFreeRunScreen extends Component {
 
             
             this.setState({
-                 hour: this.setDigit(hour),
-                 minute: this.setDigit(minute),
-                 second: this.setDigit(second),
+                hour: this.setDigit(hour),
+                minute: this.setDigit(minute),
+                second: this.setDigit(second),
                  
             });
         }
@@ -105,6 +106,17 @@ export default class startFreeRunScreen extends Component {
         else{
             return digit;
         }
+    }
+
+    //calculate pace (km/hr)
+
+    calculatePace=(second,minute,hour,distance)=>{
+        var totalduration = hour + (minute/60) + (second/60/60);
+        var pace = distance / totalduration;
+        console.log(pace);
+        this.setState({
+            avgSpeed: pace,
+        })
     }
 
     toggle=()=>{
@@ -167,6 +179,7 @@ export default class startFreeRunScreen extends Component {
             prevLat: geolocation.latitude,
             prevLng: geolocation.longitude,
             routeCoordinates: vrc.concat([newCoordinate]),
+            altitude: geolocation.altitude,
         });
 
         // console.log(this.state.routeCoordinates);
@@ -178,10 +191,13 @@ export default class startFreeRunScreen extends Component {
             var totaldistance = this.state.distanceTravelled;
             var totalnewdistance = (haversine(previousgeo, currentgeo));
 
-            //distance checker, if >10m then the distance won't be added to the total distance 
+            // distance checker, if >10m then the distance won't be added to the total distance 
             if (totalnewdistance < 0.01) {
                 this.setState({ distanceTravelled: totaldistance + totalnewdistance });
             }
+
+            this.setState({ distanceTravelled: totaldistance + totalnewdistance });
+            this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
 
         }    
 
@@ -288,8 +304,8 @@ export default class startFreeRunScreen extends Component {
                             <Text style={styles.infoWord}>{this.state.avgSpeed}</Text>
                         </View>
                         <View style={styles.info}>
-                            <Text style={styles.infoTitle}>Calories burned (cal)</Text>
-                            <Text style={styles.infoWord}>-</Text>
+                            <Text style={styles.infoTitle}>Altitude</Text>
+                            <Text style={styles.infoWord}>{this.state.altitude}</Text>
                         </View>
                     </View>
                     <View style={styles.infoRow}>

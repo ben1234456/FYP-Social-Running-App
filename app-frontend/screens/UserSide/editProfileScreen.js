@@ -51,6 +51,8 @@ export default class editProfileScreen extends Component {
 
     edit = async () =>{
 
+        console.log(this.state.id);
+
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
@@ -62,7 +64,7 @@ export default class editProfileScreen extends Component {
             gender: this.state.gender
         };
 
-        fetch(baseUrl + 'api/users/' + this.state.id, {
+        fetch(baseUrl + '/api/users/' + this.state.id, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',

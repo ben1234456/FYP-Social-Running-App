@@ -108,9 +108,7 @@ export default class FreeRunScreen extends Component {
     };
 
     startRun = async () => {
-
-        console.log("HI");
-        
+       
         try {
           const activityType = await AsyncStorage.getItem('@activityType')
           if(activityType !== null) {
