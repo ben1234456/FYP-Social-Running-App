@@ -44,10 +44,14 @@ class EventController extends Controller
 
         $event->event_name = $request->event_name;
         $event->no_of_participants = 0;
-        $event->start =  Carbon::createFromFormat('Y-m-d', $request->start)->format('Y-m-d');
-        $event->end =  Carbon::createFromFormat('Y-m-d', $request->end)->format('Y-m-d');
-        $event->registration_start =  Carbon::createFromFormat('Y-m-d', $request->regisDate)->format('Y-m-d');
-        $event->registration_end =  Carbon::createFromFormat('Y-m-d', $request->regisDueDate)->format('Y-m-d');
+        // $event->start =  Carbon::createFromFormat('Y-m-d', $request->start)->format('Y-m-d');
+        // $event->end =  Carbon::createFromFormat('Y-m-d', $request->end)->format('Y-m-d');
+        // $event->registration_start =  Carbon::createFromFormat('Y-m-d', $request->regisDate)->format('Y-m-d');
+        // $event->registration_end =  Carbon::createFromFormat('Y-m-d', $request->regisDueDate)->format('Y-m-d');
+        $event->start =  $request->start;
+        $event->end =  $request->end;
+        $event->registration_start =  $request->registration_start;
+        $event->registration_end =  $request->registration_end;
         $event->description =  $request->description;
 
 
