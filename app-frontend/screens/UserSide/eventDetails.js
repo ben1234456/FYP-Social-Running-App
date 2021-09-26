@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
+import { StackActions } from '@react-navigation/native';
 
 const window = Dimensions.get("window");
 
@@ -13,17 +14,13 @@ export default class eventDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user_id:0,
+            user_id: props.route.params.user_id,
             eventid: props.route.params.eventid,
             event_name:"",
             start_date:"",
             end_date:"",  
-            registeration_start_date:"",   
-            registeration_end_date:"",
-            fee_5km:0,
-            fee_10km:0,
-            fee_21km:0,
-            fee_42km:0,
+            registration_start_date:"",   
+            registration_end_date:"",
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -38,16 +35,13 @@ export default class eventDetails extends Component {
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 this.setState({
                     event_name: data.event_name,
                     start_date: data.start,
                     end_date: data.end,  
-                    registeration_start_date:  data.registration_start,   
-                    registeration_end_date:  data.registration_end,
-                    fee_5km: data.fee_5km,
-                    fee_10km: data.fee_10km,
-                    fee_21km: data.fee_21km,
-                    fee_42km: data.fee_42km,
+                    registration_start_date:  data.registration_start,   
+                    registration_end_date:  data.registration_end,
                 });
             })
             .catch((error) => {
@@ -179,6 +173,7 @@ export default class eventDetails extends Component {
     //     return null;
     // }
 
+
     renderItemComponent = (data) =>
         <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
 
@@ -206,7 +201,7 @@ export default class eventDetails extends Component {
             'You have successfully signed-up for the event',
             '',
             [
-              { text: "Ok", onPress: () => this.props.navigation.navigate('Coupon') }
+              { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('Coupon', {'user_id': this.state.user_id })) }
             ]
         );   
     }

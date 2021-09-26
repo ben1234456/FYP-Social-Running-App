@@ -75,59 +75,59 @@ export default class LoginScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         
-        if (this.validation()) {
-            const data = {
-                email: this.state.email,
-                password: this.state.password
-            };
+        // if (this.validation()) {
+        //     const data = {
+        //         email: this.state.email,
+        //         password: this.state.password
+        //     };
 
-            fetch( baseUrl +'/api/login', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+        //     fetch( baseUrl +'/api/login', {
+        //         method: 'POST',
+        //         headers: {
+        //             Accept: 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(data),
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log(data);
 
-                    if (data.message == "success"){
-                        //save JSON data to local storage
-                        AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
-                        //navigate to home page
-                        if (data.user.role == "user"){
-                            this.props.navigation.navigate('app');
-                        }else if (data.user.role == "admin"){
-                            this.props.navigation.navigate('adminapp');
-                        }
-                    }
+        //             if (data.message == "success"){
+        //                 //save JSON data to local storage
+        //                 AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
+        //                 //navigate to home page
+        //                 if (data.user.role == "user"){
+        //                     this.props.navigation.navigate('app');
+        //                 }else if (data.user.role == "admin"){
+        //                     this.props.navigation.navigate('adminapp');
+        //                 }
+        //             }
 
-                    else {
-                        removeLastChar = data.message.slice(0, data.message.length - 1);
+        //             else {
+        //                 removeLastChar = data.message.slice(0, data.message.length - 1);
 
-                        Alert.alert(
-                            data.message,
-                            ''
-                            [
-                              { text: "OK" }
-                            ]
-                        );
-                    }
+        //                 Alert.alert(
+        //                     data.message,
+        //                     ''
+        //                     [
+        //                       { text: "OK" }
+        //                     ]
+        //                 );
+        //             }
 
 
                     
                              
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error:', error);
+        //         });
 
-            //this.props.navigation.navigate('adminapp');
-        }
+            
+        // }
 
-        //this.props.navigation.navigate('app');
+        this.props.navigation.navigate('app');
 
     }
 

@@ -38,7 +38,6 @@ class UserEventController extends Controller
      */
     public function store(Request $request)
     {
-        error_log($request);
 
         $userevent = new UserEvent;
 
@@ -50,6 +49,11 @@ class UserEventController extends Controller
         $userevent->status = 'in-progress';
 
         $userevent->save();
+
+        $event = Event::where('id', $request->event_id)->first();
+        $event->no_of_participants += 1;
+        $event->save();
+
     }
 
     /**
