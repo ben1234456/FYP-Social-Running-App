@@ -8,7 +8,7 @@ import Blue from '../../images/blue.png';
 import Green from '../../images/green.png';
 import Orange from '../../images/orange.png';
 import MapViewDirections from 'react-native-maps-directions';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -407,8 +407,8 @@ export default class addRouteScreen extends Component {
                                     maxLength={2} />
                             </View>
                         </View>
+                        <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.create} />
                     </View>
-                    <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} />
                 </View>
             </View>
         );
