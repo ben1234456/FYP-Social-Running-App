@@ -17,7 +17,7 @@ export default class EventsScreen extends Component {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
         //get event details
-        fetch(baseUrl + '/api/events/comingsoon/all', {
+        fetch(baseUrl + '/api/events', {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ export default class EventsScreen extends Component {
 
     renderItemComponent = (data) =>
         
-        <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('userUpcomingEventScreen', { 'eventid': data.item.id })}>
+        <TouchableOpacity style={styles.rowContainer} onPress={() =>  this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
                     <Image style={styles.image} source={Event} />

@@ -41,31 +41,6 @@ Route::apiResources([
 ]);
 
 
-Route::post('activity', [ActivityController::class, 'store']);
-
-//custom functions
-Route::post('login', [LoginController::class, 'login']);
-
-Route::get('/forumposts/{forumpost}', [ForumPostController::class, 'showPost']);
-
-Route::get('/forumposts/{forumpost}/comments', [ForumPostController::class, 'showComments']);
-
-Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
-
-//get events registered by the user
-Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents']);
-
-//get events (excluded registered)
-Route::get('/events/exclusive/{user}', [EventController::class, 'showUserExclusiveEvents']);
-
-//get event distances
-Route::get('/events/{event}/distance', [EventDistanceController::class, 'showEventDistances']);
-
-//update event distances
-Route::post('/eventdistances/update', [EventDistanceController::class, 'updateDistanceFee']);
-
-Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);
-
 Route::post('/register', RegisterController::class)->name('json-api-auth.register');
 
 Route::post('/login', LoginController::class)->name('json-api-auth.login');
@@ -92,20 +67,56 @@ Route::post('/confirm-password', ConfirmablePasswordController::class)
     ->middleware('auth:sanctum')
     ->name('json-api-auth.password.confirm');
 
+
+Route::post('activity', [ActivityController::class, 'store']);
+
+//Custom functions
+
+//Forum Post
+Route::get('/forumposts/{forumpost}', [ForumPostController::class, 'showPost']);
+
+Route::get('/forumposts/{forumpost}/comments', [ForumPostController::class, 'showComments']);
+
+
+//Activity
+Route::get('/activity/users/{user}', [ActivityController::class, 'showUserActivities']);
+
+//get user activities
+Route::get('/activity/all/users/{user}', [ActivityController::class, 'showAllUserActivities']);
+
+//Event
+//get events registered by the user
+Route::get('/events/users/{user}', [UserEventController::class, 'showUserEvents']);
+
+//get events (excluded registered)
+Route::get('/events/exclusive/{user}', [EventController::class, 'showUserExclusiveEvents']);
+
+//get event distances
+Route::get('/events/{event}/distance', [EventDistanceController::class, 'showEventDistances']);
+
+//update event distances
+Route::post('/eventdistances/update', [EventDistanceController::class, 'updateDistanceFee']);
+
+//get coming soon events
+Route::get('/events/comingsoon/all', [EventController::class, 'showComingSoonEvents']);
+
+
+//User
 //get user list exclude current user
 Route::get('/users/list/{user}', [UserController::class, "showUserList"]);
 
 //search user by name
 Route::get('/users/list/{user}/{userName}', [UserController::class, "searchUserByName"]);
 
+//search user by id
+Route::get('/users/{user}', [UserController::class, "searchUserById"]);
+
+//Buddy
 //search user buddy list
 Route::get('/buddy/buddyList/{user}', [BuddyController::class, "searchUserBuddyList"]);
 
 //search buddy by name
 Route::get('/buddy/buddyList/{user}/{userName}', [BuddyController::class, "searchBuddyByName"]);
-
-//search user by id
-Route::get('/users/{user}', [UserController::class, "searchUserById"]);
 
 //get buddy id
 Route::get('/buddy/{user}/{buddy}', [BuddyController::class, "getID"]);
@@ -119,12 +130,14 @@ Route::get('/buddyrequest/{user}/{buddy}', [BuddyRequestController::class, "getI
 //custom delete buddy request by id
 Route::delete('/buddyrequest/list/{id}', [BuddyRequestController::class, "deleteBuddyReqByID"]);
 
+//Calendar
 //get user calendar data
 Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchUserCalendarList"]);
 
 //get user calendar data
 Route::get('/calendar/calendarList/{user}', [CalendarController::class, "searchUserCalendarList"]);
 
+//Route
 //get user route list data
 Route::get('/route/routeList/{user}', [RouteController::class, "searchUserRouteList"]);
 

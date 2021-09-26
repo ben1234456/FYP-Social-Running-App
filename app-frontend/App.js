@@ -54,6 +54,11 @@ import CreateNewPasswordScreen from './screens/CreateNewPasswordScreen';
 import buddyRequestDetailScreen from './screens/UserSide/buddyRequestDetailScreen';
 import BuddiesRequestList from './screens/UserSide/BuddiesRequestList';
 
+import adminEventsScreen from "./screens/AdminSide/adminEventsScreen";
+import adminUpcomingEventsScreen from "./screens/AdminSide/adminUpcomingEventsScreen";
+import userUpcomingEventScreen from "./screens/UserSide/upcomingEventScreen"
+
+
 const Stack = createStackNavigator();
 
 export default class App extends Component {
@@ -413,12 +418,41 @@ export default class App extends Component {
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Buddy Request' }}
                     />
+
+                    <Stack.Screen
+                        name="adminUpcomingEventsScreen"
+                        component={adminUpcomingEventsScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Upcoming Events' }}
+                    />
+
                     <Stack.Screen
                         name="BuddiesRequestList"
                         component={BuddiesRequestList}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Buddies Request' }}
                     />
+
+                    <Stack.Screen
+                        name="adminEventsScreen"
+                        component={adminEventsScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'All Events' }}
+                    />
+
+                    <Stack.Screen
+                        name="userUpcomingEventScreen"
+                        component={userUpcomingEventScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'All Events' }}
+                    />
+
+
+
+                  
+
+
+                    
                 </Stack.Navigator>
             </NavigationContainer>
         );

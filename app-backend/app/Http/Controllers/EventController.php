@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+date_default_timezone_set("Asia/Kuala_Lumpur");
+
 use App\Models\Event;
 use App\Models\User;
 use App\Models\UserEvent;
@@ -17,7 +19,16 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::All()->toJson();
+        $allEvents = Event::All();
+        $eventList = [];
+        foreach ($allEvents as $event) {
+            $currentDate =  date("Y-m-d");
+            if ($event->registration_start <= $currentDate){
+                array_push($eventList,$event);
+            }
+        }
+        
+        return $eventList;
     }
 
     /**
@@ -134,6 +145,7 @@ class EventController extends Controller
         }
     }
 
+    //get events (excluded registered)
     public function showUserExclusiveEvents(User $user)
     {
         $user_id = $user->id;
@@ -145,5 +157,23 @@ class EventController extends Controller
         return $user_exclusive_events->toJson();
 
     }
+
+    //Get coming soon events
+    public function showComingSoonEvents()
+    {
+
+        $allEvents = Event::All();
+        $eventList = [];
+        foreach ($allEvents as $event) {
+            $currentDate =  date("Y-m-d");
+            if ($event->registration_start > $currentDate){
+                array_push($eventList,$event);
+            }
+        }
+        
+        return $eventList;
+
+    }
+    
 
 }

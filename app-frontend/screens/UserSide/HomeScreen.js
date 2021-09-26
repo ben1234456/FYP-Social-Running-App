@@ -23,8 +23,10 @@ export default class HomeScreen extends Component {
             user_id: "",
             name: "",
             eventdata: "",
+            comingSoonEventData: "",
             currenDate: date,
-            currentDay: day
+            currentDay: day,
+            
         };
 
 
@@ -65,6 +67,24 @@ export default class HomeScreen extends Component {
                 console.error('Error:', error);
             });
 
+            //get upcoming events
+            fetch(baseUrl + '/api/events/comingsoon/all', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    comingSoonEventData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
             
         }
 
@@ -91,7 +111,7 @@ export default class HomeScreen extends Component {
         getData();
     };
 
-    renderItemComponent = (data) =>
+    renderEvents = (data) =>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
@@ -104,6 +124,19 @@ export default class HomeScreen extends Component {
             </View>
         </TouchableOpacity>
 
+    renderComingSoonEvents = (data) =>
+                    
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('userUpcomingEventScreen', { 'eventid': data.item.id })}>
+            <View style={styles.cardView}>
+                <View style={styles.view1}>
+                    <Image style={styles.image2} source={Event} />
+                </View>
+                <View style={styles.view2}>
+                    <Text style={styles.title}>{data.item.event_name}</Text>
+                    <Text style={styles.venue}>Anywhere</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
 
 
     render() {
@@ -133,7 +166,7 @@ export default class HomeScreen extends Component {
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderItemComponent(item)}
+                        renderItem={item => this.renderEvents(item)}
                     />  
                 </View>
                 
@@ -145,21 +178,15 @@ export default class HomeScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View>
-                    <ScrollView style={styles.scrollview} horizontal={true}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'user_id': this.state.user_id })}>
-                            <View style={styles.cardView}>
-                                <View style={styles.view1}>
-                                    <Image style={styles.image2} source={UpcomingEvent} />
-                                </View>
-                                <View style={styles.view2}>
-                                    <Text style={styles.title}>Family Virtual Run</Text>
-                                    <Text style={styles.venue}>Anywhere</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    </ScrollView>
+
+                <View style={styles.scrollview}>
+                    <FlatList horizontal={true}
+                        data={this.state.comingSoonEventData}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderComingSoonEvents(item)}
+                    />  
                 </View>
+
             </ScrollView>
         );
     }

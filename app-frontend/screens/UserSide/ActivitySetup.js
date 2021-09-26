@@ -46,7 +46,7 @@ export default class ActivitySetup extends Component {
             AsyncStorage.setItem('@activityType', activityTypeInput.toLowerCase())
           } catch (e) {
             // saving error
-          }
+        }
         
     }
 

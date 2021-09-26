@@ -116,6 +116,15 @@ export default class FreeRunScreen extends Component {
           if(activityType !== null) {
             this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng, 'activityType':activityType})
           }
+
+          else{
+            try {
+                AsyncStorage.setItem('@activityType', 'walking')
+                this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng, 'activityType':activityType})
+              } catch (e) {
+                // saving error
+            }
+          }
         } catch(e) {
           // error reading value
         }

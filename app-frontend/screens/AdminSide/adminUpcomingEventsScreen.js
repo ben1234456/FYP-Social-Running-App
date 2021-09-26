@@ -40,7 +40,7 @@ export default class EventsScreen extends Component {
 
     renderItemComponent = (data) =>
         
-        <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('userUpcomingEventScreen', { 'eventid': data.item.id })}>
+        <TouchableOpacity style={styles.rowContainer} onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
                     <Image style={styles.image} source={Event} />

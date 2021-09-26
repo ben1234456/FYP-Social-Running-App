@@ -15,6 +15,7 @@ export default class AdminHomeScreen extends Component {
             id: "",
             name: "",
             eventdata: "",
+            comingSoonEventData: "",
         };
 
 
@@ -42,16 +43,34 @@ export default class AdminHomeScreen extends Component {
                     'Content-Type': 'application/json'
                 },
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success')
-                    this.setState({
-                        eventdata: data
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    eventdata: data
                 });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+            //get upcoming events
+            fetch(baseUrl + '/api/events/comingsoon/all', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    comingSoonEventData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getData();
@@ -77,7 +96,7 @@ export default class AdminHomeScreen extends Component {
         getData();
     };
 
-    renderItemComponent = (data) =>
+    renderEvents = (data) =>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
                 <View style={styles.view1}>
@@ -90,7 +109,19 @@ export default class AdminHomeScreen extends Component {
             </View>
         </TouchableOpacity>
 
-
+    renderComingSoonEvents = (data) =>
+                
+    <TouchableOpacity onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
+        <View style={styles.cardView}>
+            <View style={styles.view1}>
+                <Image style={styles.image2} source={Event} />
+            </View>
+            <View style={styles.view2}>
+                <Text style={styles.title}>{data.item.event_name}</Text>
+                <Text style={styles.venue}>Anywhere</Text>
+            </View>
+        </View>
+    </TouchableOpacity>
 
     render() {
         return (
@@ -99,14 +130,13 @@ export default class AdminHomeScreen extends Component {
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
                         <Text style={styles.name}> {this.state.name}</Text>
-                        {/* <Text style={styles.name}> Admin</Text> */}
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Events</Text>
-                        <Text onPress={() => this.props.navigation.navigate('eventsScreen')} style={styles.more}>{"View More >"}</Text>
+                        <Text onPress={() => this.props.navigation.navigate('adminEventsScreen')} style={styles.more}>{"View All >"}</Text>
                     </View>
                 </View>
 
@@ -120,7 +150,7 @@ export default class AdminHomeScreen extends Component {
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderItemComponent(item)}
+                        renderItem={item => this.renderEvents(item)}
                     />  
                 </View>
                 </View>
@@ -128,8 +158,8 @@ export default class AdminHomeScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Coming Soon</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('upcomingEventsScreen')}>
-                            <Text style={styles.more}>{"View More >"}</Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('adminUpcomingEventsScreen')}>
+                            <Text style={styles.more}>{"View All >"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -140,22 +170,15 @@ export default class AdminHomeScreen extends Component {
                     alignItems: 'center',
                 }}>
                     <Ant style={{ marginRight: 5 }} name="pluscircle" size={25} color={'#8352F2'} onPress={() => this.props.navigation.navigate('addEventsScreen')}/>
-                    <View>
-                        <ScrollView style={styles.scrollview} horizontal={true}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails')}>
-                                <View style={styles.cardView}>
-                                    <View style={styles.view1}>
-                                        <Image style={styles.image2} source={UpcomingEvent} />
-                                    </View>
-                                    <View style={styles.view2}>
-                                        <Text style={styles.title}>Family Virtual Run</Text>
-                                        <Text style={styles.venue}>Anywhere</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </ScrollView>
-                    </View>
+                    <View style={styles.scrollview}>
+                    <FlatList horizontal={true}
+                        data={this.state.comingSoonEventData}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={item => this.renderComingSoonEvents(item)}
+                    />  
                 </View>
+                </View>
+
             </ScrollView>
         );
     }
