@@ -136,11 +136,14 @@ class EventController extends Controller
 
     public function showUserExclusiveEvents(User $user)
     {
-        $user_id = $user->id;
-
-        $user_events = UserEvent::where('user_id', $user_id)->get();
-
-        $user_exclusive_events = Event::whereNotIn('id', $user_events)->get();
+        $userID = $user->id;
+        $user_events = UserEvent::where('user_id','=', $userID)->get();
+        // 
+        $idList=array();
+        foreach($user_events as $event){
+            array_push($idList,$event->event_id);
+        }
+        $user_exclusive_events = Event::whereNotIn('id', $idList)->get();
 
         return $user_exclusive_events->toJson();
 
