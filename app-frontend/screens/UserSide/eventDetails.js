@@ -24,35 +24,6 @@ export default class eventDetails extends Component {
             registration_end_date: "",
             event_distance: "",
             desc: "",
-            radioButtons: [
-                {
-                    label: 'One',
-                    value: 'One',
-                    checked: true,
-                    color: '#D44336',
-                    disabled: false,
-                    flexDirection: 'row',
-                    size: 11
-                },
-                {
-                    label: 'Two',
-                    value: 'Two',
-                    checked: false,
-                    color: '#1D65F0',
-                    disabled: false,
-                    flexDirection: 'row',
-                    size: 11
-                },
-                {
-                    label: 'Three',
-                    value: 'Three',
-                    checked: false,
-                    color: '#1DC545',
-                    disabled: false,
-                    flexDirection: 'row',
-                    size: 11
-                }
-            ]
         };
 
             //using localhost on IOS and using 10.0.2.2 on Android
