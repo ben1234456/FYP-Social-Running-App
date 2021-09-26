@@ -279,6 +279,8 @@ export default class ForumScreen extends Component {
                         <Icon size={25} name='leaderboard' color='#808080' onPress={() => this.props.navigation.navigate('eventsScreen')} />
                     </View>
                 </View>
+                {this.state.posts.length!=0
+                ?
                 <FlatList
                     data={this.state.posts}
                     keyExtractor={item => item.id.toString()}
@@ -286,34 +288,35 @@ export default class ForumScreen extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })}>
                             <View style={styles.cardView}>
                                 <View style={styles.proRow}>
-                                    <View style={styles.proTitle}>
+                                    <View style={styles.profilePicContainer}>
                                         <Image style={styles.proColumnName} source={profileImage} />
                                     </View>
-                                    <View style={styles.proTitle}>
+                                    <View style={styles.profileInfoContainer}>
                                         <Text style={styles.title}>{item.name}</Text>
                                         {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
                                         <Text style={styles.date}>{item.datetime}</Text>
                                     </View>
-                                    <View>
-                                        <TouchableOpacity><Icon size={25} name={item.edit} color='#808080' /></TouchableOpacity>
+                                    {/* <TouchableOpacity>
+                                    <View style={styles.iconContainer}>
+                                        <Icon size={25} name={"edit"} color='#808080' />
                                     </View>
-                                    <View>
-                                        <TouchableOpacity onPress={() => this.delete(item.id)}><Icon2 size={25} name={item.delete} color='#808080' /></TouchableOpacity>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.delete(item.id)}>
+                                    <View style={styles.iconContainer}>
+                                        <Icon2 size={25} name={"delete"} color='#808080' />
                                     </View>
+                                    </TouchableOpacity> */}
                                 </View>
-                                <TouchableOpacity>
-                                    <View style={styles.proTitle}>
-                                        <Text style={styles.title}>{item.title}</Text>
-                                        <Text style={styles.description}>{item.description}</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.proTitle}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                    <Text style={styles.description}>{item.description}</Text>
+                                </View>
                                 <View style={styles.proRow}>
-                                    <View style={styles.proTitle}>
-                                        <Font size={25} name={item.like} onPress={() => this.updateLike(item.id)} color='#FF4141' />
-                                    </View>
-                                    <View style={styles.icon}>
+                                    <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                    <View style={styles.likeNumContainer}>
                                         <Text>{item.noLike}</Text>
                                     </View>
+                                    
                                     {/* <View style={styles.proTitle}>
                                     <Icon2 size={25} name='comment-outline' color='#808080' />
                                 </View>
@@ -343,6 +346,12 @@ export default class ForumScreen extends Component {
                         </TouchableOpacity>
                     )}
                 />
+                :
+                <View style={styles.noDataContainer}>
+                    <Text>No post avaliable. Post one now!</Text>
+                </View>
+                }
+                
                 <View style={{ flexDirection: 'row', margin: 40 }}>
                     <Modal
                         animationType={"slide"}
@@ -409,13 +418,11 @@ export const styles = StyleSheet.create({
         fontSize: 18,
     },
     cardView: {
-        marginTop: 20,
-        marginBottom: 20,
-        marginLeft: 45,
-        marginRight: 45,
+        
         borderRadius: 15,
         backgroundColor: 'white',
-
+        padding:"5%",
+        margin:"5%",
         //ios
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
@@ -428,10 +435,32 @@ export const styles = StyleSheet.create({
     proRow: {
         flexDirection: "row",
         alignItems: 'center',
+        padding:"2.5%",
+    },
+    icon: {
+    
+    },
+    profilePicContainer:{
+        flex:2,
+        
+    },
+    profileInfoContainer:{
+        flex:7,
+        paddingLeft:"2.5%",
+    },
+    likeNumContainer:{
+        marginLeft:"2.5%",
+    },
+    iconContainer:{
+        flex:1,
+        padding:"2.5%",
+        justifyContent:"center",
+        alignItems:"center",
     },
     proTitle: {
-        marginLeft: 20,
-        marginTop: 20,
+        alignItems:"flex-start",
+        justifyContent:"center",
+        padding:"2.5%",
     },
     proInfo: {
         margin: 20
@@ -453,11 +482,7 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: '#808080'
     },
-    icon: {
-        marginLeft: 10,
-        marginRight: 50,
-        marginTop: 20,
-    },
+    
     input: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
@@ -473,5 +498,10 @@ export const styles = StyleSheet.create({
         color: '#8352F2',
         marginBottom: 20,
         flex: 1
+    },
+    noDataContainer:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
     },
 });
