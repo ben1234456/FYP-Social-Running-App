@@ -48,6 +48,7 @@ class EventDistanceController extends Controller
             $eventDistance->fee = floatval($request->fee[$i]["text"]);
             $eventDistance->save();
         }
+        return response()->json(['status' => 'success']);
     }
 
     /**

@@ -5,6 +5,7 @@ import DatePicker from 'react-native-datepicker';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 import moment from 'moment';
 
 export default class addEvent extends Component {
@@ -25,7 +26,8 @@ export default class addEvent extends Component {
             imageSource: addImage,
             textInput : [],
             feeArray: [],
-            distanceArray : []
+            distanceArray : [],
+            height:0,
         }
 
     }
@@ -102,7 +104,7 @@ export default class addEvent extends Component {
             return true;
         }
     }
-
+    
     create = () => {
         
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -114,15 +116,15 @@ export default class addEvent extends Component {
                 description: this.state.description,
                 start: this.state.startDate,
                 end: this.state.endDate,
-                regisDate: this.state.regisDate,
-                regisDueDate: this.state.regisDueDate,
+                registration_start: this.state.regisDate,
+                registration_end: this.state.regisDueDate,
             };
 
             const disData = {
                 distance: this.state.distanceArray,
                 fee: this.state.feeArray
             }
-    
+
             
             fetch( baseUrl + '/api/events', {
                 method: 'POST',
@@ -188,9 +190,15 @@ export default class addEvent extends Component {
         textInput.push(
             <View>
                 
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.botTitle}>Distance (KM)</Text>
-                    <TouchableOpacity onPress={() => this.removeTextInput(index)}><Icon2 style={{ marginTop: 20 }} size={25} name="delete" color='#808080' /></TouchableOpacity>
+                <View style={styles.distanceContainer}>
+                    <View style={styles.addRowTextContainer}>
+                        <Text style={styles.botTitle}>Distance (KM)</Text>
+                    </View>
+                    <View style={styles.addRowIconContainer}>
+                        <TouchableOpacity onPress={() => this.removeTextInput(index)}>
+                            <Icon2 size={25} name="delete" color='#808080' />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.inputTitleTop}>
 
@@ -202,8 +210,9 @@ export default class addEvent extends Component {
                         />
                     </View>
                 </View>
-
-                <Text style={styles.botTitle}>Fee (RM)</Text>
+                <View>
+                    <Text style={styles.botTitle}>Fee (RM)</Text>
+                </View>
                 <View style={styles.inputTitleTop}>
                     <View style={styles.inputText}>
                         <TextInput
@@ -283,14 +292,12 @@ export default class addEvent extends Component {
         return (
 
             <ScrollView style={styles.container}>
-                <View style={(this.state.imageSource == addImage) ? styles.selectPhotoTop : styles.selectedPhotoTop}>
-                    <Text style={(this.state.imageSource == addImage) ? styles.selectPhotoTopInfo : styles.selectedPhotoTopInfo}>Take / Choose a photo</Text>
-                    <TouchableOpacity onPress={this.chooseImage} style={styles.cameraBack}>
-                        <Image source={this.state.imageSource} style={(this.state.imageSource == addImage) ? styles.camera : styles.selectedImage} />
-                    </TouchableOpacity>
-
-
-                </View>
+                <TouchableOpacity onPress={this.chooseImage} style={styles.cameraBack}>
+                    <View style={(this.state.imageSource == addImage) ? styles.selectPhotoTop : styles.selectedPhotoTop}>
+                        <Text style={(this.state.imageSource == addImage) ? styles.selectPhotoTopInfo : styles.selectedPhotoTopInfo}>Take / Choose a photo</Text>
+                            <Image source={this.state.imageSource} style={(this.state.imageSource == addImage) ? styles.camera : styles.selectedImage} />
+                    </View>
+                </TouchableOpacity>
 
                 <View style={styles.contentContainer}>
 
@@ -313,12 +320,15 @@ export default class addEvent extends Component {
                         <View>
                             <Text style={styles.botTitle}>Description</Text>
                         </View>
-                        <View style={styles.inputWithTitleTopBig}>
+                        <View style={styles.inputWithTitle}>
                             <View style={styles.inputText}>
                                 <TextInput
                                     placeholder="Write your description here"
-                                    onChangeText={(des) => this.setState({ description: des })}
+                                    onChangeText={(des) => this.setState({ description: des})}
                                     value={this.state.description}
+                                    onContentSizeChange={(desc)=>this.setState({height:desc.nativeEvent.contentSize.height})}
+                                    style={{height:Math.max(35,this.state.height)}}
+                                    multiline
                                 />
                             </View>
                         </View>
@@ -331,7 +341,7 @@ export default class addEvent extends Component {
                         return value
                         })}
                         
-                        <View>
+                        <View >
                   
                             <Button style={styles.addRow} title='Add' onPress={() => this.addTextInput(this.state.textInput.length)}>
                                 <Text style={{ color: 'white', fontSize: 14 }}>Add row</Text>
@@ -358,7 +368,8 @@ export default class addEvent extends Component {
                                     dateIcon: { display: 'none' },
                                     dateInput: { borderWidth: 0, alignItems: "flex-start" },
                                 }}
-                                onDateChange={(date) => { this.setState({ regisDate: date }) }} />
+                            
+                                onDateChange={(date) => { this.setState({ regisDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
                         </View>
 
                         <View>
@@ -377,7 +388,7 @@ export default class addEvent extends Component {
                                     dateIcon: { display: 'none' },
                                     dateInput: { borderWidth: 0, alignItems: "flex-start" },
                                 }}
-                                onDateChange={(date) => { this.setState({ regisDueDate: date }) }} />
+                                onDateChange={(date) => { this.setState({ regisDueDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
                         </View>
 
                         <View>
@@ -397,7 +408,7 @@ export default class addEvent extends Component {
                                     dateIcon: { display: 'none' },
                                     dateInput: { borderWidth: 0, alignItems: "flex-start" },
                                 }}
-                                onDateChange={(date) => { this.setState({ startDate: date }) }} />
+                                onDateChange={(date) => { this.setState({ startDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
                         </View>
 
                         <View>
@@ -416,11 +427,10 @@ export default class addEvent extends Component {
                                     dateIcon: { display: 'none' },
                                     dateInput: { borderWidth: 0, alignItems: "flex-start" },
                                 }}
-                                onDateChange={(date) => { this.setState({ endDate: date }) }} />
+                                onDateChange={(date) => { this.setState({ endDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
                         </View>
 
-                        <View>
-                            <Text style={styles.botTitle}></Text>
+                        <View style={styles.submitBtnContainer}>
                             <Button style={styles.submitBtn} onPress={this.create}>
                                 <Text style={styles.btnText}>Create</Text>
                             </Button>
@@ -446,6 +456,7 @@ export const styles = StyleSheet.create({
         padding: 20,
         paddingTop: 0,
         backgroundColor: 'white',
+        marginTop:"2.5%",
     },
     heading: {
         fontSize: 30,
@@ -485,7 +496,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginBottom: 235,
+        
     },
     btnText: {
         fontSize: 16,
@@ -520,6 +531,8 @@ export const styles = StyleSheet.create({
         backgroundColor: '#ECECEC',
         borderRadius: 15,
         padding: 10,
+        marginTop:"2.5%",
+        marginBottom:"2.5%",
     },
     pickerLeftTitle: {
         backgroundColor: '#ECECEC',
@@ -553,21 +566,14 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         flex: 1,
         fontWeight: "bold",
-        marginTop: 20,
     },
-    inputWithTitleTopBig: {
-        backgroundColor: '#ECECEC',
-        borderRadius: 15,
-        padding: 10,
-        height: "18%",
-        marginBottom: "5%",
-    },
+    
     inputTitleTop: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
-        display: 'flex',
-        flexDirection: 'row',
         padding: 10,
+        marginTop:"2.5%",
+        marginBottom: "2.5%"
     },
     pickerTitleTop: {
         backgroundColor: '#ECECEC',
@@ -575,7 +581,8 @@ export const styles = StyleSheet.create({
         display: 'flex',
         paddingTop: 2,
         paddingBottom: 2,
-        marginBottom: "5%",
+        marginBottom:"2.5%",
+        marginTop:"2.5%",
     },
     camera: {
         width: 40,
@@ -610,8 +617,24 @@ export const styles = StyleSheet.create({
     },
     addRow: {
         backgroundColor: '#8352F2',
-        marginTop: 20,
         flex: 1,
         padding: 20,
-    }
+        marginTop:"2.5%",
+        marginBottom:"2.5%",
+    },
+    addRowTextContainer:{
+        flex:9,
+    },
+    addRowIconContainer:{
+        flex:1,
+        alignContent:"center",
+    },
+    distanceContainer:{
+        flexDirection:"row",
+        marginTop:"2.5%",
+        marginBottom:"2.5%",
+    },
+    submitBtnContainer:{
+        marginTop:"5%",
+    },
 });
