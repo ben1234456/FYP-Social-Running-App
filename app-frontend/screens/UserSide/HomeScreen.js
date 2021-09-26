@@ -5,7 +5,6 @@ import Logo from '../../images/logo.png';
 import Event from '../../images/event.png';
 import UpcomingEvent from '../../images/family_marathon.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from 'moment';
 
 export default class HomeScreen extends Component {
 
@@ -15,7 +14,7 @@ export default class HomeScreen extends Component {
         var today = new Date()
         var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
         var day = today.getDay()
         var day = weekdays[day]
 
@@ -23,10 +22,9 @@ export default class HomeScreen extends Component {
             id: "",
             user_id: "",
             name: "",
-            eventdata: [],
+            eventdata: "",
             currenDate: date,
-            currentDay: day,
-            upcomingEventData:[],
+            currentDay: day
         };
 
 
@@ -59,22 +57,14 @@ export default class HomeScreen extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log('Successfully get event data')
-                //category based on regis start date and regis end date
-                for(let i=0;i<data.length;i++){
-                    if(moment(this.state.currenDate, "YYYY-MM-DD")<moment(data[i].registration_start, "YYYY-MM-DD")){
-                        this.state.upcomingEventData.push(data[i]);
-                    }
-                }
-                for(let i=0;i<data.length;i++){
-                    if(moment(this.state.currenDate, "YYYY-MM-DD")<moment(data[i].registration_end, "YYYY-MM-DD") && moment(this.state.currenDate, "YYYY-MM-DD")>=moment(data[i].registration_start, "YYYY-MM-DD")){
-                        this.state.eventdata.push(data[i]);
-                    }
-                }
+                this.setState({
+                    eventdata: data
+                });
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-            
+
             
         }
 
@@ -102,47 +92,19 @@ export default class HomeScreen extends Component {
     };
 
     renderItemComponent = (data) =>
-        <View>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
-                <View style={styles.cardView}>
-                    <View style={styles.view1}>
-                        <Image style={styles.image2} source={Event} />
-                    </View>
-                    <View style={styles.view2}>
-                        <Text style={styles.title}>{data.item.event_name}</Text>
-                        <Text style={styles.venue}>Anywhere</Text>
-                    </View>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
+            <View style={styles.cardView}>
+                <View style={styles.view1}>
+                    <Image style={styles.image2} source={Event} />
                 </View>
-            </TouchableOpacity>
-    
-            
-            
-        </View>
-    renderUpcomingEvent = (data) =>
-        <View>
-            
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
-                <View style={styles.cardView}>
-                    <View style={styles.view1}>
-                        <Image style={styles.image2} source={Event} />
-                    </View>
-                    <View style={styles.view2}>
-                        <Text style={styles.title}>{data.item.event_name}</Text>
-                        <Text style={styles.venue}>Anywhere</Text>
-                    </View>
+                <View style={styles.view2}>
+                    <Text style={styles.title}>{data.item.event_name}</Text>
+                    <Text style={styles.venue}>Anywhere</Text>
                 </View>
-            </TouchableOpacity>
-        
-        </View>
-    testing=()=>{
-        console.log(this.state.eventdata[0].registration_start);
-        console.log(this.state.currenDate);
-        console.log(typeof(moment(moment(this.state.eventdata[0].registration_start, "YYYY-MM-DD")).format("YYYY-MM-DD")));
-        console.log(typeof(moment(moment(this.state.currenDate, "YYYY-MM-DD")).format("YYYY-MM-DD")));
-        if(((moment(this.state.currenDate, "YYYY-MM-DD")))<=((moment(this.state.eventdata[0].registration_end, "YYYY-MM-DD")))){
-            console.log("smaller");
-        }
-    };
+            </View>
+        </TouchableOpacity>
+
+
 
     render() {
         return (
@@ -151,8 +113,7 @@ export default class HomeScreen extends Component {
                     <View style={styles.rowContainer}>
                         <Text style={styles.welcome}>Hi,</Text>
                         <Text style={styles.name}> {this.state.name}</Text>
-                        {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}> */}
-                        <TouchableOpacity onPress={this.testing}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
                             <Image style={styles.image} source={Logo} />
                         </TouchableOpacity>
                     </View>
@@ -169,19 +130,11 @@ export default class HomeScreen extends Component {
                 </View>
 
                 <View style={styles.scrollview}>
-                    {this.state.eventdata!=0
-                    ?
                     <FlatList horizontal={true}
                         data={this.state.eventdata}
                         keyExtractor={item => item.id.toString()}
                         renderItem={item => this.renderItemComponent(item)}
                     />  
-                    :
-                    <View style={styles.noDataContainer}>
-                        <Text style={styles.noDataText}>No event avaliable</Text>
-                    </View>
-                    }
-                    
                 </View>
                 
                 <View style={styles.contentContainer1}>
@@ -192,20 +145,20 @@ export default class HomeScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.scrollview}>
-                    {this.state.upcomingEventData!=0
-                    ?
-                    <FlatList horizontal={true}
-                        data={this.state.upcomingEventData}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderItemComponent(item)}
-                    />  
-                    :
-                    <View style={styles.noDataContainer}>
-                        <Text style={styles.noDataText}>No upcoming event avaliable</Text>
-                    </View>
-                    }
-                    
+                <View>
+                    <ScrollView style={styles.scrollview} horizontal={true}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'user_id': this.state.user_id })}>
+                            <View style={styles.cardView}>
+                                <View style={styles.view1}>
+                                    <Image style={styles.image2} source={UpcomingEvent} />
+                                </View>
+                                <View style={styles.view2}>
+                                    <Text style={styles.title}>Family Virtual Run</Text>
+                                    <Text style={styles.venue}>Anywhere</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </View>
             </ScrollView>
         );
@@ -292,13 +245,5 @@ export const styles = StyleSheet.create({
         flex: 1,
         fontSize: 18,
         color: 'grey',
-    },
-    noDataContainer:{
-        justifyContent:"center",
-        alignItems:"center",
-        flex:1,
-    },
-    noDataText:{
-        fontSize:16,
-    },
+    }
 });

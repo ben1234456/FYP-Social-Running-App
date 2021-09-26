@@ -201,8 +201,7 @@ export default class eventDetails extends Component {
             'You have successfully signed-up for the event',
             '',
             [
-              { text: "Ok", onPress: () => this.props.navigation.navigate('app') }
-              //{ text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('Coupon', {'user_id': this.state.user_id })) }
+              { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('Coupon', {'user_id': this.state.user_id })) }
             ]
         );   
     }
