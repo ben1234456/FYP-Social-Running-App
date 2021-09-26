@@ -5,6 +5,7 @@ import Back from '../images/left-arrow.png';
 import Eye from '../images/eye.png';
 import DatePicker from 'react-native-datepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { StackActions } from '@react-navigation/native';
 
 export default class SignUpScreen extends Component {
     constructor(props) {
@@ -122,6 +123,8 @@ export default class SignUpScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
+        var ip = 'http://192.168.0.192:8000';
+
         if (this.validation()){
 
         
@@ -139,7 +142,7 @@ export default class SignUpScreen extends Component {
             };
     
             
-            fetch(baseUrl +'/api/register', {
+            fetch(ip +'/api/register', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -182,35 +185,14 @@ export default class SignUpScreen extends Component {
 
                 else if (data.message == "success"){
 
-                    //special case (chg the ip once hosted)
-
-                    var ip = 'http://192.168.0.192:8000';
-
-                    fetch( ip + '/api/email/verification-notification', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + data.token,
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);            
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });  
-
                     Alert.alert(
-                        'Account Succesfully Registered!',
+                        'Account Succesfully Registered! Please verify your account by using the email entered just now',
                         ''
                         [
-                            { text: "Ok"}
+                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('login'))}
                         ]
                     );
-
-                    this.props.navigation.navigate('login');
+                    
                 }
 
             })

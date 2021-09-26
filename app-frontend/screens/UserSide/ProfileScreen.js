@@ -6,6 +6,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { StackActions } from '@react-navigation/native';
 
 export default class App extends Component {
 
@@ -53,17 +54,19 @@ export default class App extends Component {
 
     logout = async () => {
 
-        var errormsg = "Are you sure you want to log out?";
+
+        var msg = "Are you sure you want to log out?";
 
         Alert.alert(
-            errormsg,
+            msg,
             '',
             [
-                { text: "Logout Now", style: "default", onPress: () => this.props.navigation.navigate('start')},
+                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.popToTop())},
                 { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
             ],
             {cancelable: false},
         );
+
     }
 
     render() {

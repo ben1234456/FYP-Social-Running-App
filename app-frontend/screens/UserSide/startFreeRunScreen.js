@@ -36,6 +36,8 @@ export default class startFreeRunScreen extends Component {
             start_dt: dt.toLocaleString(),
             end_dt: new Date(),
 
+            activityType: props.route.params.activityType,
+
             errorMessage: "",
             prevLat: 0,
             prevLng: 0,
@@ -222,6 +224,7 @@ export default class startFreeRunScreen extends Component {
         const total_duration = String(this.state.hour) + ":" + String(this.state.minute) + ":" + String(this.state.second)
 
         const data = {
+            activity_type : this.state.activityType,
             start_lat: String(this.state.startLat),
             start_lng: String(this.state.startLng),
             end_lat: String(this.state.latitude),

@@ -43,10 +43,6 @@ Route::apiResources([
 
 Route::post('activity', [ActivityController::class, 'store']);
 
-Route::post('password/forgot-password', [ForgotPasswordController::class, 'sendResetLinkResponse'])->name('passwords.sent');
-
-Route::post('password/reset', [ResetPasswordController::class, 'sendResetResponse'])->name('passwords.reset');
-
 //custom functions
 Route::post('login', [LoginController::class, 'login']);
 

@@ -20,18 +20,20 @@ export default class resetPasswordScreen extends Component {
         }
         else {
 
+            console.log(this.state.email);
+
             const data = {
-                email: String(this.state.email)   
+                email: this.state.email   
             };
 
-            fetch(baseUrl + '/api/password/forgot-password', {
+            fetch(baseUrl + '/api/forgot-password', {
                 method: 'POST',   
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
-                })
+            })
             .then(response => response.json())
             .then(data => {
                 console.log(data)

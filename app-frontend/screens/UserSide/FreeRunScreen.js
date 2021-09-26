@@ -10,6 +10,7 @@ import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import { Dimensions } from 'react-native';
 import haversine from "haversine";
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -63,6 +64,8 @@ export default class FreeRunScreen extends Component {
             button: "Start",
         };
 
+        
+
 
     }
 
@@ -104,74 +107,22 @@ export default class FreeRunScreen extends Component {
         })
     };
 
+    startRun = async () => {
+
+        console.log("HI");
+        
+        try {
+          const activityType = await AsyncStorage.getItem('@activityType')
+          if(activityType !== null) {
+            this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng, 'activityType':activityType})
+          }
+        } catch(e) {
+          // error reading value
+        }
+    } 
 
     componentDidMount() {
         this.getLocation();
-    }
-
-
-    tracking = () => {
-
-        //using localhost on IOS and using 10.0.2.2 on Android
-        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-
-        this.toggle();
-
-        if (this.state.tracking == false) {
-
-            const currentDate = new Date();
-            const timestamp = currentDate.getTime();
-
-            this.setState({
-                tracking: true,
-                startTimestamp: timestamp,
-            });
-
-        }
-
-        else{
-            const currentDate = new Date();
-            const timestamp = currentDate.getTime();
-
-            this.setState({
-                tracking: false,
-                endTimestamp: timestamp,
-            });
-
-            const totalDuration = this.state.hourCount;
-
-            const data = {
-                start_lat: String(this.state.startLat),
-                start_lng: String(this.state.startLng),
-                end_lat: String(this.state.latitude),
-                end_lng: String(this.state.longitude),
-                total_distance: String(this.state.distanceTravelled),
-            };
-
-            this.setState({
-                date:new Date(),
-                hour:"00",
-                minute:"00",
-                second:"00",
-                hourCount:0,
-                minuteCount:0,
-                secondCount:0,
-            });
-
-            fetch(baseUrl + '/api/activity', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            })
-            
-
-            this.props.navigation.navigate('Progress');
-            
-        }
-
     }
 
     change = (geolocation) => {
@@ -240,7 +191,7 @@ export default class FreeRunScreen extends Component {
                         <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Music')}>
                             <Icon name="ios-musical-notes" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
-                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng})}>
+                        <Button block style={styles.stickyBtn} onPress={this.startRun}>
                             <Text style={styles.btnText}>{!this.state.tracking ? "Start" : "Stop"}</Text>
                         </Button>
                         <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Activity Setup')}>

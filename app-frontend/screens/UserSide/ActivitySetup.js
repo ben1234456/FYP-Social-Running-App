@@ -4,6 +4,7 @@ import { Button, ListItem } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 //import { createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class ActivitySetup extends Component {
     constructor(props) {
@@ -13,6 +14,40 @@ export default class ActivitySetup extends Component {
             routeSelected: '',
             musicSelected: ''
         }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        //setting default activity type to walking
+        getActivityType = async () => {
+            try {
+                const value = await AsyncStorage.getItem('@activityType')
+                if(value !== null) {
+                    this.setState({
+                        activitySelected : capitalizeFirstLetter(value)
+                    });
+                }
+              } catch(e) {
+                // error reading value
+            }
+            
+        }
+
+        getActivityType();
+    }
+
+    setActivityType = async (activityTypeInput) => {
+       this.setState({
+           activitySelected : activityTypeInput,
+       })
+
+        try {
+            AsyncStorage.setItem('@activityType', activityTypeInput.toLowerCase())
+          } catch (e) {
+            // saving error
+          }
+        
     }
 
     render() {
@@ -25,7 +60,7 @@ export default class ActivitySetup extends Component {
                             <Picker
                                 selectedValue={this.state.activitySelected}
                                 backgroundColor={'white'}
-                                onValueChange={(itemValue) => this.setState({ activitySelected: itemValue })}>
+                                onValueChange={(itemValue) => this.setActivityType(itemValue)}>
 
                                 <Picker.Item label="Running" value="Running" color='#373737' />
                                 <Picker.Item label="Walking" value="Walking" color='#373737' />
