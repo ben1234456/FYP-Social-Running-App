@@ -148,6 +148,19 @@ class ForumPostController extends Controller
     public function update(Request $request, ForumPost $forumPost)
     {
         //
+        error_log("editinasdasdg");
+        // $forumPost->user_id = $request->user_id;
+        // $forumPost->title = $request->title;
+        // $forumPost->description = $request->description;
+        
+        $status = $forumPost->update($request->all());
+        
+        if($status){
+            return response()->json(['status' => 'success']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
     }
 
     /**
@@ -159,6 +172,7 @@ class ForumPostController extends Controller
     public function destroy(ForumPost $forumPost)
     {
         //
+        return $forumPost->delete();
     }
 
     public function showComments( $forumPost)
@@ -181,6 +195,28 @@ class ForumPostController extends Controller
         }
 
         return $comments->toJson();
+    }
+    public function deletePostById($id)
+    {
+    
+        $post=ForumPost::where("id",$id)->first();
+        $status = $post->delete();
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Buddy request succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
+
+    
+    }
+    public function editPost($id, Request $request){
+
+        error_log("editing");
+        ForumPost::where("id",$id)->update($request->all());
+
+        return response()->json(['status' => 'success']);
+        
     }
 }
 

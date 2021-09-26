@@ -312,17 +312,18 @@ export default class ForumScreen extends Component {
                                     <Text style={styles.description}>{item.description}</Text>
                                 </View>
                                 <View style={styles.proRow}>
-                                    <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
-                                    <View style={styles.likeNumContainer}>
-                                        <Text>{item.noLike}</Text>
+                                    <View style={styles.botIcon}>
+                                        <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                        <View style={styles.iconInfoContainer}>
+                                            <Text>{item.noLike}</Text>
+                                        </View>
                                     </View>
-                                    
-                                    {/* <View style={styles.proTitle}>
-                                    <Icon2 size={25} name='comment-outline' color='#808080' />
-                                </View>
-                                <View style={styles.icon}>
-                                    <Text>{item.comments}</Text>
-                                </View> */}
+                                    <View style={styles.botIcon}>
+                                        <Icon2 size={25} name='comment-outline' color='#808080' />
+                                        <View style={styles.iconInfoContainer}>
+                                            <Text>{item.comments}</Text>
+                                        </View>
+                                    </View>
                                 </View>
 
                                 {/* <View style={styles.proTitle}>
@@ -437,9 +438,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         padding:"2.5%",
     },
-    icon: {
     
-    },
     profilePicContainer:{
         flex:2,
         
@@ -448,8 +447,14 @@ export const styles = StyleSheet.create({
         flex:7,
         paddingLeft:"2.5%",
     },
-    likeNumContainer:{
+    iconInfoContainer:{
         marginLeft:"2.5%",
+    },
+    botIcon:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"flex-start",
+        flexDirection: "row",
     },
     iconContainer:{
         flex:1,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PostLike;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostLikeController extends Controller
@@ -36,6 +37,13 @@ class PostLikeController extends Controller
     public function store(Request $request)
     {
         //
+        error_log($request);
+        $like=new PostLike();
+        //reciever id
+        $like->user_id = $request->user_id;
+        //sender id
+        $like->post_id = $request->post_id;
+        return $like->save();
     }
 
     /**
@@ -81,5 +89,35 @@ class PostLikeController extends Controller
     public function destroy(PostLike $postLike)
     {
         //
+        error_log($postLike);
+        $status = $postLike->delete();
+
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Buddy request succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
+    }
+    public function searchLikeId($user, $post){
+
+        $likeGet=PostLike::where("post_id","=",$post)->where("user_id","=",$user)->get();
+
+        return $likeGet->toJson();
+    }
+    public function deleteLikeById($id)
+    {
+        
+
+        $like=PostLike::where("id",$id)->first();
+        $status = $like->delete();
+        if($status){
+            return response()->json(['status' => 'success', 'message' => 'Post like succesfully soft deleted']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
+
+    
     }
 }

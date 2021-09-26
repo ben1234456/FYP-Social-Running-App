@@ -146,3 +146,15 @@ Route::get('/route/routeList/details/{id}', [RouteController::class, "searchRout
 
 //get admin route list data
 Route::get('/admin/route/routeList', [RouteController::class, "searchAdminRoute"]);
+
+//get like id
+Route::get('/post/list/like/{user}/{post}', [PostLikeController::class, "searchLikeId"]);
+
+//custom delete like
+Route::delete('/post/list/like/{id}', [PostLikeController::class, "deleteLikeById"]);
+
+//custom delete post
+Route::delete('/post/list/user/{id}', [ForumPostController::class, "deletePostById"]);
+
+//custom edit post
+Route::put('/post/list/edit/{id}', [ForumPostController::class, "editPost"]);
