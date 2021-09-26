@@ -14,13 +14,15 @@ export default class eventDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user_id: props.route.params.user_id,
+            user_id: "",
             eventid: props.route.params.eventid,
             event_name:"",
             start_date:"",
             end_date:"",  
             registration_start_date:"",   
             registration_end_date:"",
+            event_distance:"",
+            desc:"",
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -42,6 +44,7 @@ export default class eventDetails extends Component {
                     end_date: data.end,  
                     registration_start_date:  data.registration_start,   
                     registration_end_date:  data.registration_end,
+                    desc:data.description
                 });
             })
             .catch((error) => {
@@ -254,23 +257,13 @@ export default class eventDetails extends Component {
                                 <Text style={styles.eventInfo}>Finished Medal</Text>
                             </View>
                         </View>
-                        <View style={styles.about}>
+                        <View >
                             
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>About</Text>
-                                <Text style={styles.aboutText}>Come join our Virtual Half Marathon!</Text>
+                                <Text style={styles.aboutText}>{this.state.desc}</Text>
                             </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>The entitlements would be mailed to your house:</Text>
-                            </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>1.Finisher Medal</Text>
-                                <Text style={styles.aboutText}>2.Dri-FIT Shirt</Text>
-                                <Text style={styles.aboutText}>3.Finished Tee (42km only)</Text>
-                            </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>Please be noted that the postage is within Malaysia only and entitlement will be posted from 12 August 2021.</Text>
-                            </View>
+                            
                             <View style={styles.about}>    
                                 <Text style={styles.aboutHeading}>REGISTRATION START DATE</Text>
                                 <Text style={styles.aboutText}>{this.state.registration_start_date} (GMT +8:00)</Text>
@@ -328,7 +321,7 @@ export const styles = StyleSheet.create({
     },
     infoRow:{
         flexDirection:"row",
-        margin:"10%",
+        padding:"5%",
     },
     eventTitle:{
         textAlign:"left",
@@ -352,7 +345,7 @@ export const styles = StyleSheet.create({
     },
     about:{
         flex:1,
-        margin:"5%",
+        padding:"5%",
     },
     aboutHeading:{
         fontWeight:"bold",
