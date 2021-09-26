@@ -206,7 +206,7 @@ export default class eventDetails extends Component {
             'You have successfully signed-up for the event',
             '',
             [
-              { text: "Ok", onPress: () => this.props.navigation.navigate('Coupon') }
+              { text: "Ok", onPress: () => this.props.navigation.navigate('app') }
             ]
         );   
     }
