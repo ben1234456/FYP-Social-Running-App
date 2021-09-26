@@ -18,6 +18,7 @@ class CreatePostLikesTable extends Migration
             $table->integer('post_id');
             $table->integer('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
