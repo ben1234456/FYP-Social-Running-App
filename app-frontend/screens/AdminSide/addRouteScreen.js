@@ -377,8 +377,9 @@ export default class addRouteScreen extends Component {
                             <Text style={styles.routeInfoTextSmall}>Distance (km)</Text>
                             <Text style={styles.routeInfoTextBig}>{this.state.distance}</Text>
                         </View>
-                        
-                        <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.create} />
+                        <View style={{ justifyContent: 'center' }}>
+                            <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.create} />
+                        </View>
                     </View>
                 </View>
             </View>
@@ -417,18 +418,16 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
     },
     botInfo:{
-        flex:2,
-        justifyContent:"center",
-        flexDirection: 'row',
-        paddingLeft:"10%",
-        paddingTop:"5%",
-        paddingBottom:"5%",
-        backgroundColor:"#ffffff",
+        flex: 2,
+        justifyContent: "center",
+        width: "100%",
+        paddingLeft: "10%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
+        backgroundColor: "#ffffff",
     },
     routeInfo:{
         flex:1,
-
- 
     },
     image: {
         width: "40%",
@@ -455,12 +454,9 @@ const styles = StyleSheet.create({
     },
     routeInfoBot:{
         flexDirection:"row",
-        flex:1,
-        marginTop:"5%",
     },
     routeInfoBotDetail:{
         flex:1,
-
     },
     routeInfoTextSmall:{
 
