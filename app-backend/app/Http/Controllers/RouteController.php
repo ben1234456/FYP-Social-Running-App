@@ -39,9 +39,6 @@ class RouteController extends Controller
         $route->check2_lat = $request->check2_lat;
         $route->check1_lng = $request->check1_lng;
         $route->check2_lng = $request->check2_lng;
-        $route->hour = $request->hour;
-        $route->minute = $request->minute;
-        $route->second = $request->second;
         $route->total_distance = $request->total_distance;
 
         return $route->save();
@@ -79,9 +76,6 @@ class RouteController extends Controller
         $route->check2_lat = $request->check2_lat;
         $route->check1_lng = $request->check1_lng;
         $route->check2_lng = $request->check2_lng;
-        $route->hour = $request->hour;
-        $route->minute = $request->minute;
-        $route->second = $request->second;
         $route->total_distance = $request->total_distance;
         return $route->save();
 
