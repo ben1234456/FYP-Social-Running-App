@@ -3,6 +3,7 @@ import { Platform, StyleSheet, TouchableOpacity, ScrollView, Text, View ,FlatLis
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 export default class TrainingRouteScreen extends Component {
     constructor(props) {
         super(props);
@@ -76,6 +77,7 @@ export default class TrainingRouteScreen extends Component {
                 </View>
             </View>
         </TouchableOpacity>
+    
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -84,6 +86,8 @@ export default class TrainingRouteScreen extends Component {
                 </View>
 
                 <View style={styles.view}>
+                    {this.state.loadedAdminData.length!=0
+                    ?
                     <View style={styles.cardView}>
                         <FlatList horizontal={false}
                             data={this.state.loadedAdminData}
@@ -91,6 +95,12 @@ export default class TrainingRouteScreen extends Component {
                             renderItem={item => this.renderItemComponent(item)}
                         /> 
                     </View>
+                    :
+                    <View style={styles.noData}>
+                        <Text>No routes avaliable now</Text>
+                    </View>
+                    }
+                    
                 </View>
 
                 <View style={styles.titleContainer}>
@@ -104,6 +114,8 @@ export default class TrainingRouteScreen extends Component {
                 
                 <View>
                     <View style={styles.view}>
+                        {this.state.loadedData.length
+                        ?
                         <View style={styles.cardView}>
                             <FlatList horizontal={false}
                                 data={this.state.loadedData}
@@ -112,6 +124,13 @@ export default class TrainingRouteScreen extends Component {
                             />
                             
                         </View>
+                        :
+                        <View style={styles.noData}>
+                            <Text>No routes avaliable now</Text>
+                        </View>
+                        }
+                        
+                        
                     </View>
                 </View>
             </ScrollView>
@@ -177,6 +196,12 @@ export const styles = StyleSheet.create({
     routeDuration: {
         color: '#808080',
     },
+    noData:{
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center",
+        padding:"5%",
+    }
     // title: {
     //     marginTop: 10,
     //     fontSize: 18,

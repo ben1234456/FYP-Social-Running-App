@@ -11,7 +11,8 @@ import MapViewDirections from 'react-native-maps-directions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { StackActions } from '@react-navigation/native';
+import TrainingRouteScreen from '../UserSide/TrainingRouteScreen';
 
 export default class addRouteScreen extends Component {
 
@@ -290,7 +291,7 @@ export default class addRouteScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        //this.props.navigation.navigate('calendarScreen');
+            this.props.navigation.navigate("TrainingRoutes");
     };
     
     render() {
@@ -360,53 +361,23 @@ export default class addRouteScreen extends Component {
                     <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} />
                 </MapView>
                 <View style={styles.botInfo}>
-                    <View style={styles.botTitleContainer}>
-                        <View style={styles.routeInfo}>
+                
+                    <View style={styles.routeInfoBot}>
+                        <View style={styles.routeInfoBotDetail}>
+                            <Text style={styles.routeInfoTextSmall}>Route name</Text>
+                            <View style={styles.timeContainer}>
                             <TextInput
                                 placeholder = "Enter Route Name"
                                 onChangeText={(name) => this.setState({routeName:name})}
                                 value = {this.state.routeName}
                             />
+                            </View>
                         </View>
-                        <View style={styles.icon}>
-                            <Icon name="mode-edit" size={20} color={'#8352F2'} onPress={this.create}/>
-                        </View>
-                    </View>
-                    
-                    <View style={styles.routeInfoBot}>
                         <View style={styles.routeInfoBotDetail}>
                             <Text style={styles.routeInfoTextSmall}>Distance (km)</Text>
                             <Text style={styles.routeInfoTextBig}>{this.state.distance}</Text>
                         </View>
-                        <View style={styles.routeInfoBotDetail}>
-                            <Text style={styles.routeInfoTextSmall}>Duration</Text>
-                            <View style={styles.timeContainer}>
-                                <TextInput 
-                                    style={styles.time}
-                                    keyboardType={"numeric"} 
-                                    value={this.state.hour} 
-                                    onChangeText={(hour) => this.setState({hour})}
-                                    maxLength={2} />
-                                <Text style={styles.timeSpacing}>
-                                    :
-                                </Text>
-                                <TextInput 
-                                    style={styles.time}
-                                    keyboardType={"numeric"} 
-                                    value={this.state.minute} 
-                                    onChangeText={(minute) => this.setState({minute})} 
-                                    maxLength={2}/>
-                                <Text style={styles.timeSpacing}>
-                                    :
-                                </Text>
-                                <TextInput 
-                                    style={styles.time}
-                                    keyboardType={"numeric"} 
-                                    value={this.state.second} 
-                                    onChangeText={(second) => this.setState({second})}
-                                    maxLength={2} />
-                            </View>
-                        </View>
+                        
                         <Icon name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.create} />
                     </View>
                 </View>
