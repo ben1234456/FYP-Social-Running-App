@@ -44,7 +44,7 @@ class UserEventController extends Controller
         $userevent->user_id = $request->user_id;
         $userevent->event_id = $request->event_id;
         $userevent->registration_dt = Carbon::now();
-        $userevent->distance = 5;
+        $userevent->distance = floatval($request->distance);
         $userevent->distance_ran = 0;
         $userevent->status = 'in-progress';
 

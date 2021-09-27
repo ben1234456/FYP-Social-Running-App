@@ -16,7 +16,7 @@ export default class eventDetails extends Component {
         this.state = {
             user_id: "",
             checked: 'first',
-            //eventid: props.route.params.eventid,
+            eventid: props.route.params.eventid,
             event_name: "",
             start_date: "",
             end_date: "",
@@ -24,36 +24,68 @@ export default class eventDetails extends Component {
             registration_end_date: "",
             event_distance: "",
             desc: "",
+            distanceSelected: "",
         };
 
-            //using localhost on IOS and using 10.0.2.2 on Android
-            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-            //get events' details
-            fetch(baseUrl + '/api/events/' + this.state.eventid, {
-                    headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
+        //get events' details
+        fetch(baseUrl + '/api/events/' + this.state.eventid, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            this.setState({
+                event_name: data.event_name,
+                start_date: data.start,
+                end_date: data.end,  
+                registration_start_date:  data.registration_start,   
+                registration_end_date:  data.registration_end,
+                desc:data.description
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+        //get event distances
+        fetch(baseUrl + '/api/events/'  + this.state.eventid + '/distance', {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get event distances + fee')
+            this.setState({
+                event_distance: data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+        const getData = async () => {
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
                     this.setState({
-                        event_name: data.event_name,
-                        start_date: data.start,
-                        end_date: data.end,  
-                        registration_start_date:  data.registration_start,   
-                        registration_end_date:  data.registration_end,
-                        desc:data.description
+                        user_id: user.id,
                     });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                }
 
-            //get event distances
-            fetch(baseUrl + '/api/events/'  + this.state.eventid + '/distance', {
+            } catch (e) {
+                console.log(e);
+            }
+
+            fetch('http://192.168.0.192:8000/api/events', {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
@@ -61,112 +93,81 @@ export default class eventDetails extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Successfully get event distances + fee')
+                console.log('Success')
                 this.setState({
-                    event_distance: data
+                    eventdata: data
                 });
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-                const getData = async () => {
-                    try {
-                        const userJson = await AsyncStorage.getItem('@userJson')
-                        if (userJson !== null) {
-                            const user = JSON.parse(userJson);
-                            this.setState({
-                                user_id: user.id,
-                            });
-                        }
-
-                    } catch (e) {
-                        console.log(e);
-                    }
-
-                    fetch('http://192.168.0.192:8000/api/events', {
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Success')
-                        this.setState({
-                            eventdata: data
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                }
-
-                getData();
-
         }
 
-        formatDateTime = (sDate,FormatType) => {
-            var lDate = new Date(sDate)
+        getData();
 
-            var month=new Array(12);
-            month[0]="January";
-            month[1]="February";
-            month[2]="March";
-            month[3]="April";
-            month[4]="May";
-            month[5]="June";
-            month[6]="July";
-            month[7]="August";
-            month[8]="September";
-            month[9]="October";
-            month[10]="November";
-            month[11]="December";
+    }
 
-            var weekday=new Array(7);
-            weekday[0]="Sunday";
-            weekday[1]="Monday";
-            weekday[2]="Tuesday";
-            weekday[3]="Wednesday";
-            weekday[4]="Thursday";
-            weekday[5]="Friday";
-            weekday[6]="Saturday";
+    formatDateTime = (sDate,FormatType) => {
+        var lDate = new Date(sDate)
 
-            var hh = lDate.getHours() < 10 ? '0' + 
-                lDate.getHours() : lDate.getHours();
-            var mi = lDate.getMinutes() < 10 ? '0' + 
-                lDate.getMinutes() : lDate.getMinutes();
-            var ss = lDate.getSeconds() < 10 ? '0' + 
-                lDate.getSeconds() : lDate.getSeconds();
+        var month=new Array(12);
+        month[0]="January";
+        month[1]="February";
+        month[2]="March";
+        month[3]="April";
+        month[4]="May";
+        month[5]="June";
+        month[6]="July";
+        month[7]="August";
+        month[8]="September";
+        month[9]="October";
+        month[10]="November";
+        month[11]="December";
 
-            var d = lDate.getDate();
-            var dd = d < 10 ? '0' + d : d;
-            var yyyy = lDate.getFullYear();
-            var mon = eval(lDate.getMonth()+1);
-            var mm = (mon<10?'0'+mon:mon);
-            var monthName=month[lDate.getMonth()];
-            var weekdayName=weekday[lDate.getDay()];
+        var weekday=new Array(7);
+        weekday[0]="Sunday";
+        weekday[1]="Monday";
+        weekday[2]="Tuesday";
+        weekday[3]="Wednesday";
+        weekday[4]="Thursday";
+        weekday[5]="Friday";
+        weekday[6]="Saturday";
 
-            if(FormatType==1) {
-               return mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi;
-            } else if(FormatType==2) {
-               return weekdayName+', '+monthName+' '+ 
-                    dd +', ' + yyyy;
-            } else if(FormatType==3) {
-               return mm+'/'+dd+'/'+yyyy; 
-            } else if(FormatType==4) {
-               var dd1 = lDate.getDate();    
-               return dd1+'-'+Left(monthName,3)+'-'+yyyy;    
-            } else if(FormatType==5) {
-                return mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+ss;
-            } else if(FormatType == 6) {
-                return mon + '/' + d + '/' + yyyy + ' ' + 
-                    hh + ':' + mi + ':' + ss;
-            } else if(FormatType == 7) {
-                return  dd + '-' + monthName.substring(0,3) + 
-                    '-' + yyyy + ' ' + hh + ':' + mi + ':' + ss;
-            }
+        var hh = lDate.getHours() < 10 ? '0' + 
+            lDate.getHours() : lDate.getHours();
+        var mi = lDate.getMinutes() < 10 ? '0' + 
+            lDate.getMinutes() : lDate.getMinutes();
+        var ss = lDate.getSeconds() < 10 ? '0' + 
+            lDate.getSeconds() : lDate.getSeconds();
+
+        var d = lDate.getDate();
+        var dd = d < 10 ? '0' + d : d;
+        var yyyy = lDate.getFullYear();
+        var mon = eval(lDate.getMonth()+1);
+        var mm = (mon<10?'0'+mon:mon);
+        var monthName=month[lDate.getMonth()];
+        var weekdayName=weekday[lDate.getDay()];
+
+        if(FormatType==1) {
+            return mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi;
+        } else if(FormatType==2) {
+            return weekdayName+', '+monthName+' '+ 
+                dd +', ' + yyyy;
+        } else if(FormatType==3) {
+            return mm+'/'+dd+'/'+yyyy; 
+        } else if(FormatType==4) {
+            var dd1 = lDate.getDate();    
+            return dd1+'-'+Left(monthName,3)+'-'+yyyy;    
+        } else if(FormatType==5) {
+            return mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+ss;
+        } else if(FormatType == 6) {
+            return mon + '/' + d + '/' + yyyy + ' ' + 
+                hh + ':' + mi + ':' + ss;
+        } else if(FormatType == 7) {
+            return  dd + '-' + monthName.substring(0,3) + 
+                '-' + yyyy + ' ' + hh + ':' + mi + ':' + ss;
         }
+    }
 
         // static getDerivedStateFromProps(props, state) {
 
@@ -177,18 +178,47 @@ export default class eventDetails extends Component {
         //     return null;
         // }
 
+    validation = () => {
+        if (this.state.distanceSelected){
+            return true
+        } 
 
-        renderItemComponent = (data) =>
-            <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
+        else{
 
-        register = () =>{
+            Alert.alert(
+                "Please select distance",
+                '',
+                [
+                  { text: "Ok" }
+                ]
+            );
 
+            return false
+        }
+    }
+
+    renderDistanceDetails = (data) =>
+        <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
+
+    renderDistanceSelection = (data) =>
+    <View style={{ flexDirection: 'row' }}>
+        <Text style={{ marginTop: 8, flex: 1 }}>{data.item.distance}km</Text>
+        <RadioButton 
+            value={data.item.distance} 
+            color='#8352F2'
+        />
+    </View>
+
+    register = () =>{
+
+        if (this.validation()){
             //using localhost on IOS and using 10.0.2.2 on Android
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
             const data = {
                 user_id: String(this.state.user_id),
                 event_id: String(this.state.eventid),
+                distance: this.state.distanceSelected,
 
             };
 
@@ -205,9 +235,11 @@ export default class eventDetails extends Component {
                 'You have successfully signed-up for the event',
                 '',
                 [
-                  { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('Coupon', {'user_id': this.state.user_id })) }
+                    { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('Coupon', {'user_id': this.state.user_id })) }
                 ]
-            );   
+            );
+        }
+           
     }
 
     render() {
@@ -246,7 +278,7 @@ export default class eventDetails extends Component {
                                 <FlatList
                                     data={this.state.event_distance}
                                     keyExtractor={item => item.id.toString()}
-                                //renderItem={item => this.renderItemComponent(item)}
+                                    renderItem={item => this.renderDistanceDetails(item)}
                                 />
                             </View>
                         </View>
@@ -281,17 +313,14 @@ export default class eventDetails extends Component {
                                 <Text style={styles.aboutHeading}>DISTANCE</Text>
                                 <View style={styles.infoColumnInfo}>
                                     <RadioButton.Group
-                                        onValueChange={checked => this.setState({ checked })}
-                                        value={this.state.checked}
+                                        onValueChange={newDistance => this.setState({ distanceSelected:newDistance })}
+                                        value={this.state.distanceSelected}
                                     >
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ marginTop: 8, flex: 1 }}>5km</Text>
-                                            <RadioButton value="first" color='#8352F2' />
-                                        </View>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ marginTop: 8, flex: 1 }}>10km</Text>
-                                            <RadioButton value="second" color='#8352F2' />
-                                        </View>
+                                        <FlatList
+                                            data={this.state.event_distance}
+                                            keyExtractor={item => item.id.toString()}
+                                            renderItem={item => this.renderDistanceSelection(item)}
+                                        />
                                     </RadioButton.Group>
                                 </View>
                             </View>
