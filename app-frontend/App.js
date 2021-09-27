@@ -57,6 +57,7 @@ import BuddiesRequestList from './screens/UserSide/BuddiesRequestList';
 import adminEventsScreen from "./screens/AdminSide/adminEventsScreen";
 import adminUpcomingEventsScreen from "./screens/AdminSide/adminUpcomingEventsScreen";
 import userUpcomingEventScreen from "./screens/UserSide/upcomingEventScreen"
+import ChangePasswordScreen from './screens/UserSide/ChangePasswordScreen';
 
 
 const Stack = createStackNavigator();
@@ -216,11 +217,11 @@ export default class App extends Component {
                         initial={false}
                         options={{
                             headerTitleAlign: 'center', title: 'Add Route', headerRight: () =>
-                            <View style={styles.addRouteHeaderContainer}>
-                                <Text style={styles.addRouteHeaderText}>SAVE</Text>
-                            </View>   
+                                <View style={styles.addRouteHeaderContainer}>
+                                    <Text style={styles.addRouteHeaderText}>SAVE</Text>
+                                </View>
                         }}
-                        
+
                     />
                     <Stack.Screen
                         name="editProfileScreen"
@@ -297,7 +298,7 @@ export default class App extends Component {
                         initial={false} options={{ headerShown: false }}
                         options={{ headerTitleAlign: 'center', title: 'Routes' }}
                     />
-                    
+
                     <Stack.Screen
                         name="editRouteScreen"
                         component={editRouteScreen}
@@ -447,12 +448,12 @@ export default class App extends Component {
                         options={{ headerTitleAlign: 'center', title: 'All Events' }}
                     />
 
-
-
-                  
-
-
-                    
+                    <Stack.Screen
+                        name="ChangePasswordScreen"
+                        component={ChangePasswordScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Change Password' }}
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         );
@@ -471,12 +472,12 @@ export const styles = StyleSheet.create({
     headerText: {
         fontSize: 15,
     },
-    addRouteHeaderContainer:{
-        justifyContent:"center",
-        alignItems:"center",
-        marginRight:15,
+    addRouteHeaderContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 15,
     },
-    addRouteHeaderText:{
-        fontSize:15,
+    addRouteHeaderText: {
+        fontSize: 15,
     },
 });

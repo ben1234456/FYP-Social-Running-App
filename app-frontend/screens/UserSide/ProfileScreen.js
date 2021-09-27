@@ -89,7 +89,7 @@ export default class App extends Component {
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
 
-                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
+                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('ChangePasswordScreen')}>
                         <Text style={styles.btnText}>Change password</Text>
                     </Button>
 
