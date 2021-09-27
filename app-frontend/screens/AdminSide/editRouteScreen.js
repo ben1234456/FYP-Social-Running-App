@@ -23,15 +23,14 @@ export default class editRouteScreen extends Component {
             loadedData: "",
             data: "",
             //id:props.route.params.id,
+            id:1,
             routeName: "",
             distance: "",
             errorMessage: "",
             latitude: 0,
             longitude: 0,
             totaldistance: 0,
-            hour: "00",
-            minute: "00",
-            second: "00",
+            ownerId:"",
             defaultMarker: {
                 title: "You are here",
                 coordinates: {
@@ -126,27 +125,17 @@ export default class editRouteScreen extends Component {
                 .then(data => {
                     console.log('Successfully get user route data testing')
                     console.log(data)
-                    changeToTwoTimeDecimal = (time) => {
-                        if (time.length == 1) {
-                            return "0" + time;
-                        }
-                        else {
-                            return time;
-                        }
-                    };
-                    const convertedHour = changeToTwoTimeDecimal((data[0].hour).toString());
-                    const convertedMin = changeToTwoTimeDecimal((data[0].minute).toString());
-                    const convertedSec = changeToTwoTimeDecimal((data[0].second).toString());
+                    
+                    
                     this.setState({
                         routeName: data[0].name,
                         eventName: data[0].title,
+                        ownerId:data[0].userID,
                         startMarker: { title: "Starting point", selected: true, coordinate: { latitude: parseFloat(data[0].start_lat), longitude: parseFloat(data[0].start_lng) } },
                         endMarker: { title: "Ending point", selected: true, coordinate: { latitude: parseFloat(data[0].end_lat), longitude: parseFloat(data[0].end_lng) } },
                         loadedData: data,
                         data: data[0],
-                        hour: convertedHour,
-                        minute: convertedMin,
-                        second: convertedSec,
+                        
                     });
 
                     if (data[0].check1_lat != null) {
@@ -385,9 +374,7 @@ export default class editRouteScreen extends Component {
             start_lng: this.state.startMarker.coordinate.longitude,
             end_lat: this.state.endMarker.coordinate.latitude,
             end_lng: this.state.endMarker.coordinate.longitude,
-            hour: this.state.hour,
-            minute: this.state.minute,
-            second: this.state.second,
+            
             total_distance: this.state.distance,
             check1_lat: this.checkSelected(this.state.checkMarker1.coordinate.latitude, this.state.checkMarker1.selected),
             check1_lng: this.checkSelected(this.state.checkMarker1.coordinate.longitude, this.state.checkMarker1.selected),
@@ -397,6 +384,41 @@ export default class editRouteScreen extends Component {
 
         fetch(baseUrl + '/api/route/' + this.state.id, {
             method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                //success
+                console.log(data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+    add = () => {
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        const data = {
+            userID: this.state.userID,
+            name: this.state.routeName,
+            start_lat: this.state.startMarker.coordinate.latitude,
+            start_lng: this.state.startMarker.coordinate.longitude,
+            end_lat: this.state.endMarker.coordinate.latitude,
+            end_lng: this.state.endMarker.coordinate.longitude,
+            
+            total_distance: this.state.distance,
+            check1_lat: this.checkSelected(this.state.checkMarker1.coordinate.latitude, this.state.checkMarker1.selected),
+            check1_lng: this.checkSelected(this.state.checkMarker1.coordinate.longitude, this.state.checkMarker1.selected),
+            check2_lat: this.checkSelected(this.state.checkMarker2.coordinate.latitude, this.state.checkMarker2.selected),
+            check2_lng: this.checkSelected(this.state.checkMarker2.coordinate.latitude, this.state.checkMarker2.selected),
+        };
+
+        fetch(baseUrl + '/api/route', {
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -504,11 +526,18 @@ export default class editRouteScreen extends Component {
                         <View style={styles.routeInfoBotDetail}>
                             <Text style={styles.routeInfoTextSmall}>Route name</Text>
                             <View style={styles.timeContainer}>
+                                {this.state.ownerId==this.state.userID
+                                ?
                                 <TextInput
                                     placeholder="Enter Route Name"
                                     onChangeText={(name) => this.setState({ routeName: name })}
                                     value={this.state.routeName}
+                                    style={{borderBottomWidth:1}}
                                 />
+                                :
+                                <Text>{this.state.routeName}</Text>
+                                }
+                                
                             </View>
                         </View>
                         <View style={styles.routeInfoBotDetail}>
@@ -516,7 +545,12 @@ export default class editRouteScreen extends Component {
                             <Text style={styles.routeInfoTextBig}>{this.state.distance}</Text>
                         </View>
                         <View style={{ justifyContent: 'center' }}>
-                            <Icon2 name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.create} />
+                            {this.state.ownerId==this.state.userID
+                            ?
+                            <Icon2 name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.save} />
+                            :
+                            <Icon2 name="save-sharp" style={{ marginRight: '10%', }} size={30} color={'#8352F2'} onPress={this.add} />
+                            }
                         </View>
                     </View>
                 </View>

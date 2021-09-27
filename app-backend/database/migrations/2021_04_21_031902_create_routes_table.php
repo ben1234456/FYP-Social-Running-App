@@ -25,9 +25,6 @@ class CreateRoutesTable extends Migration
             $table->decimal('check1_lng', 11, 8)->nullable();
             $table->decimal('check2_lat', 11, 8)->nullable();
             $table->decimal('check2_lng', 11, 8)->nullable();
-            $table->integer('hour');
-            $table->integer('minute');
-            $table->integer('second');
             $table->decimal('total_distance');
             $table->timestamps();
             $table->softDeletes();
