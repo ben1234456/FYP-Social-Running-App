@@ -118,6 +118,9 @@ export default class calendarScreen extends Component {
                 futureScrollRange={200}
 
                 theme={{
+                    selectedDotColor:"#00a6ff",
+                    selectedDayBackgroundColor:"#00a6ff",
+                    dotColor:"transparent",
                     agendaDayTextColor: '#424242',
                     agendaDayNumColor: '#424242',
                     agendaTodayColor: 'red',
