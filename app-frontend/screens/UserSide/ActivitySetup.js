@@ -23,31 +23,31 @@ export default class ActivitySetup extends Component {
         getActivityType = async () => {
             try {
                 const value = await AsyncStorage.getItem('@activityType')
-                if(value !== null) {
+                if (value !== null) {
                     this.setState({
-                        activitySelected : capitalizeFirstLetter(value)
+                        activitySelected: capitalizeFirstLetter(value)
                     });
                 }
-              } catch(e) {
+            } catch (e) {
                 // error reading value
             }
-            
+
         }
 
         getActivityType();
     }
 
     setActivityType = async (activityTypeInput) => {
-       this.setState({
-           activitySelected : activityTypeInput,
-       })
+        this.setState({
+            activitySelected: activityTypeInput,
+        })
 
         try {
             AsyncStorage.setItem('@activityType', activityTypeInput.toLowerCase())
-          } catch (e) {
+        } catch (e) {
             // saving error
         }
-        
+
     }
 
     render() {
@@ -57,16 +57,17 @@ export default class ActivitySetup extends Component {
                     <View style={styles.activityRow}>
                         <View style={styles.activityInfo}>
                             <Text style={styles.activityType}>Choose your Activity Type</Text>
-                            <Picker
-                                selectedValue={this.state.activitySelected}
-                                backgroundColor={'white'}
-                                onValueChange={(itemValue) => this.setActivityType(itemValue)}>
+                            <View style={styles.picker}>
+                                <Picker
+                                    selectedValue={this.state.activitySelected}
+                                    onValueChange={(itemValue) => this.setActivityType(itemValue)}>
 
-                                <Picker.Item label="Running" value="Running" color='#373737' />
-                                <Picker.Item label="Walking" value="Walking" color='#373737' />
-                                <Picker.Item label="Cycling" value="Cycling" color='#373737' />
-                                <Picker.Item label="Hiking" value="Hiking" color='#373737' />
-                            </Picker>
+                                    <Picker.Item label="Running" value="Running" color='#373737' />
+                                    <Picker.Item label="Walking" value="Walking" color='#373737' />
+                                    <Picker.Item label="Cycling" value="Cycling" color='#373737' />
+                                    <Picker.Item label="Hiking" value="Hiking" color='#373737' />
+                                </Picker>
+                            </View>
                         </View>
                         {/* <View style={styles.editIcon}>
                             <Icon name="mode-edit" size={20} color={'#8352F2'} />
@@ -76,29 +77,31 @@ export default class ActivitySetup extends Component {
                     <View style={styles.activityRow}>
                         <View style={styles.activityInfo}>
                             <Text style={styles.activityType}>Choose your Route</Text>
-                            <Picker
-                                selectedValue={this.state.routeSelected}
-                                backgroundColor={'white'}
-                                onValueChange={(itemValue) => this.setState({ routeSelected: itemValue })}>
+                            <View style={styles.picker}>
+                                <Picker
+                                    selectedValue={this.state.routeSelected}
+                                    onValueChange={(itemValue) => this.setState({ routeSelected: itemValue })}>
 
-                                <Picker.Item label="Route1" value="Route1" color='#373737' />
-                                <Picker.Item label="Route2" value="Route2" color='#373737' />
-                                <Picker.Item label="Route3" value="Route3" color='#373737' />
-                                <Picker.Item label="Route4" value="Route4" color='#373737' />
-                            </Picker>
+                                    <Picker.Item label="Route1" value="Route1" color='#373737' />
+                                    <Picker.Item label="Route2" value="Route2" color='#373737' />
+                                    <Picker.Item label="Route3" value="Route3" color='#373737' />
+                                    <Picker.Item label="Route4" value="Route4" color='#373737' />
+                                </Picker>
+                            </View>
                         </View>
                     </View>
 
                     <View style={styles.activityRow}>
                         <View style={styles.activityInfo}>
                             <Text style={styles.activityType}>Choose a Music Player</Text>
-                            <Picker
-                                selectedValue={this.state.musicSelected}
-                                backgroundColor={'white'}
-                                onValueChange={(itemValue) => this.setState({ musicSelected: itemValue })}>
+                            <View style={styles.picker}>
+                                <Picker
+                                    selectedValue={this.state.musicSelected}
+                                    onValueChange={(itemValue) => this.setState({ musicSelected: itemValue })}>
 
-                                <Picker.Item label="Spotify" value="Spotify" color='#373737' />
-                            </Picker>
+                                    <Picker.Item label="Spotify" value="Spotify" color='#373737' />
+                                </Picker>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -146,8 +149,9 @@ export const styles = StyleSheet.create({
         right: 30,
     },
     picker: {
-        backgroundColor: 'white',
-        flex: 1,
+        backgroundColor: '#ECECEC',
+        borderRadius: 15,
+        marginTop: 15,
     },
 });
 
