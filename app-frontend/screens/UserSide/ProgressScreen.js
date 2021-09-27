@@ -149,7 +149,7 @@ export default class App extends Component {
                     </TouchableOpacity> */}
                 </View>
 
-                <Divider style={styles.divider} />
+                {/* <Divider style={styles.divider} />
 
                 <View style={styles.contentContainer}>
                     <Text style={styles.statis}>Statistics</Text>
@@ -212,7 +212,7 @@ export default class App extends Component {
                         <Text style={styles.sections}>Calories Burned</Text>
                         <Text style={styles.disValue}>100.55</Text>
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
         );
     }
