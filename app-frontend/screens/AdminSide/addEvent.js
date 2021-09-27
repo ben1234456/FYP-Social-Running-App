@@ -31,25 +31,6 @@ export default class addEvent extends Component {
         }
 
     }
-    chooseImage = async () => {
-        try {
-            permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (permissionResult.granted === false) {
-                alert("Permission to access camera roll is required!");
-                return;
-            }
-            pickerResult = await ImagePicker.launchImageLibraryAsync();
-            if (pickerResult.cancelled === true) {
-                return;
-            }
-            if (pickerResult.uri !== null) {
-                this.setState({ imageSource: { uri: pickerResult.uri } });
-            }
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }
     validation = () => {
 
         var empty = [];
@@ -292,17 +273,8 @@ export default class addEvent extends Component {
         return (
 
             <ScrollView style={styles.container}>
-                <TouchableOpacity onPress={this.chooseImage} style={styles.cameraBack}>
-                    <View style={(this.state.imageSource == addImage) ? styles.selectPhotoTop : styles.selectedPhotoTop}>
-                        <Text style={(this.state.imageSource == addImage) ? styles.selectPhotoTopInfo : styles.selectedPhotoTopInfo}>Take / Choose a photo</Text>
-                            <Image source={this.state.imageSource} style={(this.state.imageSource == addImage) ? styles.camera : styles.selectedImage} />
-                    </View>
-                </TouchableOpacity>
-
                 <View style={styles.contentContainer}>
-
                     <View>
-
                         <View>
                             <Text style={styles.botTitle}>Event Name</Text>
                         </View>
@@ -341,15 +313,11 @@ export default class addEvent extends Component {
                         return value
                         })}
                         
-                        <View >
-                  
+                        <View>
                             <Button style={styles.addRow} title='Add' onPress={() => this.addTextInput(this.state.textInput.length)}>
                                 <Text style={{ color: 'white', fontSize: 14 }}>Add row</Text>
-                            </Button>
-                           
-                              
+                            </Button>     
                         </View>
-                        
                         
                         <View>
                             <Text style={styles.botTitle}>Registration Start Date</Text>
