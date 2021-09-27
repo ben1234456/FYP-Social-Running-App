@@ -16,8 +16,8 @@ export default class ForumDetailsScreen extends Component {
         this.state = {
             user_id: "",
             id: "",
-            // post_id: props.route.params.postid,
-            post_id: 1,
+            post_id: props.route.params.postid,
+            //post_id: 1,
             name: "",
             title: "",
             description: "",
