@@ -101,7 +101,7 @@ class PostLikeController extends Controller
     }
     public function searchLikeId($user, $post){
 
-        $likeGet=PostLike::where("post_id","=",$post)->where("user_id","=",$user)->get();
+        $likeGet=PostLike::where("post_id","=",$post)->where("user_id","=",$user)->first();
 
         return $likeGet->toJson();
     }
