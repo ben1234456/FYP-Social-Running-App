@@ -27,51 +27,53 @@ export default class addRouteScreen extends Component {
             latitude:0,
             longitude:0,
             totaldistance:0,
-            hour:"00",
-            minute:"00",
-            second:"00",
-            defaultMarker:{
-                title:"You are here",
-                coordinates:{
-                latitude:0,
-                longitude:0,
-                }
-            },
-            startMarker:{
-                title:"Starting point",
-                coordinate:{
-                    latitude:0,
-                    longitude:0,
-                },
-                selected:false,
+            start: null,
+            end:null,
+            check1:null,
+            check2:null,
+            def:null,
+            // defaultMarker:{
+            //     title:"You are here",
+            //     coordinates:{
+            //     latitude:0,
+            //     longitude:0,
+            //     }
+            // },
+            // startMarker:{
+            //     title:"Starting point",
+            //     coordinate:{
+            //         latitude:0,
+            //         longitude:0,
+            //     },
+            //     selected:false,
                 
-            },
+            // },
         
-            endMarker:{
-                title:"Ending point",
-                coordinate:{
-                    latitude:0,
-                    longitude:0,
-                },
-                selected:false,
+            // endMarker:{
+            //     title:"Ending point",
+            //     coordinate:{
+            //         latitude:0,
+            //         longitude:0,
+            //     },
+            //     selected:false,
                 
-            },
-            checkMarker1:{
-                title:"Checkpoint 1",
-                coordinate:{
-                    latitude:0,
-                    longitude:0,
-                },    
-                selected:false,
-            },         
-            checkMarker2:{
-                title:"Checkpoint 2",
-                coordinate:{
-                    latitude:0,
-                    longitude:0,
-                },    
-                selected:false,
-            }, 
+            // },
+            // checkMarker1:{
+            //     title:"Checkpoint 1",
+            //     coordinate:{
+            //         latitude:0,
+            //         longitude:0,
+            //     },    
+            //     selected:false,
+            // },         
+            // checkMarker2:{
+            //     title:"Checkpoint 2",
+            //     coordinate:{
+            //         latitude:0,
+            //         longitude:0,
+            //     },    
+            //     selected:false,
+            // }, 
 
             checkPointArray:[],
 
@@ -153,13 +155,15 @@ export default class addRouteScreen extends Component {
             longitudeDelta: 0.05,
           })
         //set all marker to user current location
-        this.setState({ defaultMarker:{title:"You are here",coordinates:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ startMarker:{title:"Starting point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ endMarker:{title:"Ending point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ checkMarker1:{title:"Checkpoint 1",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ checkMarker2:{title:"Checkpoint 2",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        this.setState({ startCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
-        this.setState({ endCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
+        this.setState({
+            def:{ title:"You are here",coordinate:{latitude: currentLatitude,longitude: currentLongitude}},
+        });        
+        // this.setState({ startMarker:{title:"Starting point",coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        // this.setState({ endMarker:{title:"Ending point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        // this.setState({ checkMarker1:{title:"Checkpoint 1",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        // this.setState({ checkMarker2:{title:"Checkpoint 2",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
+        // this.setState({ startCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
+        // this.setState({ endCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
     };
     
     changeLocation=(point)=>{
@@ -168,12 +172,12 @@ export default class addRouteScreen extends Component {
         let tempoLat=point.nativeEvent.coordinate.latitude || this.state.latitude;
         let tempoLong=point.nativeEvent.coordinate.longitude || this.state.longitude;
 
-        console.log(tempoLat);
+        // console.log(tempoLat);
 
-        this.setState({
-            latitude: tempoLat,
-            longitude: tempoLong,
-        });
+        // this.setState({
+        //     latitude: tempoLat,
+        //     longitude: tempoLong,
+        // });
 
         
         //get the address of the latitude and longitude
@@ -189,43 +193,64 @@ export default class addRouteScreen extends Component {
                 if (resJson && resJson.Response && resJson.Response.View && resJson.Response.View[0] && resJson.Response.View[0].Result && resJson.Response.View[0].Result[0]) {
                     if(this.state.selection==0){
                         this.setState({ startingPoint: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ startMarker:{title:"Starting point",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
-                        
+                        // this.state.markers.push(this.state.startMarker);
+                        this.setState({
+                            start:{ title:"Starting point",coordinate:{latitude: latitude,longitude: longitude},selected:true},
+
+                        });
+                        //this.setState({ checkMarker1:{title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        //{ title:"Starting point",pinColor:"#0000FF",coordinate:{latitude: latitude,longitude: longitude}};
+
+
                     }
                     if(this.state.selection==1){
                         this.setState({ checkPoint1: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ checkMarker1:{title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({
+                            check1:{ title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true},
+
+                        });
+                        //this.setState({ checkMarker1:{title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
-                    if(this.state.selection==2 && this.state.checkMarker1.selected==true){
+                    if(this.state.selection==2 && this.state.check1!=null){
                         this.setState({ checkPoint2: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ checkMarker2:{title:"Checkpoint 2",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({
+                            check2:{ title:"Checkpoint 2",coordinate:{latitude: latitude,longitude: longitude},selected:true},
+
+                        });
+                        //this.setState({ checkMarker2:{title:"Checkpoint 2",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
                     if(this.state.selection==3){
                         this.setState({ endingPoint: resJson.Response.View[0].Result[0].Location.Address.Label});
-                        this.setState({ endMarker:{title:"Ending point",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
+                        this.setState({
+                            end:{ title:"Ending point",coordinate:{latitude: latitude,longitude: longitude},selected:true},
+
+                        });
+                        //this.setState({ endMarker:{title:"Ending point",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                     }
                     console.log(resJson.Response.View[0].Result[0].Location.Address.Label)
                 }
                 //show the direction if start and end point was chosen
-        
-                if(this.state.startMarker.selected==true && this.state.endMarker.selected==true){
-                    this.setState({ startCoor:{latitude: this.state.startMarker.coordinate.latitude,longitude: this.state.startMarker.coordinate.longitude}});
-                    this.setState({ endCoor:{latitude: this.state.endMarker.coordinate.latitude,longitude: this.state.endMarker.coordinate.longitude}});
+                if(this.state.start!=null && this.state.end!=null){
+                    // this.setState({ startCoor:{latitude: this.state.start.coordinate.latitude,longitude: this.state.start.coordinate.longitude}});
+                    // this.setState({ endCoor:{latitude: this.state.end.coordinate.latitude,longitude: this.state.end.coordinate.longitude}});
                     //add checkpoint if selected
-                    if(this.state.checkMarker1.selected==true){
+                    if(this.state.check1!=null){
                         //set first checkpoint
                         let tempoArray=[{
-                            latitude: this.state.checkMarker1.coordinate.latitude,
-                            longitude: this.state.checkMarker1.coordinate.longitude,
+                            latitude: this.state.check1.coordinate.latitude,
+                            longitude: this.state.check1.coordinate.longitude,
                           }]
+                          console.log("tempoArray");
+                        console.log(tempoArray);
                         //set second checkpoint if selected
-                        if(this.state.checkMarker2.selected==true){
+                        if(this.state.check2!=null){
                             tempoArray.push({
-                                latitude: this.state.checkMarker2.coordinate.latitude,
-                                longitude: this.state.checkMarker2.coordinate.longitude,
+                                latitude: this.state.check2.coordinate.latitude,
+                                longitude: this.state.check2.coordinate.longitude,
                               })
                         }
-
+                        console.log("tempoArray");
+                        console.log(tempoArray);
                         this.setState({checkPointArray:tempoArray});
                     }
                 }
@@ -257,23 +282,21 @@ export default class addRouteScreen extends Component {
     }
     //save route in database
     create=()=>{
+        
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         
         const data = {
             userID: this.state.userID,
             name:this.state.routeName,
-            start_lat:this.state.startMarker.coordinate.latitude,
-            start_lng:this.state.startMarker.coordinate.longitude,
-            end_lat:this.state.endMarker.coordinate.latitude,
-            end_lng:this.state.endMarker.coordinate.longitude,
-            hour:this.state.hour,
-            minute:this.state.minute,
-            second:this.state.second,
+            start_lat:this.state.start.coordinate.latitude,
+            start_lng:this.state.start.coordinate.longitude,
+            end_lat:this.state.end.coordinate.latitude,
+            end_lng:this.state.end.coordinate.longitude,
             total_distance:this.state.distance,
-            check1_lat:this.checkSelected(this.state.checkMarker1.coordinate.latitude,this.state.checkMarker1.selected),
-            check1_lng:this.checkSelected(this.state.checkMarker1.coordinate.longitude,this.state.checkMarker1.selected),
-            check2_lat:this.checkSelected(this.state.checkMarker2.coordinate.latitude,this.state.checkMarker2.selected),
-            check2_lng:this.checkSelected(this.state.checkMarker2.coordinate.latitude,this.state.checkMarker2.selected),
+            check1_lat:this.checkSelected(this.state.check1.coordinate.latitude,this.state.check1.selected),
+            check1_lng:this.checkSelected(this.state.check1.coordinate.longitude,this.state.check1.selected),
+            check2_lat:this.checkSelected(this.state.check2.coordinate.latitude,this.state.check2.selected),
+            check2_lng:this.checkSelected(this.state.check2.coordinate.longitude,this.state.check2.selected),
         };
         fetch( baseUrl + '/api/route', {
             method: 'POST',
@@ -348,17 +371,41 @@ export default class addRouteScreen extends Component {
                     </View>
                 </View>
                 <MapView onPress={this.changeLocation.bind(this)} style={styles.map} ref={this.state.reference} >
-                    <Marker coordinate={this.state.startMarker.coordinate} pinColor={"#0000FF"} title={this.state.startMarker.title}/>
+                    {this.state.def && 
+                    <Marker coordinate={this.state.def.coordinate} title={this.state.def.title}/>
+                    }
+                    {this.state.start && 
+                    <Marker coordinate={this.state.start.coordinate} pinColor={"#0000FF"} title={this.state.start.title}/>
+                    }
+                    {this.state.check1 && 
+                    <Marker coordinate={this.state.check1.coordinate} pinColor={"#008000"} title={this.state.check1.title}/>
+                    }
+                    {this.state.check2 && 
+                    <Marker coordinate={this.state.check2.coordinate} pinColor={"#ffcc00"} title={this.state.check2.title}/>
+                    }
+                    {this.state.end && 
+                    <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title}/>
+                    }
+                    {this.state.start&& this.state.end &&
+                    <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi} 
+                    onReady={result => {
+                        this.state.distance = result.distance
+                        this.getLocation();
+                        this.forceUpdate()
+                    }}
+                    />
+                    }
+                    {/* <Marker coordinate={this.state.startMarker.coordinate} pinColor={"#0000FF"} title={this.state.startMarker.title}/>
                     <Marker coordinate={this.state.endMarker.coordinate} pinColor={"#800080"} title={this.state.endMarker.title}/>
                     <Marker coordinate={this.state.checkMarker1.coordinate} pinColor={"#008000"} title={this.state.checkMarker1.title}/>
-                    <Marker coordinate={this.state.checkMarker2.coordinate} pinColor={"#ffcc00"} title={this.state.checkMarker2.title}/>
-                    <MapViewDirections origin={this.state.startCoor} destination={this.state.endCoor} waypoints={this.state.checkPointArray} apikey={this.state.googleApi} 
+                    <Marker coordinate={this.state.checkMarker2.coordinate} pinColor={"#ffcc00"} title={this.state.checkMarker2.title}/> */}
+                    {/* <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi} 
                     onReady={result => {
                         this.state.distance = result.distance
                         this.forceUpdate()
                     }}
-                    />
-                    <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} />
+                    /> */}
+                    {/* <Marker coordinate={this.state.defaultMarker.coordinates} title={this.state.defaultMarker.title} /> */}
                 </MapView>
                 <View style={styles.botInfo}>
                 
