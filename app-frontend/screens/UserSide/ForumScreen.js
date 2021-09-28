@@ -9,6 +9,7 @@ import profileImage from '../../images/avatar.jpg';
 import Ion from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment, { max, relativeTimeThreshold } from 'moment';
+import { Divider } from 'react-native-elements'
 
 export default class ForumScreen extends Component {
 
@@ -279,24 +280,24 @@ export default class ForumScreen extends Component {
                         <Icon size={25} name='leaderboard' color='#808080' onPress={() => this.props.navigation.navigate('eventsScreen')} />
                     </View>
                 </View>
-                {this.state.posts.length!=0
-                ?
-                <FlatList
-                    data={this.state.posts}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })}>
-                            <View style={styles.cardView}>
-                                <View style={styles.proRow}>
-                                    <View style={styles.profilePicContainer}>
-                                        <Image style={styles.proColumnName} source={profileImage} />
-                                    </View>
-                                    <View style={styles.profileInfoContainer}>
-                                        <Text style={styles.title}>{item.name}</Text>
-                                        {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
-                                        <Text style={styles.date}>{item.datetime}</Text>
-                                    </View>
-                                    {/* <TouchableOpacity>
+                {this.state.posts.length != 0
+                    ?
+                    <FlatList
+                        data={this.state.posts}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })}>
+                                <View style={styles.cardView}>
+                                    <View style={styles.proRow}>
+                                        <View style={styles.profilePicContainer}>
+                                            <Image style={styles.proColumnName} source={profileImage} />
+                                        </View>
+                                        <View style={styles.profileInfoContainer}>
+                                            <Text style={styles.title}>{item.name}</Text>
+                                            {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
+                                            <Text style={styles.date}>{item.datetime}</Text>
+                                        </View>
+                                        {/* <TouchableOpacity>
                                     <View style={styles.iconContainer}>
                                         <Icon size={25} name={"edit"} color='#808080' />
                                     </View>
@@ -306,33 +307,33 @@ export default class ForumScreen extends Component {
                                         <Icon2 size={25} name={"delete"} color='#808080' />
                                     </View>
                                     </TouchableOpacity> */}
-                                </View>
-                                <View style={styles.proTitle}>
-                                    <Text style={styles.title}>{item.title}</Text>
-                                    <Text style={styles.description}>{item.description}</Text>
-                                </View>
-                                <View style={styles.proRow}>
-                                    <View style={styles.botIcon}>
-                                        <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
-                                        <View style={styles.iconInfoContainer}>
-                                            <Text>{item.noLike}</Text>
+                                    </View>
+                                    <View style={styles.proTitle}>
+                                        <Text style={styles.title}>{item.title}</Text>
+                                        <Text style={styles.description}>{item.description}</Text>
+                                    </View>
+                                    <View style={styles.proRow}>
+                                        <View style={styles.botIcon}>
+                                            <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                            <View style={styles.iconInfoContainer}>
+                                                <Text>{item.noLike}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.botIcon}>
+                                            <Icon2 size={25} name='comment-outline' color='#808080' />
+                                            <View style={styles.iconInfoContainer}>
+                                                <Text>{item.comments}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                    <View style={styles.botIcon}>
-                                        <Icon2 size={25} name='comment-outline' color='#808080' />
-                                        <View style={styles.iconInfoContainer}>
-                                            <Text>{item.comments}</Text>
-                                        </View>
-                                    </View>
-                                </View>
 
-                                {/* <View style={styles.proTitle}>
+                                    {/* <View style={styles.proTitle}>
                                     <View>
                                         <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
                                     </View>
                                 </View> */}
 
-                                {/* <View style={styles.proTitle}>
+                                    {/* <View style={styles.proTitle}>
                                     <View style={styles.proRow}>
                                         <TextInput style={styles.input}
                                             placeholder="Write a comment"
@@ -343,16 +344,16 @@ export default class ForumScreen extends Component {
                                         <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.commentHolder ? styles.inactive : []]} />
                                     </View>
                                 </View> */}
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-                :
-                <View style={styles.noDataContainer}>
-                    <Text>No post avaliable. Post one now!</Text>
-                </View>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    :
+                    <View style={styles.noDataContainer}>
+                        <Text>No post avaliable. Post one now!</Text>
+                    </View>
                 }
-                
+
                 <View style={{ flexDirection: 'row', margin: 40 }}>
                     <Modal
                         animationType={"slide"}
@@ -375,18 +376,32 @@ export default class ForumScreen extends Component {
                                 </TouchableOpacity>
                             </View>
 
-                            <TextInput
-                                style={{ margin: 40 }}
-                                placeholder="Title"
-                                onChangeText={data => this.setState({ titleHolder: data })}
-                                underlineColorAndroid='transparent'
-                            />
-                            <TextInput
-                                style={{ margin: 40 }}
-                                placeholder="Write your post here"
-                                onChangeText={data => this.setState({ descriptionHolder: data })}
-                                underlineColorAndroid='transparent'
-                            />
+
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon style={{ margin: 20 }} size={25} color='#8352F2' name='title' />
+                                <View style={styles.input}>
+                                    <TextInput
+                                        style={{ padding: 10 }}
+                                        placeholder="Title"
+                                        multiline={true}
+                                        onChangeText={data => this.setState({ titleHolder: data })}
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                            </View>
+                            <Divider style={styles.divider} />
+                            <View style={{ flexDirection: 'row' }}>
+                                <Icon style={{ margin: 20 }} size={25} color='#8352F2' name='description' />
+                                <View style={styles.input}>
+                                    <TextInput
+                                        style={{ padding: 10 }}
+                                        placeholder="Write your post here"
+                                        multiline={true}
+                                        onChangeText={data => this.setState({ descriptionHolder: data })}
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                            </View>
                         </View>
                     </Modal>
                     <View style={{ flexDirection: 'column', alignItems: 'flex-end', flex: 1 }}>
@@ -419,11 +434,11 @@ export const styles = StyleSheet.create({
         fontSize: 18,
     },
     cardView: {
-        
+
         borderRadius: 15,
         backgroundColor: 'white',
-        padding:"5%",
-        margin:"5%",
+        padding: "5%",
+        margin: "5%",
         //ios
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
@@ -436,36 +451,36 @@ export const styles = StyleSheet.create({
     proRow: {
         flexDirection: "row",
         alignItems: 'center',
-        padding:"2.5%",
+        padding: "2.5%",
     },
-    
-    profilePicContainer:{
-        flex:2,
-        
+
+    profilePicContainer: {
+        flex: 2,
+
     },
-    profileInfoContainer:{
-        flex:7,
-        paddingLeft:"2.5%",
+    profileInfoContainer: {
+        flex: 7,
+        paddingLeft: "2.5%",
     },
-    iconInfoContainer:{
-        marginLeft:"2.5%",
+    iconInfoContainer: {
+        marginLeft: "2.5%",
     },
-    botIcon:{
-        flex:1,
-        alignItems:"center",
-        justifyContent:"flex-start",
+    botIcon: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "flex-start",
         flexDirection: "row",
     },
-    iconContainer:{
-        flex:1,
-        padding:"2.5%",
-        justifyContent:"center",
-        alignItems:"center",
+    iconContainer: {
+        flex: 1,
+        padding: "2.5%",
+        justifyContent: "center",
+        alignItems: "center",
     },
     proTitle: {
-        alignItems:"flex-start",
-        justifyContent:"center",
-        padding:"2.5%",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        padding: "2.5%",
     },
     proInfo: {
         margin: 20
@@ -487,14 +502,15 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: '#808080'
     },
-    
+
     input: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
+        marginTop: 10,
+        marginBottom: 10,
         marginRight: 20,
-        marginBottom: 20,
-        padding: 5,
-        flex: 4,
+        padding: 2,
+        flex: 1,
     },
     inactive: {
         color: '#808080',
@@ -504,9 +520,12 @@ export const styles = StyleSheet.create({
         marginBottom: 20,
         flex: 1
     },
-    noDataContainer:{
-        flex:1,
-        alignItems:"center",
-        justifyContent:"center",
+    noDataContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    divider: {
+        backgroundColor: '#373737',
     },
 });
