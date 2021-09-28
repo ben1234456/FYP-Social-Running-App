@@ -7,6 +7,8 @@ import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';
+import { StackActions } from '@react-navigation/native';
+
 
 export default class editProfileScreen extends Component {
 
@@ -81,7 +83,7 @@ export default class editProfileScreen extends Component {
             console.error('Error:', error);
         });
 
-        this.props.navigation.push('app');
+        this.props.navigation.dispatch(StackActions.pop());
     }
 
     render() {

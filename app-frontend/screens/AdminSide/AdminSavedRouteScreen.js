@@ -46,6 +46,29 @@ export default class AdminSavedRouteScreen extends Component {
         }
         getData();
     }
+    componentDidMount(){
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            fetch(baseUrl + '/api/admin/route/routeList', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user route list data')
+                console.log(data)
+                this.setState({
+                    loadedData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+          });
+    }
     renderItemComponent = (data) =>        
     
         <TouchableOpacity onPress={() => this.props.navigation.navigate('editRouteScreen', { 'id': data.item.id})}>
@@ -55,7 +78,6 @@ export default class AdminSavedRouteScreen extends Component {
                 </View>
                 <View style={styles.routeInfo}>
                     <Text style={styles.routeDistance}>{data.item.total_distance}km</Text>
-                    <Text style={styles.routeDuration}>{data.item.hour}:{data.item.minute}:{data.item.second}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -68,15 +90,22 @@ export default class AdminSavedRouteScreen extends Component {
                 </View>
                 
                 <View style={styles.listContainer}>
-                    <View style={styles.view}>
-                        <View style={styles.cardView}>
-                            <FlatList horizontal={false}
-                                data={this.state.loadedData}
-                                keyExtractor={item => item.id.toString()}
-                                renderItem={item => this.renderItemComponent(item)}
-                            />  
-                        </View>
+                    {this.state.loadedData.length!=0
+                    ?
+                    <View style={styles.cardView}>
+                        <FlatList horizontal={false}
+                            data={this.state.loadedData}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={item => this.renderItemComponent(item)}
+                        /> 
                     </View>
+                    :
+                    <View style={styles.noData}>
+                        <Text style={styles.noDataText}>No routes avaliable now</Text>
+                    </View>
+                    }
+                    
+                    
                 </View>
             </ScrollView>
         );
@@ -92,6 +121,15 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 30,
+    },
+    noData:{
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center",
+        padding:"5%",
+    },
+    noDataText:{
+        color:"#808080",
     },
     view: {
         height: 240,
@@ -154,6 +192,6 @@ export const styles = StyleSheet.create({
         color: '#8352F2',
     },
     listContainer:{
-        marginTop:"5%",
+        padding:"5%",
     },
 });

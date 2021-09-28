@@ -67,7 +67,27 @@ export default class BuddiesListScreen extends Component {
     }
     componentDidMount() {
         this.arrayholder = this.state.data;
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
+            fetch(baseUrl + '/api/buddy/buddyList/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get buddylist data')
+                console.log(data)
+                this.setState({
+                    userList: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+          });
     }
 
     deleteUser(id) {

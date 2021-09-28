@@ -5,7 +5,7 @@ import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import PickerModal from 'react-native-picker-modal-view';
 import TimePicker from "react-native-24h-timepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { StackActions } from '@react-navigation/native';
 
 export default class editEventCalendarScreen extends Component{
     constructor(props){
@@ -166,13 +166,16 @@ export default class editEventCalendarScreen extends Component{
             .catch((error) => {
                 console.error('Error:', error);
             });
-        this.props.navigation.navigate('calendarScreen');
+        this.props.navigation.dispatch(StackActions.pop());
+
+        this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
     };
     save=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        const convertedTime=(parseInt(this.state.selectedHour)*60)+parseInt(this.state.selectedMin);
         const data = {
             userID: this.state.userID,
-            time: this.state.convertedTime,
+            time: convertedTime,
             title: this.state.eventName,
             date: this.state.date,
         };
@@ -193,7 +196,9 @@ export default class editEventCalendarScreen extends Component{
             .catch((error) => {
                 console.error('Error:', error);
             });
-        this.props.navigation.navigate('calendarScreen');
+        this.props.navigation.dispatch(StackActions.pop());
+
+        this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
     }
     onCancel() {
         this.TimePicker.close();
@@ -323,8 +328,8 @@ export default class editEventCalendarScreen extends Component{
                     </TouchableOpacity>
 
                     <TouchableOpacity  onPress={this.confirmDelete}>
-                        <View style={styles.botBtn}>
-                            <Text style={styles.btnText}>
+                        <View style={styles.botBtn2}>
+                            <Text style={styles.btnText2}>
                                 Delete
                             </Text>
                         </View>
@@ -425,14 +430,44 @@ export const styles=StyleSheet.create({
     },
     botBtn:{
         alignItems:"center",
-        flex:1,
+
         backgroundColor:"#8352F2",
+
         borderRadius:30,
-        padding:"5%",
+
+        padding:"10%",
+
         margin:"2.5%",
+
     },
     btnText:{
         color:"white",
+        fontSize:16,
+    },
+    botBtn2:{
+
+        alignItems:"center",
+
+        backgroundColor:"white",
+
+        borderColor: '#8352F2',
+
+        borderWidth: 1,
+
+        borderRadius:30,
+
+        padding:"10%",
+
+        margin:"2.5%",
+
+    },
+
+    btnText2:{
+
+        color:"#8352F2",
+
+        fontSize:16,
+
     },
     dateContainer:{
         justifyContent:"center",

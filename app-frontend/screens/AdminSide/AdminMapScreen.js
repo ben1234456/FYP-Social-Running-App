@@ -96,8 +96,8 @@ export default class AdminMapScreen extends Component {
             latitude: currentLatitude,
             longitude: currentLongitude,
 
-            latitudeDelta: 0.0005,
-            longitudeDelta: 0.0005,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
 
         })
     };

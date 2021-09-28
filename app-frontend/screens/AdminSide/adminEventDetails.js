@@ -21,6 +21,7 @@ export default class adminEventDetails extends Component {
             registration_end_date: "",
             description: "",
             event_distance: "",
+            
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -149,7 +150,8 @@ export default class adminEventDetails extends Component {
     };
 
     delete_event = () => {
-        fetch('http://192.168.0.192:8000/api/events/' + this.state.eventid, {
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        fetch(baseUrl+'/api/events/' + this.state.eventid, {
             method: 'DELETE',
             headers: {
                 Accept: 'application/json',
@@ -187,6 +189,7 @@ export default class adminEventDetails extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        
     }
 
     delete = () => {
@@ -278,7 +281,7 @@ export default class adminEventDetails extends Component {
 
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>About</Text>
-                                <Text style={styles.aboutText}>{this.state.desc}</Text>
+                                <Text style={styles.aboutText}>{this.state.description}</Text>
                             </View>
 
                             <View style={styles.about}>

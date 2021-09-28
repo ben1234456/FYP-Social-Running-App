@@ -217,5 +217,42 @@ class ForumPostController extends Controller
         return response()->json(['status' => 'success']);
         
     }
+    public function showAllPost($id){
+        $posts = ForumPost::orderBy('created_at','desc')->get();
+
+        foreach ($posts as $post){
+            //get user information
+            $userid = $post->user_id;
+            $user = User::where('id', $userid)->first();
+            $post->name = $user->first_name;
+
+            //get no of like
+            $likes = PostLike::where('post_id', '=', $post->id)->get();
+            $noOfLikes = count($likes);
+            $post->noLike = $noOfLikes;
+            $likeStatus = PostLike::where('post_id', '=', $post->id)->where ('user_id', '=', $id)->first();
+            if($likeStatus){
+                $post->liked=true;
+            }
+            else{
+                $post->liked=false;
+            }
+
+            //get no of comment
+            $comments = PostComment::where('post_id', '=', $post->id)->get();
+            $noOfComments = count($comments);
+            $post->comments = $noOfComments;
+
+            //add other details
+            $post->img= 'profileImage';
+            $post->like = 'heart-o';
+
+            $dt = strval($post->created_at);
+            $datetime = substr($dt,0,10) . " " . substr($dt,10,9);
+            $post->datetime = $datetime;
+        }
+
+        return $posts->toJson();
+    }
 }
 

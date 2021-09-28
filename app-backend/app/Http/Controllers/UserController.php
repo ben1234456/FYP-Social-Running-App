@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\UserController;
+use App\Models\Buddy;
 use App\Models\User;
 use App\Models\Users;
 use App\Models\UserList;
@@ -104,7 +105,16 @@ class UserController extends Controller
         
         $userID = $user->id;
         
-        $allUser=User::where("role","=","user")->where("id","!=",$userID)->take(10)->get();
+        $buddy=Buddy::where("userID","=",$userID)->get();
+
+        $buddyIdList=[];
+
+        foreach($buddy as $id)
+        {
+            array_push($buddyIdList,$id->buddyID);
+        }
+
+        $allUser=User::where("role","=","user")->where("id","!=",$userID)->whereNotIn("id",$buddyIdList)->take(10)->get();
 
         return $allUser->toJson();
 

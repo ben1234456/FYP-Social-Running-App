@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
+import { StackActions } from '@react-navigation/native';
 
 export default class couponDetails extends Component {
     
@@ -133,7 +134,7 @@ export default class couponDetails extends Component {
                     </View>
                     
                     <View>
-                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('run')} >
+                        <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.dispatch(StackActions.replace('run'))} >
                             <Text style={styles.btnText}>RUN</Text>
                         </Button>
                     </View>

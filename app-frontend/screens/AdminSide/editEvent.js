@@ -28,7 +28,8 @@ export default class editEvent extends Component {
             eventDistance: [],
             textInput : [],
             feeArray: [],
-            distanceArray : []
+            distanceArray : [],
+            height:0,
         }
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -184,7 +185,7 @@ export default class editEvent extends Component {
                         data.message,
                         '',
                         [
-                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', {'eventid': this.state.event_id })) }
+                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', { 'eventid': this.state.event_id }))}
                         ]
                     );
                 }
@@ -283,14 +284,6 @@ export default class editEvent extends Component {
         return (
             
             <ScrollView style={styles.container}>
-                <View style={(this.state.imageSource==addImage)?styles.selectPhotoTop:styles.selectedPhotoTop}>
-                    <Text style={(this.state.imageSource==addImage)?styles.selectPhotoTopInfo:styles.selectedPhotoTopInfo}>Take / Choose a photo</Text>
-                    <TouchableOpacity onPress={this.chooseImage} style={styles.cameraBack}>
-                        <Image source={this.state.imageSource} style={(this.state.imageSource==addImage)?styles.camera:styles.selectedImage} />
-                    </TouchableOpacity>
-                    
-                        
-                </View>
                 
                 <View style={styles.contentContainer}>
                     
@@ -313,15 +306,18 @@ export default class editEvent extends Component {
                         <View>
                             <Text style={styles.botTitle}>Description</Text>
                         </View>
-                        <View style={styles.inputWithTitleTopBig}>
+                        <View style={styles.inputWithTitle}>
                             <View style={styles.inputText}>
-                                <TextInput 
-                                    placeholder = "Write your description here"
-                                    onChangeText={(des) => this.setState({description:des})}
-                                    value = {this.state.description}
+                                <TextInput
+                                    placeholder="Write your description here"
+                                    onChangeText={(des) => this.setState({ description: des})}
+                                    value={this.state.description}
+                                    onContentSizeChange={(desc)=>this.setState({height:desc.nativeEvent.contentSize.height})}
+                                    style={{height:Math.max(35,this.state.height)}}
+                                    multiline
                                 />
                             </View>
-                        </View>  
+                        </View> 
 
                         <View>
                             <Text style={styles.botTitle}>Distances and Fees</Text>

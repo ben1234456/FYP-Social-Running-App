@@ -7,7 +7,7 @@ import Font from 'react-native-vector-icons/FontAwesome'
 import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../../images/avatar.jpg';
 import moment from 'moment';
-
+import { StackActions } from '@react-navigation/native';
 
 export default class ForumDetailsScreen extends Component {
 
@@ -59,18 +59,19 @@ export default class ForumDetailsScreen extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log("Succesfully get like id")
+                console.log("testing")
                 console.log(data)
-                if(data.length!=0){
-                    this.setState({
-                        showLike:false,
-                        like: 'heart',
-                    });
-                }
-                else{
-                    this.setState({
-                        showLike:true,
-                    });
-                }
+                // if(data.liked!=0){
+                //     this.setState({
+                //         showLike:false,
+                //         like: 'heart',
+                //     });
+                // }
+                // else{
+                //     this.setState({
+                //         showLike:true,
+                //     });
+                // }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -346,6 +347,8 @@ export default class ForumDetailsScreen extends Component {
         }
     }
 
+    
+
     renderItemComponent = (data) =>
         <View style={styles.proRow}>
             <View style={styles.commentProfileContainer}>
@@ -391,6 +394,8 @@ export default class ForumDetailsScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        this.props.navigation.dispatch(StackActions.pop());
+
     };
     
     render() {
@@ -406,32 +411,38 @@ export default class ForumDetailsScreen extends Component {
                         <Text style={styles.title}>{this.state.name}</Text>
                         <Text style={styles.date}>{this.state.datetime}</Text>
                     </View>
+                    {this.state.user_id==this.state.postUserId
+                    ?
                     <View>
-                        {this.state.editing
-                        ?
-                        <View style={styles.wholeIconContainer}>
+                    {this.state.editing
+                    ?
+                    <View style={styles.wholeIconContainer}>
+                    <TouchableOpacity onPress={() => this.edit()}>
+                        <View style={styles.iconContainer}>
+                            <Icon size={25} name={"done"} color='#808080' />
+                        </View>
+                    </TouchableOpacity>
+                    </View>
+                    :
+                    <View style={styles.wholeIconContainer}>
                         <TouchableOpacity onPress={() => this.edit()}>
                             <View style={styles.iconContainer}>
-                                <Icon size={25} name={"done"} color='#808080' />
+                                <Icon size={25} name={"edit"} color='#808080' />
                             </View>
                         </TouchableOpacity>
-                        </View>
-                        :
-                        <View style={styles.wholeIconContainer}>
-                            <TouchableOpacity onPress={() => this.edit()}>
-                                <View style={styles.iconContainer}>
-                                    <Icon size={25} name={"edit"} color='#808080' />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.confirmDelete()}>
-                                <View style={styles.iconContainer}>
-                                    <Icon2 size={25} name={"delete"} color='#808080' />
-                                </View>
-                            </TouchableOpacity>  
-                        </View>
-                        }
-                        
-                    </View>         
+                        <TouchableOpacity onPress={() => this.confirmDelete()}>
+                            <View style={styles.iconContainer}>
+                                <Icon2 size={25} name={"delete"} color='#808080' />
+                            </View>
+                        </TouchableOpacity>  
+                    </View>
+                    }
+                    
+                </View>
+                :
+                <View></View>
+                    }
+                             
                 </View>
                 <View style={styles.proTitle}>
                     {this.state.editing

@@ -158,3 +158,6 @@ Route::delete('/post/list/user/{id}', [ForumPostController::class, "deletePostBy
 
 //custom edit post
 Route::put('/post/list/edit/{id}', [ForumPostController::class, "editPost"]);
+
+//get whether like or not
+Route::get('/forumposts/list/{user}', [ForumPostController::class, "showAllPost"]);

@@ -77,7 +77,7 @@ export default class AdminHomeScreen extends Component {
         getData();
 
     }
-
+    
     componentDidUpdate() {
         const getData = async () => {
             try {
@@ -294,5 +294,6 @@ export const styles = StyleSheet.create({
 
     noEventText:{
         fontSize:16,
+        color:"#808080",
     },
 });

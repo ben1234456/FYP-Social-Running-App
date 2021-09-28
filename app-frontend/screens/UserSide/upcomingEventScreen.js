@@ -20,6 +20,7 @@ export default class eventDetails extends Component {
             end_date:"",  
             registration_start_date:"",   
             registration_end_date:"",
+            desc:"",
         };
 
 
@@ -43,6 +44,7 @@ export default class eventDetails extends Component {
                 end_date: data.end,  
                 registration_start_date:  data.registration_start,   
                 registration_end_date:  data.registration_end,
+                desc:data.description,
             });
         })
         .catch((error) => {
@@ -207,19 +209,9 @@ export default class eventDetails extends Component {
                             
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>About</Text>
-                                <Text style={styles.aboutText}>Come join our Virtual Half Marathon!</Text>
+                                <Text style={styles.aboutText}>{this.state.desc}</Text>
                             </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>The entitlements would be mailed to your house:</Text>
-                            </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>1.Finisher Medal</Text>
-                                <Text style={styles.aboutText}>2.Dri-FIT Shirt</Text>
-                                <Text style={styles.aboutText}>3.Finished Tee (42km only)</Text>
-                            </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutText}>Please be noted that the postage is within Malaysia only and entitlement will be posted from 12 August 2021.</Text>
-                            </View>
+                            
                             <View style={styles.about}>    
                                 <Text style={styles.aboutHeading}>REGISTRATION START DATE</Text>
                                 <Text style={styles.aboutText}>{this.state.registration_start_date} (GMT +8:00)</Text>

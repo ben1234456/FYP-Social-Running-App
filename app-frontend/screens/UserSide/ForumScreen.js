@@ -10,6 +10,7 @@ import Ion from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment, { max, relativeTimeThreshold } from 'moment';
 import { Divider } from 'react-native-elements'
+import { StackActions } from '@react-navigation/native';
 
 export default class ForumScreen extends Component {
 
@@ -22,14 +23,17 @@ export default class ForumScreen extends Component {
             id: "",
             name: "",
             eventdata: "",
-            heart: true,
+            heart: false,
+            like: 'heart-o',
+            showLike: true,
             date: "",
-            data: [
-                { id: '1', name: "User 1", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '2', name: "User 2", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '3', name: "User 3", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-                { id: '4', name: "User 4", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
-            ],
+            noLike: "",
+            // data: [
+            //     { id: '1', name: "User 1", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 1, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+            //     { id: '2', name: "User 2", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 2, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+            //     { id: '3', name: "User 3", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 5, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+            //     { id: '4', name: "User 4", img: profileImage, date: 'Sep 1, 2021', like: 'heart-o', noLike: 10, title: 'Title here', description: 'This is the description that users write', comment: 0, comments: '', edit: '', delete: '', status: false },
+            // ],
             isVisible: false,
             commentHolder: '',
             titleHolder: '',
@@ -52,17 +56,11 @@ export default class ForumScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-        }
-
-        getData();
-
-        this.arrayholder = [];
-
-        //using localhost on IOS and using 10.0.2.2 on Android
+            //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
         //get forum posts' details
-        fetch(baseUrl + '/api/forumposts', {
+        fetch(baseUrl + '/api/forumposts/list/'+this.state.user_id, {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -79,21 +77,46 @@ export default class ForumScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+        }
+
+        getData();
+
+        this.arrayholder = [];
+
+        
 
     }
 
     changeLike = () => {
+        // let newState;
+        // if (this.state.data) {
+        //     newState = {
+        //         fav: false,
+        //         noLike: this.state.noLike + 1,
+        //     }
+        // } else {
+        //     newState = {
+        //         fav: true,
+        //     }
+        // }
+        // // set new state value
+        // this.setState(newState)
         let newState;
-        if (this.state.data) {
+        if (this.state.showLike) {
             newState = {
-                fav: false,
+                like: 'heart',
                 noLike: this.state.noLike + 1,
+                showLike: false,
             }
         } else {
             newState = {
-                fav: true,
+                like: 'heart-o',
+                noLike: this.state.noLike - 1,
+                showLike: true,
             }
+            
         }
+        
         // set new state value
         this.setState(newState)
     };
@@ -104,6 +127,33 @@ export default class ForumScreen extends Component {
             () => this.tick(),
             1000
         );
+        
+        
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        //get forum posts' details
+        fetch(baseUrl + '/api/forumposts/list/'+this.state.user_id, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get forum posts')
+                console.log(data)
+                this.setState({
+                    posts: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            //Put your Data loading function here instead of my this.loadData()
+        });
+          
     }
 
     componentWillUnmount() {
@@ -227,7 +277,9 @@ export default class ForumScreen extends Component {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
+            
 
+            this.props.navigation.dispatch(StackActions.replace('forumScreen'));
         }
     }
 
@@ -276,7 +328,7 @@ export default class ForumScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>
-                        <Icon size={25} style={{ marginRight: 20 }} name='people' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
+                        <Icon size={25} name='people' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
                     </View>
                 </View>
                 {this.state.posts.length != 0
@@ -313,7 +365,13 @@ export default class ForumScreen extends Component {
                                     </View>
                                     <View style={styles.proRow}>
                                         <View style={styles.botIcon}>
+                                            {item.liked
+                                            ?
                                             <Font size={25} name={"heart"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+                                            :
+                                            <Font size={25} name={"heart-o"} onPress={() => this.updateLike(item.id)} color='#FF4141' />
+
+                                            }
                                             <View style={styles.iconInfoContainer}>
                                                 <Text>{item.noLike}</Text>
                                             </View>
@@ -349,7 +407,7 @@ export default class ForumScreen extends Component {
                     />
                     :
                     <View style={styles.noDataContainer}>
-                        <Text>No post avaliable. Post one now!</Text>
+                        <Text style={styles.noData}>No post avaliable. Post one now!</Text>
                     </View>
                 }
 
@@ -446,6 +504,9 @@ export const styles = StyleSheet.create({
 
         //android
         elevation: 5,
+    },
+    noData:{
+        color:"#808080",
     },
     proRow: {
         flexDirection: "row",

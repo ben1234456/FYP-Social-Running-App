@@ -118,7 +118,7 @@ export default class SignUpScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
-        var ip = 'http://192.168.0.192:8000';
+        var ip = 'http://192.168.0.145:8000';
 
         if (this.validation()){
 

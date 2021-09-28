@@ -102,10 +102,6 @@ export default class addEventCalendarScreen extends Component{
             empty.push("title");
         }
 
-        if (!(this.state.time)) {
-            empty.push("time");
-        }
-
         if (empty.length != 0) {
 
             console.log(empty[0]);
@@ -146,7 +142,7 @@ export default class addEventCalendarScreen extends Component{
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const data = {
                 userID: this.state.userID,
-                time: this.state.eventTime,
+                time: this.state.convertedTime,
                 title: this.state.eventName,
                 date: this.state.date,
             };
@@ -167,11 +163,12 @@ export default class addEventCalendarScreen extends Component{
             .catch((error) => {
                 console.error('Error:', error);
             });
+            this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
         }
         
         
 
-        this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
+        
     }
     onCancel() {
         this.TimePicker.close();

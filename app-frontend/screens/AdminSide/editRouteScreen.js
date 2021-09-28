@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackActions } from '@react-navigation/native';
 
 export default class editRouteScreen extends Component {
 
@@ -310,12 +311,17 @@ export default class editRouteScreen extends Component {
 
     };
 
-    checkSelected = (value, selected) => {
-        if (selected == false) {
-            return null;
+    checkSelected=(value,type)=>{
+        if(value!=null){
+            if(type=="long"){
+                return value.coordinate.longitude
+            }
+            else{
+                return value.coordinate.latitude
+            }
         }
-        else {
-            return value;
+        else{
+            return null;
         }
     }
     save = () => {
@@ -329,10 +335,10 @@ export default class editRouteScreen extends Component {
             end_lat: this.state.end.coordinate.latitude,
             end_lng: this.state.end.coordinate.longitude,
             total_distance: this.state.distance,
-            check1_lat: this.checkSelected(this.state.check1.coordinate.latitude, this.state.check1.selected),
-            check1_lng: this.checkSelected(this.state.check1.coordinate.longitude, this.state.check1.selected),
-            check2_lat: this.checkSelected(this.state.check2.coordinate.latitude, this.state.check2.selected),
-            check2_lng: this.checkSelected(this.state.check2.coordinate.longitude, this.state.check2.selected),
+            check1_lat:this.checkSelected(this.state.check1,"lat"),
+            check1_lng:this.checkSelected(this.state.check1,"long"),
+            check2_lat:this.checkSelected(this.state.check2,"lat"),
+            check2_lng:this.checkSelected(this.state.check2,"long"),
         };
 
         fetch(baseUrl + '/api/route/' + this.state.id, {
@@ -351,6 +357,8 @@ export default class editRouteScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+            this.props.navigation.dispatch(StackActions.pop());
+
     };
     add = () => {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
@@ -363,10 +371,10 @@ export default class editRouteScreen extends Component {
             end_lat: this.state.end.coordinate.latitude,
             end_lng: this.state.end.coordinate.longitude,
             total_distance: this.state.distance,
-            check1_lat: this.checkSelected(this.state.check1.coordinate.latitude, this.state.check1.selected),
-            check1_lng: this.checkSelected(this.state.check1.coordinate.longitude, this.state.check1.selected),
-            check2_lat: this.checkSelected(this.state.check2.coordinate.latitude, this.state.check2.selected),
-            check2_lng: this.checkSelected(this.state.check2.coordinate.longitude, this.state.check2.selected),
+            check1_lat:this.checkSelected(this.state.check1,"lat"),
+            check1_lng:this.checkSelected(this.state.check1,"long"),
+            check2_lat:this.checkSelected(this.state.check2,"lat"),
+            check2_lng:this.checkSelected(this.state.check2,"long"),
         };
 
         fetch(baseUrl + '/api/route', {
@@ -385,6 +393,8 @@ export default class editRouteScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+            this.props.navigation.dispatch(StackActions.pop());
+
     };
     delete = () => {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
@@ -404,6 +414,8 @@ export default class editRouteScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+            this.props.navigation.dispatch(StackActions.pop());
+
     };
     componentDidMount() {
 
@@ -517,16 +529,24 @@ export default class editRouteScreen extends Component {
                             <Text style={styles.routeInfoTextSmall}>Distance (km)</Text>
                             <Text style={styles.routeInfoTextBig}>{this.state.distance}</Text>
                         </View>
-                        <View style={{ justifyContent: 'center' }}>
-                            <Icon style={{ marginRight: '10%', }} name="delete" size={30} color={'#808080'} onPress={this.delete} />
+                        {this.state.ownerId == this.state.userID
+                        ?
+                        <View style={{ justifyContent: 'center' ,alignItems:"center",flex:1}}>
+                            <Icon style={{}} name="delete" size={30} color={'#808080'} onPress={this.delete} />
+                        </View>
+                        :
+                        <View></View>
+                        }
+                        <View style={{ justifyContent: 'center',alignItems:"center",flex:1 }}>
+                        {this.state.ownerId == this.state.userID
+                        ?
+                        <Icon2 name="save-sharp" style={{   }} size={30} color={'#8352F2'} onPress={this.save} />
+                        :
+                        <Icon2 name="save-sharp" style={{ }} size={30} color={'#8352F2'} onPress={this.add} />
+                    }
                         </View>
                     </View>
-                    {this.state.ownerId == this.state.userID
-                        ?
-                        <Icon2 name="save-sharp" style={{ marginTop: '10%', flex: 1 }} size={30} color={'#8352F2'} onPress={this.save} />
-                        :
-                        <Icon2 name="save-sharp" style={{ marginTop: '10%', flex: 1 }} size={30} color={'#8352F2'} onPress={this.add} />
-                    }
+                    
                 </View>
             </View>
 
@@ -604,7 +624,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     routeInfoBotDetail: {
-        flex: 1,
+        flex: 3,
     },
     routeInfoTextSmall: {
 

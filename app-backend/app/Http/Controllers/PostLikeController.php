@@ -110,6 +110,8 @@ class PostLikeController extends Controller
 
         $likeGet=PostLike::where("post_id","=",$post)->where("user_id","=",$user)->first();
 
+        
+
         return $likeGet->toJson();
     }
     public function deleteLikeById($id)

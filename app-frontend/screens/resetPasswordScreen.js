@@ -13,7 +13,7 @@ export default class resetPasswordScreen extends Component {
 
     sendEmail = () => {
         //using localhost on IOS and using 10.0.2.2 on Android
-        const baseUrl = Platform.OS === 'android' ? 'http://192.168.0.192:8000' : 'http://localhost';
+        const baseUrl = Platform.OS === 'android' ? 'http://192.168.0.145:8000' : 'http://localhost';
 
         if (!this.state.email) {
             Alert.alert('Your email cannot be empty')

@@ -20,6 +20,27 @@ export default class App extends Component {
             dob: "",
         };
 
+        
+        
+    }
+
+    logout = async () => {
+
+
+        var msg = "Are you sure you want to log out?";
+
+        Alert.alert(
+            msg,
+            '',
+            [
+                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.replace('login'))},
+                { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
+            ],
+            {cancelable: false},
+        );
+
+    }
+    componentDidMount(){
         //get data from async storage
         const getData = async () => {
             try {
@@ -49,26 +70,12 @@ export default class App extends Component {
         }
     
         getData();
-        
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            console.log("aukhsku");
+            getData();
+            this.forceUpdate();
+          });
     }
-
-    logout = async () => {
-
-
-        var msg = "Are you sure you want to log out?";
-
-        Alert.alert(
-            msg,
-            '',
-            [
-                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.replace('login'))},
-                { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
-            ],
-            {cancelable: false},
-        );
-
-    }
-
     render() {
         return (
             <View style={styles.container}>

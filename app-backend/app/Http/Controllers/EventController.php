@@ -149,19 +149,30 @@ class EventController extends Controller
     public function showUserExclusiveEvents(User $user)
     {
         $eventList = [];
-
-        $user_id = $user->id;
-
-        $user_events = UserEvent::where('user_id', $user_id)->get();
-
-        $user_exclusive_events = Event::whereNotIn('id', $user_events)->get();
-
+        $userID = $user->id;
+        $user_events = UserEvent::where('user_id','=', $userID)->get();
+        //
+        $idList=array();
+        foreach($user_events as $event){
+        array_push($idList,$event->event_id);
+        }
+        $user_exclusive_events = Event::whereNotIn('id', $idList)->get();
         foreach ($user_exclusive_events as $event) {
             $currentDate =  date("Y-m-d");
             if ($event->registration_start <= $currentDate){
                 array_push($eventList,$event);
             }
         }
+
+        
+
+        // $user_id = $user->id;
+
+        // $user_events = UserEvent::where('user_id', $user_id)->get();
+
+        // $user_exclusive_events = Event::whereNotIn('id', $user_events)->get();
+
+        
 
         return $eventList;
 

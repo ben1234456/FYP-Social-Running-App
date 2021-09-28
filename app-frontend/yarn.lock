@@ -6163,6 +6163,13 @@
   dependencies:
     "react-timer-mixin" "^0.13.3"
 
+"react-native-loading-spinner-overlay@^2.0.0":
+  "integrity" "sha512-V38M+N1Wk9GlpbfrD6znsJA1K2+09b3naxq3UjDjqNTA3MOBfj4W87alKSI3P+4ZawczQASTv2fTzhEQ7Z+SVA=="
+  "resolved" "https://registry.npmjs.org/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-2.0.0.tgz"
+  "version" "2.0.0"
+  dependencies:
+    "prop-types" "^15.6.2"
+
 "react-native-maps-directions@^1.8.0":
   "integrity" "sha512-7KWfPrvPLU8VP2nEqsnrWlOuylidlRWWDdk3lqT5Nb1q87FeyzNgA7Ib7n6cZlQwH4usTRlJSnzNo/yQ3u4AZw=="
   "resolved" "https://registry.npmjs.org/react-native-maps-directions/-/react-native-maps-directions-1.8.0.tgz"

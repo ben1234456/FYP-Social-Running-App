@@ -14,7 +14,6 @@ export default class TrainingRouteScreen extends Component {
         };
         const getData = async () => {
             //using localhost on IOS and using 10.0.2.2 on Android
-            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
                 if (userJson !== null) {
@@ -27,6 +26,8 @@ export default class TrainingRouteScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
             fetch(baseUrl + '/api/admin/route/routeList', {
                 headers: {
                     Accept: 'application/json',
@@ -73,11 +74,50 @@ export default class TrainingRouteScreen extends Component {
                 </View>
                 <View style={styles.routeInfo}>
                     <Text style={styles.routeDistance}>{data.item.total_distance}km</Text>
-                    <Text style={styles.routeDuration}>{data.item.hour}:{data.item.minute}:{data.item.second}</Text>
                 </View>
             </View>
         </TouchableOpacity>
-    
+    componentDidMount(){
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            fetch(baseUrl + '/api/admin/route/routeList', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get admin route list data')
+                console.log(data)
+                this.setState({
+                    loadedAdminData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            fetch(baseUrl + '/api/route/routeList/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user route list data')
+                console.log(data)
+                this.setState({
+                    loadedData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            //Put your Data loading function here instead of my this.loadData()
+          });
+    }
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -97,7 +137,7 @@ export default class TrainingRouteScreen extends Component {
                     </View>
                     :
                     <View style={styles.noData}>
-                        <Text>No routes avaliable now</Text>
+                        <Text style={styles.noDataText}>No routes avaliable now</Text>
                     </View>
                     }
                     
@@ -126,7 +166,7 @@ export default class TrainingRouteScreen extends Component {
                         </View>
                         :
                         <View style={styles.noData}>
-                            <Text>No routes avaliable now</Text>
+                            <Text style={styles.noDataText}>No routes avaliable now</Text>
                         </View>
                         }
                         
@@ -144,6 +184,7 @@ export const styles = StyleSheet.create({
         flex:1,
         padding:"5%",
     },
+    
     routesContainer:{
         alignItems:"flex-start",
         flex:1,
@@ -201,7 +242,10 @@ export const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems:"center",
         padding:"5%",
-    }
+    },
+    noDataText:{
+        color:"#808080",
+    },
     // title: {
     //     marginTop: 10,
     //     fontSize: 18,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 'react-native';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { StackActions } from '@react-navigation/native';
 
 export default class buddyRequestDetailScreen extends Component {
 
@@ -97,8 +97,10 @@ export default class buddyRequestDetailScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-            this.props.navigation.dispatch(StackActions.replace('BuddiesRequestList'))
+            this.props.navigation.dispatch(StackActions.pop());
+            this.props.navigation.dispatch(StackActions.pop());
+            this.props.navigation.dispatch(StackActions.replace('BuddiesListScreen'))
+            // this.props.navigation.dispatch(StackActions.replace('BuddiesRequestList'))
 
     }
     accept=() =>{

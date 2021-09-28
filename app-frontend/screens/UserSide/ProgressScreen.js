@@ -20,6 +20,13 @@ export default class App extends Component {
         };
 
 
+        
+
+        
+        
+    }
+
+    componentDidMount(){
         const getData = async () => {
 
             try {
@@ -34,15 +41,7 @@ export default class App extends Component {
             } catch(e) {
                 console.log(e);
             }
-       
-        }
-
-        getData();
-        
-    }
-
-    componentDidMount(){
-        //using localhost on IOS and using 10.0.2.2 on Android
+            //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
         fetch(baseUrl + '/api/activity/users/' + this.state.user_id, {
@@ -54,7 +53,7 @@ export default class App extends Component {
         .then(response => response.json())
         .then(data => {
             console.log('Successfully get activity data')
-            // console.log(data)
+            console.log(data)
             this.setState({
                 activityData:data
             });
@@ -62,6 +61,12 @@ export default class App extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        }
+        getData();
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            getData();
+            //Put your Data loading function here instead of my this.loadData()
+          });
     }
 
     renderActivities = (data) => 
@@ -104,7 +109,6 @@ export default class App extends Component {
         return (
             
             <ScrollView style={styles.container}>
-                <View style={styles.activityContainer}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.activityTitle}>Recent Activities </Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('activityHistoryScreen')}>
@@ -114,7 +118,7 @@ export default class App extends Component {
 
                     {this.state.activityData.length!=0
                     ?
-                    <View style={styles.scrollview}>
+                    <View style={styles.dataContainer}>
                         <FlatList 
                         data={this.state.activityData}
                         keyExtractor={item => item.id.toString()}
@@ -159,7 +163,6 @@ export default class App extends Component {
                             <Text style={styles.date}>2021-01-01</Text>
                         </View>
                     </TouchableOpacity> */}
-                </View>
 
                 {/* <Divider style={styles.divider} />
 
@@ -234,23 +237,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        padding:"5%",
+        paddingTop:"10%",
     },
     contentContainer: {
         padding: 40,
+    },
+    dataContainer:{
+        marginTop:"5%",
     },
     contentContainer2: {
         paddingLeft: 40,
         paddingTop: 10,
     },
-    activityContainer: {
-        marginTop: 30,
-    },
     rowContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 30,
-        paddingLeft: 40,
-        paddingRight: 40,
+        marginBottom:"5%",
     },
     rowContainer2: {
         paddingBottom: 20,
@@ -331,4 +334,9 @@ const styles = StyleSheet.create({
     date: {
         color: '#999999',
     },
+    noEventText:{
+        flex:1,
+        color:"#808080",
+        marginTop:"5%",
+    }
 });

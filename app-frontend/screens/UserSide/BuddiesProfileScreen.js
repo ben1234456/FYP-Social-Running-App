@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 'react-native';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { StackActions } from '@react-navigation/native';
 
 export default class BuddiesProfileScreen extends Component {
 
@@ -101,7 +101,7 @@ export default class BuddiesProfileScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            this.props.navigation.navigate('BuddiesListScreen');
+            this.props.navigation.dispatch(StackActions.pop());
 
     }
     addBuddy=() =>{

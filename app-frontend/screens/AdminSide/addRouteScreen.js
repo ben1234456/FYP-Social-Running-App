@@ -12,7 +12,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
-import TrainingRouteScreen from '../UserSide/TrainingRouteScreen';
 
 export default class addRouteScreen extends Component {
 
@@ -272,12 +271,17 @@ export default class addRouteScreen extends Component {
         this.getLocation();
     };
 
-    checkSelected=(value,selected)=>{
-        if(selected==false){
-            return null;
+    checkSelected=(value,type)=>{
+        if(value!=null){
+            if(type=="long"){
+                return value.coordinate.longitude
+            }
+            else{
+                return value.coordinate.latitude
+            }
         }
         else{
-            return value;
+            return null;
         }
     }
     //save route in database
@@ -293,10 +297,10 @@ export default class addRouteScreen extends Component {
             end_lat:this.state.end.coordinate.latitude,
             end_lng:this.state.end.coordinate.longitude,
             total_distance:this.state.distance,
-            check1_lat:this.checkSelected(this.state.check1.coordinate.latitude,this.state.check1.selected),
-            check1_lng:this.checkSelected(this.state.check1.coordinate.longitude,this.state.check1.selected),
-            check2_lat:this.checkSelected(this.state.check2.coordinate.latitude,this.state.check2.selected),
-            check2_lng:this.checkSelected(this.state.check2.coordinate.longitude,this.state.check2.selected),
+            check1_lat:this.checkSelected(this.state.check1,"lat"),
+            check1_lng:this.checkSelected(this.state.check1,"long"),
+            check2_lat:this.checkSelected(this.state.check2,"lat"),
+            check2_lng:this.checkSelected(this.state.check2,"long"),
         };
         fetch( baseUrl + '/api/route', {
             method: 'POST',
@@ -314,7 +318,9 @@ export default class addRouteScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            this.props.navigation.navigate("TrainingRoutes");
+        this.props.navigation.dispatch(StackActions.pop());
+
+        
     };
     
     render() {

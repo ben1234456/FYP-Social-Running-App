@@ -159,8 +159,8 @@ export default class startFreeRunScreen extends Component {
             latitude: geolocation.latitude,
             longitude: geolocation.longitude,
 
-            latitudeDelta: 0.0005,
-            longitudeDelta: 0.0005,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
         })
 
         var previousgeo = { latitude: this.state.prevLat, longitude: this.state.prevLng };
@@ -194,10 +194,12 @@ export default class startFreeRunScreen extends Component {
             // distance checker, if >10m then the distance won't be added to the total distance 
             if (totalnewdistance < 0.01) {
                 this.setState({ distanceTravelled: totaldistance + totalnewdistance });
+                this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
+
             }
 
-            this.setState({ distanceTravelled: totaldistance + totalnewdistance });
-            this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
+            // this.setState({ distanceTravelled: totaldistance + totalnewdistance });
+            // this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
 
         }    
 

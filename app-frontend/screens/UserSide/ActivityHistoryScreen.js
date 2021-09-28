@@ -21,6 +21,11 @@ export default class App extends Component {
         };
 
 
+        
+        
+    }
+    componentDidMount(){
+        
         const getData = async () => {
 
             try {
@@ -35,6 +40,7 @@ export default class App extends Component {
             } catch(e) {
                 console.log(e);
             }
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
 
             fetch( baseUrl + '/api/activity/all/users/' + this.state.user_id, {
                 headers: {
@@ -49,6 +55,8 @@ export default class App extends Component {
                     activityData:data,
                     activityNumber:data.length,
                 });
+                
+                console.log(this.state.activityData.length);
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -56,9 +64,7 @@ export default class App extends Component {
         }
 
         getData();
-        
     }
-
     renderActivities = (data) => 
         <View style={styles.rowContainer}>
             <Icon name={ (data.item.activity_type == "walking") ? "walk" : 

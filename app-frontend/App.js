@@ -164,7 +164,8 @@ export default class App extends Component {
                     <Stack.Screen
                         name="run"
                         component={FreeRun}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false} 
+                        options={{ headerTitleAlign: 'center', title: 'Free Run' }}
                     />
 
                     <Stack.Screen
@@ -176,7 +177,8 @@ export default class App extends Component {
                     <Stack.Screen
                         name="eventDetails"
                         component={eventDetails}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Events' }}
                     />
                     <Stack.Screen
                         name="Coupon"
@@ -192,7 +194,9 @@ export default class App extends Component {
                     <Stack.Screen
                         name="couponDetails"
                         component={couponDetails}
-                        initial={false} options={{ headerShown: false }}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'Registered Events' }}
+
                     />
                     <Stack.Screen
                         name="submitRun"
@@ -216,11 +220,7 @@ export default class App extends Component {
                         component={addRouteScreen}
                         initial={false}
                         options={{
-                            headerTitleAlign: 'center', title: 'Add Route', headerRight: () =>
-                                <View style={styles.addRouteHeaderContainer}>
-                                    <Text style={styles.addRouteHeaderText}>SAVE</Text>
-                                </View>
-                        }}
+                            headerTitleAlign: 'center', title: 'Add Route' }}
 
                     />
                     <Stack.Screen
