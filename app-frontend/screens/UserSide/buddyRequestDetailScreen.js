@@ -97,9 +97,8 @@ export default class buddyRequestDetailScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-            this.props.navigation.navigate('BuddiesRequestList');
-                
-                
+
+            this.props.navigation.dispatch(StackActions.replace('BuddiesRequestList'))
 
     }
     accept=() =>{
@@ -139,16 +138,6 @@ export default class buddyRequestDetailScreen extends Component {
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
                 <View style={{ flexDirection: 'column' }}>
-                    <View style={styles.followerRow}>
-                        <View style={styles.followPosition}>
-                            <Text style={styles.noOfFollower}>0</Text>
-                            <Text style={styles.follow}>FOLLOWERS</Text>
-                        </View>
-                        <View style={styles.followPosition}>
-                            <Text style={styles.noOfFollower}>0</Text>
-                            <Text style={styles.follow}>FOLLOWING</Text>
-                        </View>
-                    </View>
                 </View>
                 <View style={styles.cardView}>
                     <View style={styles.proRow}>

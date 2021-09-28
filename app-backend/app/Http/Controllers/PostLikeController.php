@@ -43,7 +43,14 @@ class PostLikeController extends Controller
         $like->user_id = $request->user_id;
         //sender id
         $like->post_id = $request->post_id;
-        return $like->save();
+        $status = $like->save();
+
+        if($status){
+            return response()->json(['status' => 'success']);
+        }
+        else{
+            return response()->json(['status' => 'fail']);
+        }
     }
 
     /**

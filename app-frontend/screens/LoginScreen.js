@@ -100,20 +100,38 @@ export default class LoginScreen extends Component {
                 console.log(data);
 
                 if (data.message == "success"){
-                    this.setState({
-                        spinner: !this.state.spinner
-                    });
 
-                    //save JSON data to local storage
-                    AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
-                    //navigate to home page
-                    if (data.user.role == "user"){
-                        this.props.navigation.dispatch(StackActions.popToTop());
-                        this.props.navigation.dispatch(StackActions.replace('app'));
-                    }else if (data.user.role == "admin"){
-                        this.props.navigation.dispatch(StackActions.popToTop());
-                        this.props.navigation.dispatch(StackActions.replace('adminapp'));
+                    if (data.user.email_verified_at){
+                        this.setState({
+                            spinner: !this.state.spinner
+                        });
+    
+                        //save JSON data to local storage
+                        AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
+                        //navigate to home page
+                        if (data.user.role == "user"){
+                            this.props.navigation.dispatch(StackActions.replace('app'));
+                        }else if (data.user.role == "admin"){
+                            this.props.navigation.dispatch(StackActions.replace('adminapp'));
+                        }
                     }
+
+                    else{
+                        this.setState({
+                            spinner: !this.state.spinner
+                        });
+
+                        Alert.alert(
+                            'Email Not Verified',
+                            'Please verify your email',
+                            [
+                                { text: "OK" },
+                            ]
+                        );
+
+                        
+                    }
+                    
                 }
 
                 else {

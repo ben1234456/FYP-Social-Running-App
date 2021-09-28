@@ -137,7 +137,7 @@ export default class ForumDetailsScreen extends Component {
                 description: this.state.description,
             };
 
-            fetch(baseUrl + '/api/post/list/edit/'+1, {
+            fetch(baseUrl + '/api/post/list/edit/'+ this.state.post_id, {
                 method: 'PUT',
                 headers: {
                   Accept: 'application/json',

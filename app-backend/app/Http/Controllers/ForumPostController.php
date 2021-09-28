@@ -91,7 +91,6 @@ class ForumPostController extends Controller
      */
     public function show(ForumPost $forumPost)
     {
-        error_log("?");
         return $forumPost->toJson();
     }
 
