@@ -141,20 +141,29 @@ class EventController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Event succesfully soft deleted']);
         }
         else{
-            return response()->json(['status' => 'fail']);
+            return response()->json(['status' => 'fail', 'message'=> 'error']);
         }
     }
 
     //get events (excluded registered)
     public function showUserExclusiveEvents(User $user)
     {
+        $eventList = [];
+
         $user_id = $user->id;
 
         $user_events = UserEvent::where('user_id', $user_id)->get();
 
         $user_exclusive_events = Event::whereNotIn('id', $user_events)->get();
 
-        return $user_exclusive_events->toJson();
+        foreach ($user_exclusive_events as $event) {
+            $currentDate =  date("Y-m-d");
+            if ($event->registration_start <= $currentDate){
+                array_push($eventList,$event);
+            }
+        }
+
+        return $eventList;
 
     }
 

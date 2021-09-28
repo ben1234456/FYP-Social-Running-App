@@ -202,7 +202,7 @@ export default class eventDetails extends Component {
 
     renderDistanceSelection = (data) =>
     <View style={{ flexDirection: 'row' }}>
-        <Text style={{ marginTop: 8, flex: 1 }}>{data.item.distance}km</Text>
+        <Text style={{ marginTop: 8, flex: 1 }}>{data.item.distance}km (RM{data.item.fee})</Text>
         <RadioButton 
             value={data.item.distance} 
             color='#8352F2'

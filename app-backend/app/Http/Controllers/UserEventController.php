@@ -62,9 +62,10 @@ class UserEventController extends Controller
      * @param  \App\Models\UserEvent  $userEvent
      * @return \Illuminate\Http\Response
      */
-    public function show(UserEvent $userEvent)
+    public function show($userEvent)
     {
-        return $userEvent->toJson();
+        $userevent = UserEvent::where('id',$userEvent)->first();
+        return $userevent->toJson();
     }
 
     /**
@@ -108,6 +109,7 @@ class UserEventController extends Controller
 
         foreach($userevents as $userevent){
             $event = Event::where('id', '=', $userevent->event_id)->first();
+            $userevent->event_id= $event->id;
             $userevent->start_date = $event->start;
             $userevent->end_date = $event->end;
             $userevent->event_name = $event->event_name;

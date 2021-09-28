@@ -12,7 +12,14 @@ export default class couponDetails extends Component {
         super(props);
         this.state = {
             id:"",
-            name:"",     
+            name:"",
+            event_id: props.route.params.event_id,   
+            registration_id: props.route.params.registration_id,   
+            event_name: "",
+            event_start: "",
+            event_end: "",     
+            progress: "",
+            register_at: "",
         };
 
 
@@ -35,6 +42,52 @@ export default class couponDetails extends Component {
     
     }
 
+    componentDidMount(){
+        //get event details
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        console.log(this.state.event_id)
+        fetch(baseUrl + '/api/events/' + this.state.event_id, {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get registered event data')
+            this.setState({
+                event_name: data.event_name,
+                event_start: data.start,
+                event_end: data.end,
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+        //get registration details
+
+        fetch(baseUrl + '/api/userevents/' + this.state.registration_id, {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get registration data')
+            this.setState({
+                progress: data.status,
+                register_at: data.created_at,
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
     render() {
         return (
             <ScrollView style={styles.background}>
@@ -43,22 +96,22 @@ export default class couponDetails extends Component {
                         <Image style={styles.image} source={Event} />
                     </View>
                     <View>
-                        <Text style={styles.title}>Virtual Half Marathon</Text>
+                        <Text style={styles.title}>{this.state.event_name}</Text>
                     </View>
                     <View style={styles.infoRow}>
                         <View style={styles.infoColumnTitle}>
                             <Text style={styles.eventTitle}>Date</Text>
                         </View>
                         <View style={styles.infoColumnInfo}>
-                            <Text style={styles.eventInfo}>7 July - 12 August 2021</Text>
+                            <Text style={styles.eventInfo}>{this.state.event_start} - {this.state.event_end}</Text>
                         </View>
                     </View>
                     <View style={styles.infoRow}>
                         <View style={styles.infoColumnTitle}>
-                            <Text style={styles.eventTitle}>Run Submission:</Text>
+                            <Text style={styles.eventTitle}>Registered at:</Text>
                         </View>
                         <View style={styles.infoColumnInfo}>
-                            <Text style={styles.eventInfo}>12 August 2021</Text>
+                            <Text style={styles.eventInfo}>{this.state.register_at.slice(0,10) + " " + this.state.register_at.slice(11,19)}</Text>
                         </View>
                     </View>
                     <View style={styles.spacing}/>
@@ -75,17 +128,10 @@ export default class couponDetails extends Component {
                             <Text style={styles.userTitle}>Progress</Text>
                         </View>
                         <View style={styles.infoColumnInfo}>
-                            <Text style={styles.userInfo}>Ongoing</Text>
+                            <Text style={styles.userInfo}>{this.state.progress}</Text>
                         </View>
                     </View>
-                    <View style={styles.infoRow}>
-                        <View style={styles.infoColumnTitle}>
-                            <Text style={styles.userTitle}>Coupon No.</Text>
-                        </View>
-                        <View style={styles.infoColumnInfo}>
-                            <Text style={styles.userInfo}>RUN1928376</Text>
-                        </View>
-                    </View>
+                    
                     <View>
                         <Button block style={styles.stickyBtn} onPress={() => this.props.navigation.navigate('run')} >
                             <Text style={styles.btnText}>RUN</Text>

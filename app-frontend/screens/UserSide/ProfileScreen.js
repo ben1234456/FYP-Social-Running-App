@@ -50,7 +50,7 @@ export default class App extends Component {
     
         getData();
         
-        }
+    }
 
     logout = async () => {
 
@@ -61,7 +61,7 @@ export default class App extends Component {
             msg,
             '',
             [
-                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.popToTop())},
+                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.replace('login'))},
                 { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
             ],
             {cancelable: false},

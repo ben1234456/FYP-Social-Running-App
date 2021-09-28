@@ -6,7 +6,8 @@ import Eye from '../images/eye.png';
 import { Actions } from 'react-native-router-flux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class LoginScreen extends Component {
 
@@ -20,6 +21,7 @@ export default class LoginScreen extends Component {
             password: "",
             showPassword: true,
             user: "",
+            spinner: false,
         }
 
     }
@@ -72,6 +74,10 @@ export default class LoginScreen extends Component {
 
     login = () => {
 
+        this.setState({
+            spinner: !this.state.spinner
+        });
+
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         
@@ -89,40 +95,50 @@ export default class LoginScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
 
-                    if (data.message == "success"){
-                        //save JSON data to local storage
-                        AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
-                        //navigate to home page
-                        if (data.user.role == "user"){
-                            this.props.navigation.navigate('app');
-                        }else if (data.user.role == "admin"){
-                            this.props.navigation.navigate('adminapp');
-                        }
+                if (data.message == "success"){
+                    this.setState({
+                        spinner: !this.state.spinner
+                    });
+
+                    //save JSON data to local storage
+                    AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
+                    //navigate to home page
+                    if (data.user.role == "user"){
+                        this.props.navigation.dispatch(StackActions.popToTop());
+                        this.props.navigation.dispatch(StackActions.replace('app'));
+                    }else if (data.user.role == "admin"){
+                        this.props.navigation.dispatch(StackActions.popToTop());
+                        this.props.navigation.dispatch(StackActions.replace('adminapp'));
                     }
+                }
 
-                    else {
-                        removeLastChar = data.message.slice(0, data.message.length - 1);
+                else {
+                    this.setState({
+                        spinner: !this.state.spinner
+                    });
 
-                        Alert.alert(
-                            data.message,
-                            ''
-                            [
-                              { text: "OK" }
-                            ]
-                        );
-                    }
+                    removeLastChar = data.message.slice(0, data.message.length - 1);
+
+                    Alert.alert(
+                        data.message,
+                        ''
+                        [
+                            { text: "OK" }
+                        ]
+                    );
+                }
 
 
-                    
-                             
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                
+                            
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
             
         }
@@ -155,6 +171,11 @@ export default class LoginScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.contentContainer}>
+                    <Spinner
+                        visible={this.state.spinner}
+                        textContent={'Loading...'}
+                        textStyle={styles.spinnerTextStyle}
+                    />
                     <View>
                         <Text style={styles.heading}>Welcome Back.</Text>
                         <View style={styles.input}>

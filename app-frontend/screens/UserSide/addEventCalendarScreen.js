@@ -1,10 +1,12 @@
 import React,{ Component } from "react";
-import { View,Text,StyleSheet,Image,TextInput,Picker,TouchableOpacity,Button } from "react-native";
+import { View,Text,StyleSheet,Image,TextInput,Picker,TouchableOpacity,Button, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import PickerModal from 'react-native-picker-modal-view';
 import TimePicker from "react-native-24h-timepicker";
+import { StackActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default class addEventCalendarScreen extends Component{
@@ -55,6 +57,7 @@ export default class addEventCalendarScreen extends Component{
             },
             ],
         };
+
         const getData = async () => {
             //using localhost on IOS and using 10.0.2.2 on Android
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
@@ -74,51 +77,88 @@ export default class addEventCalendarScreen extends Component{
 
         getData();
     }
-    toggle=()=>{
-        if(this.state.allDay=="ON"){
-            this.setState({ allDay: "OFF" });
-        }
-        if(this.state.allDay=="OFF"){
-            this.setState({ allDay: "ON" });
-        }
-        const data = {
-            userID: this.state.userID,
-            time: this.state.eventTime,
-            title: this.state.eventName,
-            date: this.state.date,
-        };
-        console.log(data);
-    };
+
     select=(selected)=>{
         this.setState({ remindTime: selected });
         return selected;
     };
+
     onClosed=()=>{
         console.log('back key pressed');
     };
+
     back=()=>{
         console.log('back key pressed');
     };
+
     testing=()=>{
         console.log(this.state.remindTime);
     };
+
+    validation = () =>{
+        var empty = [];
+
+        if (!(this.state.eventName)) {
+            empty.push("title");
+        }
+
+        if (!(this.state.time)) {
+            empty.push("time");
+        }
+
+        if (empty.length != 0) {
+
+            console.log(empty[0]);
+
+            var errormsg = "Your ";
+            var i;
+
+            for (i = 0; i < empty.length; i++) {
+                if (i == empty.length - 1) {
+                    errormsg += empty[i] + " ";
+                }
+                else {
+                    errormsg += empty[i] + ", ";
+                }
+            }
+
+            errormsg += "cannot be emtpy";
+
+            Alert.alert(
+                errormsg,
+                '',
+                [
+                    { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return false;
+        }
+
+        else {
+
+            return true;
+        }
+    }
+
     save=()=>{
-        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-        const data = {
-            userID: this.state.userID,
-            time: this.state.eventTime,
-            title: this.state.eventName,
-            date: this.state.date,
-        };
-        
-        fetch( baseUrl + '/api/calendar', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
+
+        if (this.validation()){
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            const data = {
+                userID: this.state.userID,
+                time: this.state.eventTime,
+                title: this.state.eventName,
+                date: this.state.date,
+            };
+            
+            fetch( baseUrl + '/api/calendar', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            })
             .then(response => response.json())
             .then(data => {
                 //success
@@ -127,7 +167,11 @@ export default class addEventCalendarScreen extends Component{
             .catch((error) => {
                 console.error('Error:', error);
             });
-        this.props.navigation.navigate('calendarScreen');
+        }
+        
+        
+
+        this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
     }
     onCancel() {
         this.TimePicker.close();
@@ -213,37 +257,18 @@ export default class addEventCalendarScreen extends Component{
                         <View style={styles.infoRowContainer}>
                             <View style={styles.infoContainerLeft}>
                                 <Text>
-                                    All-day
-                                </Text>
-                            </View>
-                            <View style={styles.infoContainerRight}>
-                                <TouchableOpacity style={(this.state.allDay=="ON")?styles.toggle:styles.toggled} onPress={this.toggle}>
-                                    <Text style={(this.state.allDay=="ON")?styles.toggleText:styles.toggledText}>
-                                        {this.state.allDay}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.infoRowContainer}>
-                            <View style={styles.infoContainerLeft}>
-                                <Text>
                                     {this.state.date}
                                 </Text>
                             </View>
-                            <View style={styles.infoContainerRight1}>
-                                {this.state.allDay=="OFF"
-                                ?
+                            <View style={styles.infoContainerRight}>
                                 <TouchableOpacity onPress={() => this.TimePicker.open()}>
                                     <Text>
                                         {this.state.eventTime}
                                     </Text>
                                 </TouchableOpacity>
-                                :
-                                <View></View>
-                                }
-                                
                             </View>
                         </View>
+                    
                     </View>
                     
                 </View> 

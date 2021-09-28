@@ -6,6 +6,7 @@ import Eye from '../images/eye.png';
 import DatePicker from 'react-native-datepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class SignUpScreen extends Component {
     constructor(props) {
@@ -28,6 +29,7 @@ export default class SignUpScreen extends Component {
             icEye: 'eye-off',
             showPassword: true,
             token: '',
+            spinner: false,
         }
     }
 
@@ -88,18 +90,7 @@ export default class SignUpScreen extends Component {
             return false;
         }
 
-        // else if (!this.emailvalidation()){
-        //     Alert.alert(
-        //         "Please enter an valid email address",
-        //         '',
-        //         [
-        //           { text: "Ok", onPress: () => console.log("OK Pressed") }
-        //         ]
-        //     );
-
-        //     return false;
-        // }
-
+        
         else if (this.state.password != this.state.password_confirmation ){
             Alert.alert(
                 "Both passwords must be the same",
@@ -117,8 +108,12 @@ export default class SignUpScreen extends Component {
             return true;
         }
     }
-
+    
     register = () => {
+
+        this.setState({
+            spinner: !this.state.spinner
+        });
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
@@ -156,24 +151,44 @@ export default class SignUpScreen extends Component {
 
                 if (data.message == "The given data was invalid."){
 
-                    if (data.errors.name){
-                        for (let x = 0; x < data.errors.name.length; x++){
-                            errorMsg += data.errors.name[x] + "\n";
+                    //see if there any email error
+                    try {
+                        if (data.errors.email != ""){
+                            for (let x = 0; x < data.errors.email.length; x++){
+                                errorMsg += data.errors.email[x] + "\n";
+                            }
                         }
                     }
-         
-                    if (data.errors.email != ""){
-                        for (let x = 0; x < data.errors.email.length; x++){
-                            errorMsg += data.errors.email[x] + "\n";
-                        }
+                      catch(err) {
+                        console.log("No email error")
                     }
 
-                    if (data.errors.password){
-                        for (let x = 0; x < data.errors.password.length; x++){
-                            errorMsg += data.errors.password[x] + "\n";
+                    try {
+                        if (data.errors.name != ""){
+                            for (let x = 0; x < data.errors.name.length; x++){
+                                errorMsg += data.errors.name[x] + "\n";
+                            }
                         }
                     }
+                      catch(err) {
+                        console.log("No name error")
+                    }
+
+                    try {
+                        if (data.errors.password){
+                            for (let x = 0; x < data.errors.password.length; x++){
+                                errorMsg += data.errors.password[x] + "\n";
+                            }
+                        }
+                    }
+                      catch(err) {
+                        console.log("No password error")
+                    }
                     
+                    this.setState({
+                        spinner: !this.state.spinner
+                    });
+
                     Alert.alert(
                         errorMsg,
                         ''
@@ -185,11 +200,19 @@ export default class SignUpScreen extends Component {
 
                 else if (data.message == "success"){
 
+                    this.setState({
+                        spinner: !this.state.spinner
+                    });
+
                     Alert.alert(
-                        'Account Succesfully Registered! Please verify your account by using the email entered just now',
-                        ''
+                        "Success",
+                        "Account Succesfully Registered! Please verify your account by using the email entered just now",
                         [
-                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('login'))}
+                          {
+                            text: "Ok",
+                            onPress: () => this.props.navigation.dispatch(StackActions.replace('login')),
+                          },
+                          
                         ]
                     );
                     
@@ -223,9 +246,14 @@ export default class SignUpScreen extends Component {
     };
 
     render() {
-        return (
+        return (       
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer}>
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Loading...'}
+                    textStyle={styles.spinnerTextStyle}
+                />
                     <View>
                         <Text style={styles.heading}>Create Account</Text>
                         <View >

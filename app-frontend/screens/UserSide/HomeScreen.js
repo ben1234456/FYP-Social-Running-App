@@ -29,7 +29,7 @@ export default class HomeScreen extends Component {
             
         };
 
-
+        
         const getData = async () => {
 
             //using localhost on IOS and using 10.0.2.2 on Android
@@ -92,24 +92,6 @@ export default class HomeScreen extends Component {
 
     }
 
-    componentDidUpdate() {
-        const getData = async () => {
-            try {
-                const userJson = await AsyncStorage.getItem('@userJson')
-                if (userJson !== null) {
-                    const user = JSON.parse(userJson);
-                    this.setState({
-                        name: user.first_name,
-                    });
-                }
-
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        getData();
-    };
 
     renderEvents = (data) =>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>
@@ -162,13 +144,20 @@ export default class HomeScreen extends Component {
                     </View>
                 </View>
 
-                <View style={styles.scrollview}>
-                    <FlatList horizontal={true}
-                        data={this.state.eventdata}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderEvents(item)}
-                    />  
-                </View>
+                {this.state.eventdata.length!=0
+                    ?
+                    <View style={styles.scrollview}>
+                        <FlatList horizontal={true}
+                            data={this.state.eventdata}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={item => this.renderEvents(item)}
+                        />  
+                    </View>
+                    :
+                    <View style={styles.noEventView}>
+                        <Text style={styles.noEventText}>There is currently no event, please wait for the update!</Text>
+                    </View>
+                }
                 
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
@@ -179,6 +168,8 @@ export default class HomeScreen extends Component {
                     </View>
                 </View>
 
+                {this.state.comingSoonEventData.length!=0
+                ?
                 <View style={styles.scrollview}>
                     <FlatList horizontal={true}
                         data={this.state.comingSoonEventData}
@@ -186,6 +177,13 @@ export default class HomeScreen extends Component {
                         renderItem={item => this.renderComingSoonEvents(item)}
                     />  
                 </View>
+                :
+                <View style={styles.noEventView}>
+                    <Text style={styles.noEventText}>There is currently no upcoming event, please wait for the update!</Text>
+                </View>
+                }
+
+                
 
             </ScrollView>
         );
@@ -272,5 +270,17 @@ export const styles = StyleSheet.create({
         flex: 1,
         fontSize: 18,
         color: 'grey',
-    }
+    },
+    noEventView:{
+        flex:1,
+        paddingLeft:"10%",
+        paddingRight:"10%",
+        alignItems:"flex-start",
+        justifyContent:"center",
+        paddingTop:"10%",
+    },
+
+    noEventText:{
+        fontSize:16,
+    },
 });

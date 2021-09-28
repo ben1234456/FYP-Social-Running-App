@@ -6,6 +6,7 @@ import Event from '../../images/event.png';
 import UpcomingEvent from '../../images/family_marathon.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ant from 'react-native-vector-icons/AntDesign';
+import { StackActions } from '@react-navigation/native';
 
 export default class AdminHomeScreen extends Component {
 
@@ -96,6 +97,7 @@ export default class AdminHomeScreen extends Component {
         getData();
     };
 
+    
     renderEvents = (data) =>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('adminEventDetailsScreen', { 'eventid': data.item.id })}>
             <View style={styles.cardView}>
@@ -145,13 +147,20 @@ export default class AdminHomeScreen extends Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
+                    {this.state.eventdata.length!=0
+                    ?
                     <View style={styles.scrollview}>
                         <FlatList horizontal={true}
                             data={this.state.eventdata}
                             keyExtractor={item => item.id.toString()}
                             renderItem={item => this.renderEvents(item)}
-                        />
+                        />  
                     </View>
+                    :
+                    <View style={styles.noEventView}>
+                        <Text style={styles.noEventText}>There is currently no event, please wait for the update!</Text>
+                    </View>
+                    }
                 </View>
 
                 <View style={styles.contentContainer1}>
@@ -168,13 +177,21 @@ export default class AdminHomeScreen extends Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
+                    {this.state.comingSoonEventData.length!=0
+                    ?
                     <View style={styles.scrollview}>
                         <FlatList horizontal={true}
                             data={this.state.comingSoonEventData}
                             keyExtractor={item => item.id.toString()}
                             renderItem={item => this.renderComingSoonEvents(item)}
-                        />
+                        />  
                     </View>
+                    :
+                    <View style={styles.noEventView}>
+                        <Text style={styles.noEventText}>There is currently no upcoming event, please wait for the update!</Text>
+                    </View>
+                    }
+
                 </View>
                 <View style={{ flexDirection: 'column', alignItems: 'flex-end', padding: 40 }}>
                     <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} onPress={() => this.props.navigation.navigate('addEventsScreen')} />
@@ -265,5 +282,17 @@ export const styles = StyleSheet.create({
         flex: 1,
         fontSize: 18,
         color: 'grey',
-    }
+    },
+    noEventView:{
+        flex:1,
+        paddingLeft:"10%",
+        paddingRight:"10%",
+        alignItems:"flex-start",
+        justifyContent:"center",
+        paddingTop:"10%",
+    },
+
+    noEventText:{
+        fontSize:16,
+    },
 });

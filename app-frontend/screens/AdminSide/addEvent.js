@@ -7,6 +7,7 @@ import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import moment from 'moment';
+import { StackActions } from '@react-navigation/native';
 
 export default class addEvent extends Component {
     constructor(props) {
@@ -137,12 +138,17 @@ export default class addEvent extends Component {
 
                         //Alert the user
                         Alert.alert(
+                            "Success",
                             data.message,
-                            '',
                             [
-                                { text: "Ok", onPress: () => this.props.navigation.push('adminapp') }
+                              {
+                                text: "Ok",
+                                onPress: () => this.props.navigation.dispatch(StackActions.replace('adminapp')),
+                              },
+                              
                             ]
                         );
+
                     }
 
                     //fail 

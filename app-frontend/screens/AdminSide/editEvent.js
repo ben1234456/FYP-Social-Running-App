@@ -5,6 +5,7 @@ import { Button, Left } from 'native-base'
 import DatePicker from 'react-native-datepicker';
 import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
+import { StackActions } from '@react-navigation/native';
 
 
 export default class editEvent extends Component {
@@ -183,7 +184,7 @@ export default class editEvent extends Component {
                         data.message,
                         '',
                         [
-                            { text: "Ok", onPress: () => this.props.navigation.push('adminapp') }
+                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', {'eventid': this.state.event_id })) }
                         ]
                     );
                 }

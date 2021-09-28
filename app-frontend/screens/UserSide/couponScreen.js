@@ -44,8 +44,8 @@ export default class couponScreen extends Component {
         <View style={styles.couponDate}>
             <Text style={styles.eventDate}>{data.item.start_date} until {data.item.end_date}</Text>
         </View>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('couponDetails')}>
-            <View style={styles.couponRow}  onPress={() => this.props.navigation.navigate('couponDetails')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('couponDetails',{event_id: data.item.event_id,registration_id: data.item.id})}>
+            <View style={styles.couponRow}  onPress={() => this.props.navigation.navigate('couponDetails',{event_id: data.item.event_id,registration_id: data.item.id})}>
                 <View style={styles.couponImg}>
                     <Image style={styles.image} source={Event} />
                 </View>
@@ -63,11 +63,22 @@ export default class couponScreen extends Component {
             <ScrollView style={styles.background}>
                 <View style={styles.container}>
 
-                <FlatList 
+                {this.state.event_data.length!=0
+                ?
+                <View style={styles.scrollview}>
+                    <FlatList 
                     data={this.state.event_data}
                     keyExtractor={item => item.id.toString()}
                     renderItem={item => this.renderItemComponent(item)}
-                /> 
+                    /> 
+                </View>
+                :
+                <View style={styles.noEventView}>
+                    <Text style={styles.noEventText}>Oh! Seems like you did not registered any event!</Text>
+                </View>
+                }
+
+                 
 
                 </View>
             </ScrollView>
@@ -127,6 +138,17 @@ export const styles = StyleSheet.create({
         height:"100%",
         width:"100%",
         borderRadius:10,
+    },
+    noEventView:{
+        flex:1,
+        paddingLeft:"10%",
+        paddingRight:"10%",
+        alignItems:"flex-start",
+        justifyContent:"center",
+    },
+
+    noEventText:{
+        fontSize:16,
     },
 });
 

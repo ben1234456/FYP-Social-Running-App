@@ -22,9 +22,6 @@ export default class App extends Component {
 
         const getData = async () => {
 
-            //using localhost on IOS and using 10.0.2.2 on Android
-            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
                 if(userJson !== null) {
@@ -37,31 +34,37 @@ export default class App extends Component {
             } catch(e) {
                 console.log(e);
             }
-
-            fetch(baseUrl + '/api/activity/users/' + this.state.user_id, {
-                headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get activity data')
-                // console.log(data)
-                this.setState({
-                    activityData:data
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+       
         }
 
         getData();
         
     }
 
-    renderItemComponent = (data) => 
+    componentDidMount(){
+        //using localhost on IOS and using 10.0.2.2 on Android
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+        fetch(baseUrl + '/api/activity/users/' + this.state.user_id, {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Successfully get activity data')
+            // console.log(data)
+            this.setState({
+                activityData:data
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    renderActivities = (data) => 
     <TouchableOpacity>
         <View style={styles.rowContainer}>
             <Icon name={ (data.item.activity_type == "walking") ? "walk" : 
@@ -109,12 +112,21 @@ export default class App extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <FlatList 
+                    {this.state.activityData.length!=0
+                    ?
+                    <View style={styles.scrollview}>
+                        <FlatList 
                         data={this.state.activityData}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={item => this.renderItemComponent(item)}
-                    /> 
-  
+                        renderItem={item => this.renderActivities(item)}
+                        /> 
+                    </View>
+                    :
+                    <View style={styles.noEventView}>
+                        <Text style={styles.noEventText}>Looks like you don't have any activities here! Try to track yourself in the "Activity" tab</Text>
+                    </View>
+                    }
+                    
                     {/* <TouchableOpacity>
                         <View style={styles.rowContainer}>
                             <Icon name="run" style={styles.icon} size={30} color={'#8352F2'} />

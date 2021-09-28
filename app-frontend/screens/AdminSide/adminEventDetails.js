@@ -4,7 +4,7 @@ import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Event from '../../images/event.png';
 //import { createAppContainer } from "react-navigation";
-import { RadioButton } from 'react-native-paper';
+import { StackActions } from '@react-navigation/native';
 
 const window = Dimensions.get("window");
 
@@ -131,11 +131,12 @@ export default class adminEventDetails extends Component {
         }
     }
 
-    renderItemComponent = (data) =>
+    renderDistance = (data) =>
         <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
 
     edit = () => {
-        this.props.navigation.navigate('editEventsScreen', {
+
+        this.props.navigation.dispatch(StackActions.replace('editEventsScreen', {
             'eventid': this.state.eventid,
             'event_name': this.state.event_name,
             "start_date": this.state.start_date,
@@ -144,7 +145,7 @@ export default class adminEventDetails extends Component {
             "registration_end": this.state.registration_end_date,
             "description": this.state.description,
 
-        });
+        }));
     };
 
     delete_event = () => {
@@ -156,47 +157,50 @@ export default class adminEventDetails extends Component {
             },
 
         })
-            .then(response => response.json())
-            .then(data => {
-                //success
-                if (data.status == "success") {
-                    //Alert the user
-                    Alert.alert(
-                        data.message,
-                        '',
-                        [
-                            { text: "Ok", onPress: () => this.props.navigation.push('adminapp') }
-                        ]
-                    );
-                }
+        .then(response => response.json())
+        .then(data => {
+            //success
+            if (data.status == "success") {
+                //Alert the user
+                Alert.alert(
+                    "Success",
+                    data.message,
+                    [
+                        { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminapp')) }
+                    ]
+                );
+            }
 
-                //fail 
-                else if (data.status == "fail") {
-                    //alert fail message
-                    Alert.alert(
-                        data.message,
-                        '',
-                        [
-                            { text: "Ok", onPress: () => console.log("OK Pressed") }
-                        ]
-                    );
-                }
+            //fail 
+            else if (data.status == "fail") {
+                //alert fail message
+                Alert.alert(
+                    "Failed",
+                    data.message,
+                    [
+                        { text: "Ok", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+            }
 
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 
     delete = () => {
+        
         Alert.alert(
-            'Are you sure you want to delete this event?',
-            '',
+            "Delete event",
+            "Are you sure you want to delete this event?",
             [
-                { text: "Yes", onPress: this.delete_event },
-                { text: "No" }
+              {
+                text: "No",
+              },
+              { text: "Yes", onPress: () => this.delete_event() }
             ]
-        );
+          );
     };
 
     // register = () =>{
@@ -258,7 +262,7 @@ export default class adminEventDetails extends Component {
                                 <FlatList
                                     data={this.state.event_distance}
                                     keyExtractor={item => item.id.toString()}
-                                    renderItem={item => this.renderDistanceDetails(item)}
+                                    renderItem={item => this.renderDistance(item)}
                                 />
                             </View>
                         </View>
@@ -289,21 +293,7 @@ export default class adminEventDetails extends Component {
                                 <Text style={styles.aboutHeading}>RUN SUBMISSION</Text>
                                 <Text style={styles.aboutText}>Please kindly submit your result through this mobile application</Text>
                             </View>
-                            <View style={styles.about}>
-                                <Text style={styles.aboutHeading}>DISTANCE</Text>
-                                <View style={styles.infoColumnInfo}>
-                                    <RadioButton.Group
-                                        onValueChange={newDistance => this.setState({ distanceSelected: newDistance })}
-                                        value={this.state.distanceSelected}
-                                    >
-                                        <FlatList
-                                            data={this.state.event_distance}
-                                            keyExtractor={item => item.id.toString()}
-                                            renderItem={item => this.renderDistanceSelection(item)}
-                                        />
-                                    </RadioButton.Group>
-                                </View>
-                            </View>
+                            
                         </View>
 
                     </View>
