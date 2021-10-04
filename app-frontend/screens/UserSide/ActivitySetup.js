@@ -12,7 +12,10 @@ export default class ActivitySetup extends Component {
         this.state = {
             activitySelected: '',
             routeSelected: '',
-            musicSelected: ''
+            musicSelected: '',
+            userID:"",
+            loadedData:"",
+            
         }
 
         function capitalizeFirstLetter(string) {
@@ -31,7 +34,36 @@ export default class ActivitySetup extends Component {
             } catch (e) {
                 // error reading value
             }
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
 
+            } catch (e) {
+                console.log(e);
+            }
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            fetch(baseUrl + '/api/route/routeList/'+this.state.userID, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user route list data')
+                console.log(data)
+                this.setState({
+                    loadedData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
 
         getActivityType();
@@ -49,7 +81,20 @@ export default class ActivitySetup extends Component {
         }
 
     }
-
+    pickerList(){
+        if(this.state.loadedData.length!=0){
+            return this.state.loadedData.map((route) => 
+                <Picker.Item label={route.name} value={route.name} color='#373737' />
+            )
+        }
+        else{
+            return (
+                <Picker.Item label="No Route Avaliable" value="No Route Avaliable" color='#373737' />
+            )
+        }
+        
+    
+    }
     render() {
         return (
             <ScrollView style={styles.background}>
@@ -81,11 +126,11 @@ export default class ActivitySetup extends Component {
                                 <Picker
                                     selectedValue={this.state.routeSelected}
                                     onValueChange={(itemValue) => this.setState({ routeSelected: itemValue })}>
-
-                                    <Picker.Item label="Route1" value="Route1" color='#373737' />
+                                    {this.pickerList()}
+                                    {/* <Picker.Item label="Route1" value="Route1" color='#373737' />
                                     <Picker.Item label="Route2" value="Route2" color='#373737' />
                                     <Picker.Item label="Route3" value="Route3" color='#373737' />
-                                    <Picker.Item label="Route4" value="Route4" color='#373737' />
+                                    <Picker.Item label="Route4" value="Route4" color='#373737' /> */}
                                 </Picker>
                             </View>
                         </View>
