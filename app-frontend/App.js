@@ -58,6 +58,7 @@ import adminEventsScreen from "./screens/AdminSide/adminEventsScreen";
 import adminUpcomingEventsScreen from "./screens/AdminSide/adminUpcomingEventsScreen";
 import userUpcomingEventScreen from "./screens/UserSide/upcomingEventScreen"
 import ChangePasswordScreen from './screens/UserSide/ChangePasswordScreen';
+import AdminParticipantScreen from './screens/AdminSide/AdminParticipantScreen';
 
 
 const Stack = createStackNavigator();
@@ -164,7 +165,7 @@ export default class App extends Component {
                     <Stack.Screen
                         name="run"
                         component={FreeRun}
-                        initial={false} 
+                        initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Free Run' }}
                     />
 
@@ -220,7 +221,8 @@ export default class App extends Component {
                         component={addRouteScreen}
                         initial={false}
                         options={{
-                            headerTitleAlign: 'center', title: 'Add Route' }}
+                            headerTitleAlign: 'center', title: 'Add Route'
+                        }}
 
                     />
                     <Stack.Screen
@@ -453,6 +455,13 @@ export default class App extends Component {
                         component={ChangePasswordScreen}
                         initial={false}
                         options={{ headerTitleAlign: 'center', title: 'Change Password' }}
+                    />
+
+                    <Stack.Screen
+                        name="AdminParticipantScreen"
+                        component={AdminParticipantScreen}
+                        initial={false}
+                        options={{ headerTitleAlign: 'center', title: 'No. of Participants' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
