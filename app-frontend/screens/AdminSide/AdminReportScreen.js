@@ -14,11 +14,22 @@ export default class AdminReportScreen extends Component {
         super(props);
         this.state = {
             data: [
-                { no: 1, state: 'Sarawak', participant: 2000 },
-                { no: 2, state: 'Pahang', participant: 1820 },
-                { no: 3, state: 'Sabah', participant: 1050 },
-                { no: 4, state: 'Terengganu', participant: 600 },
-                { no: 5, state: 'Kelantan', participant: 587 },
+                { no: 1, state: 'Sarawak', participant: 0 },
+                { no: 2, state: 'Pahang', participant: 0 },
+                { no: 3, state: 'Sabah', participant: 0 },
+                { no: 4, state: 'Terengganu', participant: 0 },
+                { no: 5, state: 'Kelantan', participant: 0 },
+                { no: 6, state: 'Perak', participant: 0 },
+                { no: 7, state: 'Selangor', participant: 0 },
+                { no: 8, state: 'Perlis', participant: 0 },
+                { no: 9, state: 'Johor', participant: 0 },
+                { no: 10, state: 'Kedah', participant: 0 },
+                { no: 11, state: 'Kuala Lumpur', participant: 0 },
+                { no: 12, state: 'Negeri Sembilan', participant: 0 },
+                { no: 13, state: 'Labuan', participant: 0 },
+                { no: 14, state: 'Purtajaya', participant: 0 },
+                { no: 15, state: 'Malacca', participant: 0 },
+                { no: 16, state: 'Penang', participant: 0 },
             ],
             runningType: [
                 { type: 'Running', icon: 'run', percent: 0.28 },
@@ -26,6 +37,8 @@ export default class AdminReportScreen extends Component {
                 { type: 'Cycling', icon: 'bicycle', percent: 0.12 },
                 { type: 'Hiking', icon: 'hiking', percent: 0.76 },
             ],
+            eventData:"",
+            refresh:true,
         };
 
 
@@ -42,29 +55,46 @@ export default class AdminReportScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
+            
+        };
+        getData();
+        
+        
 
-            fetch('http://192.168.0.192:8000/api/activity/users/' + this.state.user_id, {
+    }
+    componentDidMount(){
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+
+            fetch(baseUrl + '/api/event/joined', {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success')
-                    this.setState({
-                        activityData: data
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get event data')
+                console.log(data)
+                this.setState({
+                    eventData: data
                 });
-        }
-
-        getData();
-
+                for (let cityList of data) {
+                    for (let city of this.state.data) {
+                        if(cityList.toLowerCase()==city.state.toLowerCase()){
+                            city.participant+=1;
+                            this.setState({ 
+                                refresh: !this.state.refresh
+                            })
+                        }
+                    }
+                }
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
     }
-
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -79,6 +109,7 @@ export default class AdminReportScreen extends Component {
                     <FlatList
                         data={this.state.data}
                         keyExtractor={item => item.first}
+                        extraData={this.state.refresh}
                         renderItem={({ item }) => (
                             <View>
                                 <View style={styles.rowContainer}>
@@ -91,11 +122,11 @@ export default class AdminReportScreen extends Component {
                     />
                     <View style={styles.rowContainer}>
                         <Text style={{ flex: 1 }}></Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminParticipantScreen')}>
+                        {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminParticipantScreen')}>
                             <Text style={{ color: '#8352F2' }}>View All</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
-                    <Divider style={styles.divider} />
+                    {/* <Divider style={styles.divider} />
 
                     <View style={styles.contentContainer}>
                         <Text style={styles.title}>Completion Rate</Text>
@@ -115,7 +146,7 @@ export default class AdminReportScreen extends Component {
                                 </View>
                             </View>
                         )}
-                    />
+                    /> */}
                 </View>
             </ScrollView>
         );

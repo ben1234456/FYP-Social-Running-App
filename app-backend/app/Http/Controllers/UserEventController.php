@@ -117,4 +117,16 @@ class UserEventController extends Controller
 
         return $userevents->toJson();
     }
+    public function getEventParticipateCount()
+    {
+
+        $userevents = UserEvent::get();
+        $countList=[];
+        foreach($userevents as $userevent){
+            $user = User::where('id', '=', $userevent->user_id)->first();
+            array_push($countList,$user->city);
+        }
+
+        return $countList;
+    }
 }

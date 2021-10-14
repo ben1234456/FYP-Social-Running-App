@@ -161,3 +161,6 @@ Route::put('/post/list/edit/{id}', [ForumPostController::class, "editPost"]);
 
 //get whether like or not
 Route::get('/forumposts/list/{user}', [ForumPostController::class, "showAllPost"]);
+
+//get count of participate user city
+Route::get('/event/joined', [UserEventController::class, "getEventParticipateCount"]);
