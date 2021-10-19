@@ -163,6 +163,8 @@ export default class addEventCalendarScreen extends Component{
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+
             this.props.navigation.dispatch(StackActions.replace('calendarScreen'));
         }
         

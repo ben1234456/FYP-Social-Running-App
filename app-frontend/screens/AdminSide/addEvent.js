@@ -52,6 +52,12 @@ export default class addEvent extends Component {
         if (!(this.state.endDate)) {
             empty.push("end date");
         }
+        if (!(this.state.feeArray)) {
+            empty.push("end date");
+        }
+        if (!(this.state.distanceArray)) {
+            empty.push("end date");
+        }
         
         if (empty.length != 0) {
 

@@ -135,14 +135,11 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
 
+        error_log("????" + $event);
+        
         $status = $event->delete();
 
-        if($status){
-            return response()->json(['status' => 'success', 'message' => 'Event succesfully soft deleted']);
-        }
-        else{
-            return response()->json(['status' => 'fail', 'message'=> 'error']);
-        }
+        return $event->toJson();
     }
 
     //get events (excluded registered)

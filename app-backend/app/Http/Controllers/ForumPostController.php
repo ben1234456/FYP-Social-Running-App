@@ -147,7 +147,7 @@ class ForumPostController extends Controller
     public function update(Request $request, ForumPost $forumPost)
     {
         //
-        error_log("editinasdasdg");
+
         // $forumPost->user_id = $request->user_id;
         // $forumPost->title = $request->title;
         // $forumPost->description = $request->description;

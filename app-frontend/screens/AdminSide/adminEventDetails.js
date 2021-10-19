@@ -150,25 +150,28 @@ export default class adminEventDetails extends Component {
     };
 
     delete_event = () => {
+
+        //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-        fetch(baseUrl+'/api/events/' + this.state.eventid, {
+
+        fetch( baseUrl + '/api/events/' + this.state.eventid, {
             method: 'DELETE',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
             },
-
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             //success
             if (data.status == "success") {
                 //Alert the user
                 Alert.alert(
-                    "Success",
                     data.message,
+                    '',
                     [
-                        { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminapp')) }
+                        { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', {'eventid': this.state.event_id })) }
                     ]
                 );
             }
@@ -177,14 +180,13 @@ export default class adminEventDetails extends Component {
             else if (data.status == "fail") {
                 //alert fail message
                 Alert.alert(
-                    "Failed",
                     data.message,
+                    '',
                     [
                         { text: "Ok", onPress: () => console.log("OK Pressed") }
                     ]
                 );
             }
-
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -201,7 +203,7 @@ export default class adminEventDetails extends Component {
               {
                 text: "No",
               },
-              { text: "Yes", onPress: () => this.delete_event() }
+              { text: "Yes", onPress: () => this.delete_event()}
             ]
           );
     };
