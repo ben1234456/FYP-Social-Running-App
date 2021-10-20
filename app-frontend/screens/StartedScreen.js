@@ -33,15 +33,15 @@ export default class StartedScene extends Component {
 export const styles = StyleSheet.create({
     container: {
         padding: 40,
-        display: 'flex',
         flex: 1,
+        justifyContent: 'center',
         backgroundColor: 'white',
     },
 
     image: {
+        flex: 1,
         alignSelf: 'center',
         width: 390,
-        height: 277,
     },
 
     top: {

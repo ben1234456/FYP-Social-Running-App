@@ -33,15 +33,15 @@ export default class AdminMapScreen extends Component {
             reference: React.createRef(),
             showInfo: 'none',
 
-            date:new Date(),
-            hour:"00",
-            minute:"00",
-            second:"00",
-            hourCount:0,
-            minuteCount:0,
-            secondCount:0,
-            stopwatch:false,
-            startPause:"START",
+            date: new Date(),
+            hour: "00",
+            minute: "00",
+            second: "00",
+            hourCount: 0,
+            minuteCount: 0,
+            secondCount: 0,
+            stopwatch: false,
+            startPause: "START",
 
             //stopwatch
             stopwatchStart: false,
@@ -82,8 +82,8 @@ export default class AdminMapScreen extends Component {
         const currentLatitude = currentLocation.coords.latitude;
         const currentLongitude = currentLocation.coords.longitude;
 
-        this.setState({ 
-            prevLat: currentLatitude, 
+        this.setState({
+            prevLat: currentLatitude,
             prevLng: currentLongitude,
             startLat: currentLatitude,
             startLng: currentLongitude,
@@ -124,7 +124,7 @@ export default class AdminMapScreen extends Component {
 
         }
 
-        else{
+        else {
             const currentDate = new Date();
             const timestamp = currentDate.getTime();
 
@@ -144,13 +144,13 @@ export default class AdminMapScreen extends Component {
             };
 
             this.setState({
-                date:new Date(),
-                hour:"00",
-                minute:"00",
-                second:"00",
-                hourCount:0,
-                minuteCount:0,
-                secondCount:0,
+                date: new Date(),
+                hour: "00",
+                minute: "00",
+                second: "00",
+                hourCount: 0,
+                minuteCount: 0,
+                secondCount: 0,
             });
 
             fetch('http://192.168.0.192:8000/api/activity', {
@@ -161,10 +161,10 @@ export default class AdminMapScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            
+
 
             this.props.navigation.navigate('Progress');
-            
+
         }
 
     }
@@ -216,7 +216,7 @@ export default class AdminMapScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <MapView style={styles.map}
+                {/* <MapView style={styles.map}
                     ref={this.state.reference}
                     provider={PROVIDER_GOOGLE}
                     showsUserLocation
@@ -227,14 +227,15 @@ export default class AdminMapScreen extends Component {
                 >
                     <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
                     
-                </MapView>
+                </MapView> */}
 
                 <View style={styles.columnContainer}>
- 
+
                     <View style={styles.contentContainer}>
                         <TouchableOpacity style={styles.icon2} onPress={() => this.props.navigation.navigate('AdminSavedRouteScreen')}>
                             <Font name="route" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
+                        <View style={{ flex: 1 }}></View>
                         <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('addRouteScreen')}>
                             <Icon name="add-location" size={30} color={'#8352F2'} />
                         </TouchableOpacity>
@@ -284,7 +285,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 30,
         padding: 6,
-        marginRight: 195,
 
         //ios
         shadowColor: '#000',

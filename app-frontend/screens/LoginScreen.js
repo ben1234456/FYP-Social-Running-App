@@ -80,14 +80,14 @@ export default class LoginScreen extends Component {
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-        
+
         if (this.validation()) {
             const data = {
                 email: this.state.email,
                 password: this.state.password
             };
 
-            fetch( baseUrl +'/api/login', {
+            fetch(baseUrl + '/api/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -95,73 +95,73 @@ export default class LoginScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
 
-                if (data.message == "success"){
+                    if (data.message == "success") {
 
-                    if (data.user.email_verified_at){
-                        this.setState({
-                            spinner: !this.state.spinner
-                        });
-    
-                        //save JSON data to local storage
-                        AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
-                        //navigate to home page
-                        if (data.user.role == "user"){
-                            this.props.navigation.dispatch(StackActions.replace('app'));
-                        }else if (data.user.role == "admin"){
-                            this.props.navigation.dispatch(StackActions.replace('adminapp'));
+                        if (data.user.email_verified_at) {
+                            this.setState({
+                                spinner: !this.state.spinner
+                            });
+
+                            //save JSON data to local storage
+                            AsyncStorage.setItem('@userJson', JSON.stringify(data.user));
+                            //navigate to home page
+                            if (data.user.role == "user") {
+                                this.props.navigation.dispatch(StackActions.replace('app'));
+                            } else if (data.user.role == "admin") {
+                                this.props.navigation.dispatch(StackActions.replace('adminapp'));
+                            }
                         }
+
+                        else {
+                            this.setState({
+                                spinner: !this.state.spinner
+                            });
+
+                            Alert.alert(
+                                'Email Not Verified',
+                                'Please verify your email',
+                                [
+                                    { text: "OK" },
+                                ]
+                            );
+
+
+                        }
+
                     }
 
-                    else{
+                    else {
                         this.setState({
                             spinner: !this.state.spinner
                         });
+
+                        removeLastChar = data.message.slice(0, data.message.length - 1);
 
                         Alert.alert(
-                            'Email Not Verified',
-                            'Please verify your email',
+                            data.message,
+                            ''
                             [
-                                { text: "OK" },
+                            { text: "OK" }
                             ]
                         );
-
-                        
                     }
-                    
-                }
-
-                else {
-                    this.setState({
-                        spinner: !this.state.spinner
-                    });
-
-                    removeLastChar = data.message.slice(0, data.message.length - 1);
-
-                    Alert.alert(
-                        data.message,
-                        ''
-                        [
-                            { text: "OK" }
-                        ]
-                    );
-                }
 
 
-                
-                            
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
 
-            
+
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
+
         }
 
-        // this.props.navigation.navigate('app');
+        //this.props.navigation.navigate('app')
 
     }
 
@@ -185,44 +185,41 @@ export default class LoginScreen extends Component {
     };
 
     render() {
-
         return (
             <View style={styles.container}>
-                <View style={styles.contentContainer}>
-                    <Spinner
-                        visible={this.state.spinner}
-                        textContent={'Loading...'}
-                        textStyle={styles.spinnerTextStyle}
-                    />
-                    <View>
-                        <Text style={styles.heading}>Welcome Back.</Text>
-                        <View style={styles.input}>
-                            <TextInput
-                                style={styles.email}
-                                placeholder="Email"
-                                autoFocus
-                                onChangeText={(email_input) => this.setState({ email: email_input })}
-                                value={this.state.email}
-                            />
-                        </View>
-                        <View style={styles.input}>
-                            <TextInput style={styles.inputRow}
-                                placeholder="Password"
-                                secureTextEntry={this.state.showPassword}
-                                onChangeText={(password_input) => this.setState({ password: password_input })}
-                                value={this.state.password}
-                            />
-                            <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType} />
-                        </View>
-                        <View>
-                            <Button style={styles.submitBtn} onPress={this.login}>
-                                <Text style={styles.btnText}>SIGN IN</Text>
-                            </Button>
-                        </View>
-                        <Text style={styles.signin} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
-                            <Text style={styles.link}>Forgot Your Password? </Text>
-                        </Text>
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Loading...'}
+                    textStyle={styles.spinnerTextStyle}
+                />
+                <View style={{ flexDirection: 'column' }}>
+                    <Text style={styles.heading}>Welcome Back.</Text>
+                    <View style={styles.input}>
+                        <TextInput
+                            style={styles.email}
+                            placeholder="Email"
+                            autoFocus
+                            onChangeText={(email_input) => this.setState({ email: email_input })}
+                            value={this.state.email}
+                        />
                     </View>
+                    <View style={styles.input}>
+                        <TextInput style={styles.inputRow}
+                            placeholder="Password"
+                            secureTextEntry={this.state.showPassword}
+                            onChangeText={(password_input) => this.setState({ password: password_input })}
+                            value={this.state.password}
+                        />
+                        <Icon style={styles.icon} name={this.state.icEye} size={25} onPress={this.changePasswordType} />
+                    </View>
+                    <View>
+                        <Button style={styles.submitBtn} onPress={this.login}>
+                            <Text style={styles.btnText}>SIGN IN</Text>
+                        </Button>
+                    </View>
+                    <Text style={styles.signin} onPress={() => this.props.navigation.navigate('resetPasswordScreen')}>
+                        <Text style={styles.link}>Forgot Your Password? </Text>
+                    </Text>
                 </View>
             </View>
         );
@@ -232,24 +229,9 @@ export default class LoginScreen extends Component {
 export const styles = StyleSheet.create({
     container: {
         padding: 40,
-        display: 'flex',
         flex: 1,
+        justifyContent: 'center',
         backgroundColor: 'white',
-        paddingTop:0,
-    },
-
-    contentContainer: {
-        flex: 1,
-        
-    },
-    email:{
-        flex:1,
-    },
-    image: {
-        marginTop: 15,
-        marginRight: 15,
-        width: 30,
-        height: 30,
     },
 
     heading: {
@@ -258,7 +240,7 @@ export const styles = StyleSheet.create({
         color: '#373737',
         lineHeight: 40,
         textAlign: 'center',
-        marginTop: 130,
+        alignItems: 'center'
     },
 
     input: {

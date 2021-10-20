@@ -610,7 +610,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#ECECEC',
         borderRadius: 15,
         padding:"2.5%",
-        flex: 5,
+        flex: 1,
     },
     inactive: {
         color: '#808080',
@@ -618,7 +618,6 @@ export const styles = StyleSheet.create({
     text: {
         color: '#8352F2',
         alignItems:"center",
-        flex: 1,
         padding:"2.5%",
     },
     comment: {
