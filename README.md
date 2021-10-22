@@ -1,14 +1,36 @@
-<h1 align="center">Social Running Application</h1>
+# Social Running Application
 
-<p align="center">A cross-platform tracking mobile application with social features!</p>
+## A cross-platform tracking mobile application with social features!
 
 
-<h2>Operating System Minimum Requirements</h2>
+## Operating System Minimum Requirements
 
 1. Android 5.0 or higher
 2. iOS 12 or higher
 
-<h2 align="left">How do I open it?</h2>
+## How do I open it?
+## A. Using Smartphone (Android/iOS)
 
-<h3 align="left">1. Using Smartphone (Android/iOS)</h3>
+1. Install Expo Go 
+2. Clone this repository and go to the file directory
+3. Run `npm start`
+4. After the development server is started, a new broswer tab should pop out, scan the QR code to open the application
 
+OR
+
+1. Install Expo Go
+2. Use this link https://expo.io/@fypsocialrunningapp/projects/social-running-app to open the application
+
+## B. Using an emulator/simulator (Android/iOS)
+
+1. Install Expo Go 
+2. Clone this repository and go to the file directory
+3. Run `npm start`
+4. After the development server is started, a new broswer tab should pop out
+5. Click "Run on Android device/emulator" if you are using an Adnroid emulator
+6. Click "Run on iOS simulator" if you are using an iOS simulator
+
+OR
+
+1. Install Expo Go
+2. Use this link https://expo.io/@fypsocialrunningapp/projects/social-running-app to open the application
