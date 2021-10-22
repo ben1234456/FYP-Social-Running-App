@@ -13,8 +13,9 @@
 
 1. Install Expo Go 
 2. Clone this repository and go to the file directory
-3. Run `npm start`
-4. After the development server is started, a new broswer tab should pop out, scan the QR code to open the application
+3. Run `npm install` (First time only)
+4. Run `npm start`
+5. After the development server is started, a new broswer tab should pop out, scan the QR code to open the application
 
 OR
 
@@ -25,10 +26,11 @@ OR
 
 1. Install Expo Go 
 2. Clone this repository and go to the file directory
-3. Run `npm start`
-4. After the development server is started, a new broswer tab should pop out
-5. Click "Run on Android device/emulator" if you are using an Adnroid emulator
-6. Click "Run on iOS simulator" if you are using an iOS simulator
+3. Run `npm install` (First time only)
+4. Run `npm start`
+5. After the development server is started, a new broswer tab should pop out
+6. Click "Run on Android device/emulator" if you are using an Adnroid emulator
+7. Click "Run on iOS simulator" if you are using an iOS simulator
 
 OR
 
