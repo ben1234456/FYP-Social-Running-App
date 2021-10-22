@@ -43,7 +43,6 @@ export default class adminEventDetails extends Component {
                     end_date: data.end,
                     registration_start_date: data.registration_start,
                     registration_end_date: data.registration_end,
-
                     description: data.description
                 });
             })

@@ -19,13 +19,10 @@ export default class App extends Component {
             city: "",
             dob: "",
         };
-
-        
-        
+       
     }
 
     logout = async () => {
-
 
         var msg = "Are you sure you want to log out?";
 
@@ -40,6 +37,7 @@ export default class App extends Component {
         );
 
     }
+
     componentDidMount(){
         //get data from async storage
         const getData = async () => {
@@ -62,6 +60,8 @@ export default class App extends Component {
                         city:user.city,
                         dob:user.dob
                     });  
+
+                    console.log(this.state.name);
                 }
     
             } catch(e) {
@@ -70,12 +70,43 @@ export default class App extends Component {
         }
     
         getData();
+
         this.focusListener = this.props.navigation.addListener('focus', () => {
-            console.log("aukhsku");
-            getData();
-            this.forceUpdate();
-          });
+
+            const IP = 'https://socialrunningapp.herokuapp.com';
+
+            //get forum posts' details
+            fetch(IP + '/api/users/' + this.state.user_id, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                JSON.stringify(data);
+                console.log(data);
+                //change to upper case
+                var gender = data[0].gender;
+                var genderText = gender[0].toUpperCase() + gender.substring(1);
+
+                this.setState({
+                    user_id: data[0].id,
+                    name: data[0].first_name,
+                    email: data[0].email,
+                    gender: genderText,
+                    city: data[0].city,
+                    dob: data[0].dob
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        });
+
     }
+
     render() {
         return (
             <View style={styles.container}>

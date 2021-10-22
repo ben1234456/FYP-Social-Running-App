@@ -231,15 +231,15 @@ export default class ForumScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status == "success") {
-                        console.log("Succesfully saved post");
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == "success") {
+                    console.log("Succesfully saved post");
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
             this.setState({
                 title: '',

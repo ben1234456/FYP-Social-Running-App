@@ -77,7 +77,7 @@ export default class editProfileScreen extends Component {
         })
         .then(response => response.json())
         .then(data => { 
-            console.log('Success:',data.user);
+            //console.log('Success:',data.user);
             AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
         })
         .catch((error) => {
