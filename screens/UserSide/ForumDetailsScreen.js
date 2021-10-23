@@ -537,7 +537,7 @@ export default class ForumDetailsScreen extends Component {
                     <Text style={styles.comment}>Comments</Text>
                 </View>
 
-                <View>
+                <View style={{marginBottom: "10%"}}>
                     {this.state.comments.length!=0
                     ?
                     <FlatList 
@@ -593,8 +593,7 @@ export const styles = StyleSheet.create({
         padding:"2.5%",
     },
     profilePicContainer:{
-        flex:2,
-        
+        flex:3,
     },
     profileInfoContainer:{
         flex:7,
