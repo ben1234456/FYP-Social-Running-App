@@ -241,13 +241,13 @@ const styles = StyleSheet.create({
     },
     infoRow:{
         flexDirection:"row",
-        
     },
     infoTitle:{
         flex:3,
         marginTop:"3%",
         marginBottom:"3%",
         justifyContent:"center",
+
     },
     infoData:{
         flex:8,

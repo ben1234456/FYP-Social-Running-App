@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
         marginTop:"3%",
         marginBottom:"3%",
         justifyContent:"center",
+
     },
     infoData:{
         flex:8,

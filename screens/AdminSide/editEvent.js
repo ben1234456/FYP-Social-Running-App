@@ -433,6 +433,7 @@ export default class editEvent extends Component {
 
                         <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Distances and Fees</Text>
+                        
                         </View>
 
                         <FlatList 
@@ -534,9 +535,6 @@ export default class editEvent extends Component {
                                 <Text style={styles.btnText}>Edit</Text>
                             </Button>   
                         </View>
-
-                        
-
                     </View>
                 
             </ScrollView>
@@ -549,7 +547,6 @@ export const styles = StyleSheet.create({
         padding: 30,
         flex: 1,
         backgroundColor: 'white',
-        
     },
     heading: {
         fontSize: 30,
@@ -559,7 +556,6 @@ export const styles = StyleSheet.create({
         marginTop: 35,
         marginBottom: 15,
         color: '#373737',
-        
     },
 
     input: {
@@ -593,6 +589,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         marginBottom:"10%",
         
+
     },
 
     btnText: {
@@ -655,8 +652,9 @@ export const styles = StyleSheet.create({
         flex:1,
     },
     botTitle:{
-        fontSize:20,
+        fontSize:15,
         flex:1,
+        marginTop:10,
         fontWeight:"bold",
     },
     titleHeading:{

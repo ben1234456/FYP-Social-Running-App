@@ -144,7 +144,6 @@ export default class AdminHomeScreen extends Component {
                 </View>
 
                 <View style={{
-                    marginLeft: 8,
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
@@ -234,6 +233,7 @@ export const styles = StyleSheet.create({
         height: 210,
         width: 250,
         marginLeft: 20,
+
         borderRadius: 15,
         marginBottom:20,
         backgroundColor: 'white',

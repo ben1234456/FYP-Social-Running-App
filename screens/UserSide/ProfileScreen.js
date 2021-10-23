@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Button } from 'native-base'
 import { Actions, Reducer } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
@@ -109,7 +109,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
@@ -172,7 +172,7 @@ export default class App extends Component {
                         </View>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -242,28 +242,30 @@ const styles = StyleSheet.create({
     },
 
     editProfile: {
-        display: 'flex',
+        flex:1,
         backgroundColor: '#8352F2',
         borderRadius: 30,
-        // marginTop: 50,
+
     },
 
     changePassword: {
-        display: 'flex',
+        flex: 1,
         backgroundColor: '#FF0000',
         borderRadius: 30,
         // marginTop: 50,
         marginLeft:10,
+        marginRight: 40,
     },
 
     btnText: {
         fontSize: 16,
         color: 'white',
         padding: 20,
+        textAlign: 'center',
     },
     cardView: {
         marginTop:"5%",
-        
+
         borderRadius: 15,
         backgroundColor: 'white',
 
