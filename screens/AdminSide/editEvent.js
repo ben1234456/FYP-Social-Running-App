@@ -587,9 +587,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginBottom:"10%",
-        
-
+        marginBottom:"20%",
     },
 
     btnText: {
