@@ -144,7 +144,6 @@ export default class AdminHomeScreen extends Component {
                 </View>
 
                 <View style={{
-                    marginLeft: 8,
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
@@ -223,8 +222,7 @@ export const styles = StyleSheet.create({
     cardView: {
         height: 210,
         width: 250,
-        marginLeft: 5,
-        marginRight: 35,
+        marginLeft: 40,
         borderRadius: 15,
         backgroundColor: 'white',
 

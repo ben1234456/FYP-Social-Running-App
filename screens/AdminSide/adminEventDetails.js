@@ -281,7 +281,6 @@ export default class adminEventDetails extends Component {
                             </View>
                         </View>
                         <View >
-
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>About</Text>
                                 <Text style={styles.aboutText}>{this.state.description}</Text>
@@ -323,19 +322,23 @@ export default class adminEventDetails extends Component {
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
-
-
     stickyBtn1: {
         flex: 1,
         borderRadius: 30,
-        margin: "1%",
+        marginLeft: 40,
+        marginRight: 5,
+        marginTop: 5,
+        marginBottom: 5,
         backgroundColor: '#8352F2',
     },
     stickyBtn2: {
         flex: 1,
         borderRadius: 30,
-        margin: "1%",
+        marginTop: 5,
+        marginBottom: 5,
+        marginRight: 40,
         backgroundColor: '#ff0000',
     },
     btnContainer: {
@@ -356,7 +359,9 @@ export const styles = StyleSheet.create({
     },
     infoRow: {
         flexDirection: "row",
-        margin: "5%",
+        marginLeft: 40,
+        marginRight: 40,
+        marginBottom: 20,
     },
     eventTitle: {
         textAlign: "left",
@@ -380,7 +385,9 @@ export const styles = StyleSheet.create({
     },
     about: {
         flex: 1,
-        margin: "5%",
+        marginLeft: 40,
+        marginRight: 40,
+        marginBottom: 20,
     },
     aboutHeading: {
         fontWeight: "bold",
