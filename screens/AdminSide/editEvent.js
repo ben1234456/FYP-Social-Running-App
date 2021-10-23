@@ -6,6 +6,7 @@ import DatePicker from 'react-native-datepicker';
 import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
 import { StackActions } from '@react-navigation/native';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 export default class editEvent extends Component {
@@ -130,6 +131,108 @@ export default class editEvent extends Component {
             return true;
         }
     }
+    addTextInput = (index) => {
+        let textInput = this.state.textInput;
+        textInput.push(
+            <View>
+                
+                <View style={styles.distanceContainer}>
+                    <View style={styles.addRowTextContainer}>
+                        <Text style={styles.botTitle}>Distance (KM)</Text>
+                    </View>
+                    <View style={styles.addRowIconContainer}>
+                        <TouchableOpacity onPress={() => this.removeTextInput(index)}>
+                            <Icon2 size={25} name="delete" color='#808080' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.inputTitleTop}>
+
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. 5"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addValues(text, index)}
+                        />
+                    </View>
+                </View>
+                <View style={styles.titleHeading}>
+                    <Text style={styles.botTitle}>Fee (RM)</Text>
+                </View>
+                <View style={styles.inputTitleTop}>
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. RMXXX"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addFee(text, index)}
+                        />
+                    </View>
+                </View>
+            </View>
+        );
+        this.setState({ textInput });
+    }
+
+    //function to remove TextInput dynamically
+    removeTextInput = (index) => {
+        let textInput = this.state.textInput;
+        let distanceArray = this.state.distanceArray;
+        let feeArray = this.state.feeArray;
+        textInput.splice(index,1);
+        distanceArray.splice(index,1);
+        feeArray.splice(index,1);
+        this.setState({ textInput,distanceArray,feeArray });
+    }
+
+    //function to add text from TextInputs into single array
+    addFee = (text, index) => {
+        let dataArray = this.state.feeArray;
+        let checkBool = false;
+        if (dataArray.length !== 0){
+        dataArray.forEach(element => {
+            if (element.index === index ){
+            element.text = text;
+            checkBool = true;
+            }
+        });
+        }
+        if (checkBool){
+        this.setState({
+            feeArray: dataArray
+        });
+    }
+    else {
+        dataArray.push({'text':text,'index':index});
+        this.setState({
+            feeArray: dataArray
+        });
+    }
+    }
+
+    //function to add text from TextInputs into single array
+    addValues = (text, index) => {
+        let dataArray = this.state.distanceArray;
+        let checkBool = false;
+        if (dataArray.length !== 0){
+        dataArray.forEach(element => {
+            if (element.index === index ){
+            element.text = text;
+            checkBool = true;
+            }
+        });
+        }
+        if (checkBool){
+        this.setState({
+        distanceArray: dataArray
+        });
+    }
+    else {
+        dataArray.push({'text':text,'index':index});
+        this.setState({
+        distanceArray: dataArray
+        });
+    }
+    }
 
     edit = () => {
         
@@ -251,34 +354,44 @@ export default class editEvent extends Component {
     renderItemComponent = (data) =>
     
     <View>
+        <View>
                 
-        <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.botTitle}>Distance (KM) </Text>
-        </View>
+                <View style={styles.distanceContainer}>
+                    <View style={styles.addRowTextContainer}>
+                        <Text style={styles.botTitle}>Distance (KM)</Text>
+                    </View>
+                    <View style={styles.addRowIconContainer}>
+                        <TouchableOpacity onPress={() => this.removeTextInput(index)}>
+                            <Icon2 size={25} name="delete" color='#808080' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.inputTitleTop}>
 
-        <View style={styles.inputTitleTop}>
-
-            <View style={styles.inputText}>
-                <TextInput
-                    placeholder="e.g. 5"
-                    keyboardType='numeric'
-                    onChangeText={(text) => this.editDistance(text, data)}
-                    value = {data.item.distance}
-                />
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. 5"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addValues(text, index)}
+                            value = {data.item.distance}
+                        />
+                    </View>
+                </View>
+                <View style={styles.titleHeading}>
+                    <Text style={styles.botTitle}>Fee (RM)</Text>
+                </View>
+                <View style={styles.inputTitleTop}>
+                    <View style={styles.inputText}>
+                        <TextInput
+                            placeholder="e.g. RMXXX"
+                            keyboardType='numeric'
+                            onChangeText={(text) => this.addFee(text, index)}
+                            value = {data.item.fee}
+                        />
+                    </View>
+                </View>
             </View>
-        </View>
-
-        <Text style={styles.botTitle}>Fee (RM)</Text>
-        <View style={styles.inputTitleTop}>
-            <View style={styles.inputText}>
-                <TextInput
-                    placeholder="e.g. RMXXX"
-                    keyboardType='numeric'
-                    onChangeText={(text) => this.editFee(text, data)}
-                    value = {data.item.fee}
-                />
-            </View>
-        </View>
+        
     </View>
 
 
@@ -286,12 +399,9 @@ export default class editEvent extends Component {
         return (
             
             <ScrollView style={styles.container}>
-                
-                <View style={styles.contentContainer}>
-                    
                     <View>
 
-                        <View>
+                    <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event Name</Text>
                         </View>
 
@@ -305,10 +415,10 @@ export default class editEvent extends Component {
                             </View>
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Description</Text>
                         </View>
-                        <View style={styles.inputWithTitle}>
+                        <View style={styles.inputTitleTop}>
                             <View style={styles.inputText}>
                                 <TextInput
                                     placeholder="Write your description here"
@@ -321,7 +431,7 @@ export default class editEvent extends Component {
                             </View>
                         </View> 
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Distances and Fees</Text>
                         </View>
 
@@ -332,10 +442,20 @@ export default class editEvent extends Component {
                         />
 
                         
+                        {this.state.textInput.map((value) => {
+                        return value
+                        })}
+                        
                         <View>
+                            <Button style={styles.addRow} title='Add' onPress={() => this.addTextInput(this.state.textInput.length)}>
+                                <Text style={{ color: 'white', fontSize: 14 }}>Add row</Text>
+                            </Button>     
+                        </View>
+                        
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Registration Start Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration date"
                                 date={this.state.regisDate} 
@@ -351,10 +471,10 @@ export default class editEvent extends Component {
                                 onDateChange={(date) => { this.setState({ regisDate: date }) }} />
                         </View>
                         
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Registration End Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.regisDueDate} 
@@ -370,10 +490,10 @@ export default class editEvent extends Component {
                                 onDateChange={(date) => { this.setState({ regisDueDate: date }) }} />
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event Start Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose event start date"
                                 date={this.state.startDate} 
@@ -389,10 +509,10 @@ export default class editEvent extends Component {
                                 onDateChange={(date) => { this.setState({ startDate: date }) }} />
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event End Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.endDate} 
@@ -418,7 +538,7 @@ export default class editEvent extends Component {
                         
 
                     </View>
-                </View>
+                
             </ScrollView>
         );
     }
@@ -426,20 +546,11 @@ export default class editEvent extends Component {
 
 export const styles = StyleSheet.create({
     container: {
+        padding: 30,
         flex: 1,
         backgroundColor: 'white',
         
     },
-
-    contentContainer: {
-        flex: 1,
-        padding: 20,
-        paddingTop:0,
-        backgroundColor: 'white',
-    },
-
-    
-
     heading: {
         fontSize: 30,
         fontWeight: '700',
@@ -480,7 +591,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginBottom: 235,
+        marginBottom:"10%",
         
     },
 
@@ -532,10 +643,7 @@ export const styles = StyleSheet.create({
         flex:1,
         textAlignVertical:"top",
     },
-    sameRow:{
-        flexDirection:"row",
-        marginBottom:"5%",
-    },
+    
     choseFile:{
         flex:1,
         marginRight:"5%",
@@ -551,19 +659,15 @@ export const styles = StyleSheet.create({
         flex:1,
         fontWeight:"bold",
     },
-    inputWithTitleTopBig: {
-        backgroundColor: '#ECECEC',
-        borderRadius: 15,
-        padding: 10,
-        height:"15%",
-        marginBottom:"5%",
+    titleHeading:{
+        padding:"2%",
     },
     inputTitleTop: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
         display: 'flex',
         flexDirection: 'row',
-        padding: 10,
+        padding:"2%",
     },
     pickerTitleTop: {
         backgroundColor: '#ECECEC',
@@ -604,5 +708,24 @@ export const styles = StyleSheet.create({
     selectedPhotoTopInfo:{
         display:"none",
         
+    },
+    addRow: {
+        backgroundColor: '#8352F2',
+        flex: 1,
+        padding: 20,
+        marginTop:"2.5%",
+        marginBottom:"2.5%",
+    },
+    addRowTextContainer:{
+        flex:9,
+        
+    },
+    addRowIconContainer:{
+        flex:1,
+        alignContent:"center",
+    },
+    distanceContainer:{
+        flexDirection:"row",
+        padding:"2%",
     },
 });

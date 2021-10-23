@@ -51,83 +51,90 @@ export default class ForumDetailsScreen extends Component {
             }
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
-            fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Succesfully get like id")
-                console.log("testing")
-                console.log(data)
-                // if(data.liked!=0){
-                //     this.setState({
-                //         showLike:false,
-                //         like: 'heart',
-                //     });
-                // }
-                // else{
-                //     this.setState({
-                //         showLike:true,
-                //     });
-                // }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            if(this.state.user_id.length!=0 && this.state.post_id.length!=0 ){
+                fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Succesfully get like id")
+                    console.log("testing")
+                    console.log(data)
+                    if(data.post_id!=null){
+                        this.setState({
+                            showLike:false,
+                            like: 'heart',
+                        });
+                    }
+                    else{
+                        this.setState({
+                            showLike:true,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+            
         }
     
-        getData();
+        
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
-        //get post details
+        if(this.state.post_id.length!=0){
+            //get post details
         fetch(IP + '/api/forumposts/' + this.state.post_id, {
-                headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-                },
-            })
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                title: data.title,
-                description: data.description,
-                name: data.name,
-                datetime: data.datetime,
-                noLike: data.noLike,
-                noComment: data.comments,
-                postUserId:data.user_id,
-            });
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-
-        //get comments
-        fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
             headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'
             },
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Succesfully get comments")
-            console.log(data)
-            this.setState({
-                comments:data,
+    .then(response => response.json())
+    .then(data => {
+        this.setState({
+            title: data.title,
+            description: data.description,
+            name: data.name,
+            datetime: data.datetime,
+            noLike: data.noLike,
+            noComment: data.comments,
+            postUserId:data.user_id,
+        });
+        if(data.comments.length!=0){
+            //get comments
+            fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Succesfully get comments")
+                console.log(data)
+                this.setState({
+                    comments:data,
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-        })
+                }
+                console.log(data);
+            })
         .catch((error) => {
             console.error('Error:', error);
         });
+
+    
+        }
+        getData();
     }
 
     edit=()=>{
@@ -143,23 +150,25 @@ export default class ForumDetailsScreen extends Component {
                 title: this.state.title,
                 description: this.state.description,
             };
-
-            fetch(IP + '/api/post/list/edit/'+ this.state.post_id, {
-                method: 'PUT',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Succesfully update post")
-                console.log(data)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            if(this.state.post_id.length!=0){
+                fetch(IP + '/api/post/list/edit/'+ this.state.post_id, {
+                    method: 'PUT',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Succesfully update post")
+                    console.log(data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+            
         }
         else{
             this.setState({
@@ -173,8 +182,8 @@ export default class ForumDetailsScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
-        //get comments
+        if(this.state.post_id.length!=0){
+            //get comments
         fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
             headers: {
             Accept: 'application/json',
@@ -192,6 +201,8 @@ export default class ForumDetailsScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        }
+        
     }
     
     
@@ -234,19 +245,8 @@ export default class ForumDetailsScreen extends Component {
                 noLike: this.state.noLike - 1,
                 showLike: true,
             }
-
-            fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Succesfully get like id")
-                console.log(data.id)
-                fetch(IP + "/api/post/list/like/"+data.id, {
-                    method:"DELETE",
+            if(this.state.user_id.length!=0 && this.state.post_id.length!=0){
+                fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
                     headers: {
                       Accept: 'application/json',
                       'Content-Type': 'application/json'
@@ -254,16 +254,29 @@ export default class ForumDetailsScreen extends Component {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Succesfully delete like")
-                    console.log(data)
+                    console.log("Succesfully get like id")
+                    console.log(data.id)
+                    fetch(IP + "/api/post/list/like/"+data.id, {
+                        method:"DELETE",
+                        headers: {
+                          Accept: 'application/json',
+                          'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Succesfully delete like")
+                        console.log(data)
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            }
+            
         }
         
         // set new state value
@@ -337,8 +350,8 @@ export default class ForumDetailsScreen extends Component {
             this.setState({
                 comment:'',
             })
-
-            //get comments
+            if(this.state.post_id.length!=0){
+                //get comments
             fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
                 headers: {
                 Accept: 'application/json',
@@ -355,6 +368,8 @@ export default class ForumDetailsScreen extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
+            }
+            
         }
     }
 

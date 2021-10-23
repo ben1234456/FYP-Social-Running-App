@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
         flexDirection:"column",
     },
     profilePic: {
-        flex:3,
+        flex:4,
         
         marginTop:"5%",   
         justifyContent: 'center',  
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         paddingLeft:"10%",
         paddingRight:"10%",
         flex:6,
-        marginTop:"5%",
+        paddingTop:"10%",
     },
     infoRow:{
         flexDirection:"row",
@@ -245,16 +245,14 @@ const styles = StyleSheet.create({
     },
     infoTitle:{
         flex:3,
-        margin:"1%",
         marginTop:"3%",
         marginBottom:"3%",
+        justifyContent:"center",
     },
     infoData:{
-        flex:7,
-        
+        flex:8,
         marginTop:"3%",
         marginBottom:"3%",
-        paddingRight:"5%",
         
     },
     info:{

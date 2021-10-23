@@ -208,6 +208,10 @@ export const styles = StyleSheet.create({
     more: {
         color: '#8352F2',
     },
+    view:{
+        marginRight:"2%",
+        marginLeft:"2%",
+    },
     cardView: {
         marginTop:"5%",
         marginBottom:"5%",

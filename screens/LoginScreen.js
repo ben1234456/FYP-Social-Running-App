@@ -196,7 +196,7 @@ export default class LoginScreen extends Component {
                     textStyle={styles.spinnerTextStyle}
                 />
                 <View style={{ flexDirection: 'column' }}>
-                    <Text style={styles.heading}>Welcome Back.</Text>
+                    <Text style={styles.heading}>Welcome Back</Text>
                     <View style={styles.input}>
                         <TextInput
                             style={styles.email}
@@ -290,5 +290,8 @@ export const styles = StyleSheet.create({
 
     inputRow: {
         flex: 1,
-    }
+    },
+    email:{
+        flex:1,
+    },
 });

@@ -205,7 +205,7 @@ export default class addEvent extends Component {
                         />
                     </View>
                 </View>
-                <View>
+                <View style={styles.titleHeading}>
                     <Text style={styles.botTitle}>Fee (RM)</Text>
                 </View>
                 <View style={styles.inputTitleTop}>
@@ -287,26 +287,25 @@ export default class addEvent extends Component {
         return (
 
             <ScrollView style={styles.container}>
-                <View style={styles.contentContainer}>
                     <View>
-                        <View>
+                    <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event Name</Text>
                         </View>
 
                         <View style={styles.inputTitleTop}>
                             <View style={styles.inputText}>
                                 <TextInput
-                                    placeholder="Event Name"
-                                    onChangeText={(name) => this.setState({ eventName: name })}
-                                    value={this.state.eventName}
+                                    placeholder = "Event Name"
+                                    onChangeText={(name) => this.setState({eventName:name})}
+                                    value = {this.state.eventName}
                                 />
                             </View>
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Description</Text>
                         </View>
-                        <View style={styles.inputWithTitle}>
+                        <View style={styles.inputTitleTop}>
                             <View style={styles.inputText}>
                                 <TextInput
                                     placeholder="Write your description here"
@@ -317,9 +316,9 @@ export default class addEvent extends Component {
                                     multiline
                                 />
                             </View>
-                        </View>
-                        
-                        <View>
+                        </View> 
+
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Distances and Fees</Text>
                         </View>
 
@@ -333,85 +332,81 @@ export default class addEvent extends Component {
                             </Button>     
                         </View>
                         
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Registration Start Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration date"
-                                date={this.state.regisDate}
-                                minDate={new Date()}
-                                maxDate={this.state.regisDueDate ? moment(this.state.regisDueDate).subtract(1, 'day').format('YYYY-MM-DD') : new Date("2023-12-31")}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                useNativeDriver='true'
-                                format="YYYY-MM-DD"
+                                date={this.state.regisDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
                                 customStyles={{
                                     dateIcon: { display: 'none' },
-                                    dateInput: { borderWidth: 0, alignItems: "flex-start" },
-                                }}
-                            
-                                onDateChange={(date) => { this.setState({ regisDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ regisDate: date }) }} />
                         </View>
-
-                        <View>
+                        
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Registration End Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
-                                date={this.state.regisDueDate}
-                                minDate={this.state.regisDate ? moment(this.state.regisDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                useNativeDriver='true'
-                                format="YYYY-MM-DD"
+                                date={this.state.regisDueDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
                                 customStyles={{
                                     dateIcon: { display: 'none' },
-                                    dateInput: { borderWidth: 0, alignItems: "flex-start" },
-                                }}
-                                onDateChange={(date) => { this.setState({ regisDueDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ regisDueDate: date }) }} />
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event Start Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose event start date"
-                                date={this.state.startDate}
-                                minDate={this.state.regisDueDate ? moment(this.state.regisDueDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
-                                maxDate={this.state.endDate ? moment(this.state.endDate).subtract(1, 'day').format('YYYY-MM-DD') : new Date("2023-12-31")}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                useNativeDriver='true'
-                                format="YYYY-MM-DD"
+                                date={this.state.startDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
                                 customStyles={{
                                     dateIcon: { display: 'none' },
-                                    dateInput: { borderWidth: 0, alignItems: "flex-start" },
-                                }}
-                                onDateChange={(date) => { this.setState({ startDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ startDate: date }) }} />
                         </View>
 
-                        <View>
+                        <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event End Date</Text>
                         </View>
-                        <View style={styles.pickerTitleTop}>
+                        <View style={styles.inputTitleTop}>
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
-                                date={this.state.endDate}
-                                minDate={this.state.startDate ? moment(this.state.startDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                useNativeDriver='true'
-                                format="YYYY-MM-DD"
+                                date={this.state.endDate} 
+                                minDate={new Date()} 
+                                confirmBtnText="Confirm" 
+                                cancelBtnText="Cancel" 
+                                useNativeDriver='true' 
+                                format="YYYY-MM-DD" 
                                 customStyles={{
                                     dateIcon: { display: 'none' },
-                                    dateInput: { borderWidth: 0, alignItems: "flex-start" },
-                                }}
-                                onDateChange={(date) => { this.setState({ endDate: moment(moment(date, "YYYY-MM-DD")).format("YYYY-MM-DD") }) }} />
+                                    dateInput: { borderWidth: 0 ,alignItems:"flex-start"},
+                                }} 
+                                onDateChange={(date) => { this.setState({ endDate: date }) }} />
                         </View>
-
                         <View style={styles.submitBtnContainer}>
                             <Button style={styles.submitBtn} onPress={this.create}>
                                 <Text style={styles.btnText}>Create</Text>
@@ -421,7 +416,6 @@ export default class addEvent extends Component {
 
 
                     </View>
-                </View>
             </ScrollView>
         );
     }
@@ -431,15 +425,10 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-
-    },
-    contentContainer: {
-        flex: 1,
         padding: 20,
-        paddingTop: 0,
-        backgroundColor: 'white',
-        marginTop:"2.5%",
+        paddingTop:"2.5%",
     },
+    
     heading: {
         fontSize: 30,
         fontWeight: '700',
@@ -478,7 +467,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        
+        marginBottom:"10%",
     },
     btnText: {
         fontSize: 16,
@@ -550,12 +539,15 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     
+    titleHeading:{
+        padding:"2%",
+    },
     inputTitleTop: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
-        padding: 10,
-        marginTop:"2.5%",
-        marginBottom: "2.5%"
+        display: 'flex',
+        flexDirection: 'row',
+        padding:"2%",
     },
     pickerTitleTop: {
         backgroundColor: '#ECECEC',
@@ -563,8 +555,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         paddingTop: 2,
         paddingBottom: 2,
-        marginBottom:"2.5%",
-        marginTop:"2.5%",
+        marginBottom:"5%",
     },
     camera: {
         width: 40,
@@ -606,6 +597,7 @@ export const styles = StyleSheet.create({
     },
     addRowTextContainer:{
         flex:9,
+        
     },
     addRowIconContainer:{
         flex:1,
@@ -613,8 +605,7 @@ export const styles = StyleSheet.create({
     },
     distanceContainer:{
         flexDirection:"row",
-        marginTop:"2.5%",
-        marginBottom:"2.5%",
+        padding:"2%",
     },
     submitBtnContainer:{
         marginTop:"5%",

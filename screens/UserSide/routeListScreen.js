@@ -92,6 +92,8 @@ export const styles = StyleSheet.create({
     },
     view: {
         height: 240,
+        marginLeft:"2%",
+        marginRight:"2%",
     },
     cardView: {
         height: 'auto',
@@ -99,7 +101,7 @@ export const styles = StyleSheet.create({
         marginRight: 30,
         borderRadius: 15,
         backgroundColor: 'white',
-
+        
         //ios
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },

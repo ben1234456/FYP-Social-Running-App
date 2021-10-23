@@ -450,7 +450,6 @@ const styles = StyleSheet.create({
     },
     topInfo:{
         flex:3,
-        borderWidth:1,
         paddingLeft:"5%",
         paddingRight:"5%",
         paddingTop:"1%",
@@ -462,7 +461,6 @@ const styles = StyleSheet.create({
     },
     info:{
         borderRadius:5,
-        borderWidth:1,
         padding:"1%",
         backgroundColor: '#ffffff',
     },
@@ -505,6 +503,8 @@ const styles = StyleSheet.create({
     },
     infoText:{
         fontSize:12,
+        color:"#808080",
+
     },
     routeInfoBot:{
         flexDirection:"row",

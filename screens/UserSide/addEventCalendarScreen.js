@@ -17,7 +17,7 @@ export default class addEventCalendarScreen extends Component{
             eventTime:"0000",
             selectedHour:"0",
             selectedMin:"00",
-            convertedTime:"",
+            convertedTime:"0",
             //default value (empty option)
             remindTime:{"Name":"Add new notifications"},
             remindHour:1,
@@ -219,35 +219,7 @@ export default class addEventCalendarScreen extends Component{
                         />
                     </View>
                 </View> 
-                {/* second row */}
-                <View style={styles.row}>
-                    <View style={styles.iconContainer}>
-                        <Icon1 name={"notifications-none"} size={30} color={"grey"} />
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <PickerModal
-                            renderSelectView={(disabled, selected, showModal) =>
-                                <View>
-                                    <TouchableOpacity onPress={showModal}>
-                                        <Text>
-                                            {this.state.remindTime.Name}
-                                        </Text> 
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                            onSelected={this.select}
-                            items={this.state.data}
-                            sortingLanguage={'tr'}
-                            showToTopButton={true}
-                            showAlphabeticalIndex={false}
-                            autoGenerateAlphabeticalIndex={true}
-                            selectPlaceholderText={'Choose one'}
-                            searchPlaceholderText={'Search'}
-                            requireSelection={false}
-                            autoSort={false} 
-                        />
-                    </View>
-                </View> 
+                
                 {/* third row */}
                 <View style={styles.rowLast}>
                     <View style={styles.iconContainer}>

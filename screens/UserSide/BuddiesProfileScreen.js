@@ -145,7 +145,7 @@ export default class BuddiesProfileScreen extends Component {
                 <View style={styles.rowContainer}>
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
-                <View style={{ flexDirection: 'column' }}>
+                {/* <View style={{ flexDirection: 'column' }}>
                     <View style={styles.followerRow}>
                         <View style={styles.followPosition}>
                             <Text style={styles.noOfFollower}>0</Text>
@@ -156,7 +156,7 @@ export default class BuddiesProfileScreen extends Component {
                             <Text style={styles.follow}>FOLLOWING</Text>
                         </View>
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.cardView}>
                     <View style={styles.proRow}>
                         <View style={styles.proTitle}>

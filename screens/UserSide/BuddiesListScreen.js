@@ -42,23 +42,26 @@ export default class BuddiesListScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-            fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get buddylist data')
-                console.log(data)
-                this.setState({
-                    userList: data
+            if(this.state.userID.length!=0){
+                fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get buddylist data')
+                    console.log(data)
+                    this.setState({
+                        userList: data
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            }
+            
             
             
         }
@@ -71,24 +74,26 @@ export default class BuddiesListScreen extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
-            fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get buddylist data')
-                console.log(data)
-                this.setState({
-                    userList: data
+            if(this.state.userID.length!=0){
+                fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get buddylist data')
+                    console.log(data)
+                    this.setState({
+                        userList: data
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            }
+            
           });
     }
 
@@ -175,8 +180,8 @@ export default class BuddiesListScreen extends Component {
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
-        //get 10 user
+        if(this.state.userID.length!=0){
+            //get 10 user
         fetch(IP + '/api/buddy/buddyList/' + this.state.userID +"/"+ value, {
             headers: {
                 Accept: 'application/json',
@@ -194,6 +199,8 @@ export default class BuddiesListScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        }
+        
     };
     
     render() {
@@ -284,5 +291,6 @@ export const styles = StyleSheet.create({
     },
     noBuddyText:{
         fontSize:16,
+        color:"#808080",
     },
 });

@@ -130,7 +130,7 @@ export default class AdminHomeScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.contentContainer1}>
-                    <View style={styles.rowContainer}>
+                    <View style={styles.rowContainerBig}>
                         <Text style={styles.welcome}>Hi,</Text>
                         <Text style={styles.name}> {this.state.name}</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Activity')}>
@@ -206,26 +206,36 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        paddingTop:"2%",
     },
     contentContainer1: {
-        marginTop: 30,
-        padding: 20,
+        marginTop:"5%",
     },
     rowContainer: {
         flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
         padding: 20,
+        paddingTop:10,
+        paddingBottom:10,
+    },
+    rowContainerBig: {
+        flex: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 20,
+        paddingTop:10,
+        paddingBottom:0,
     },
     scrollview: {
-        height: 240,
+        marginTop:"5%",
     },
     cardView: {
         height: 210,
         width: 250,
-        marginLeft: 5,
-        marginRight: 35,
+        marginLeft: 20,
         borderRadius: 15,
+        marginBottom:20,
         backgroundColor: 'white',
 
         //ios
@@ -286,11 +296,10 @@ export const styles = StyleSheet.create({
     },
     noEventView:{
         flex:1,
-        paddingLeft:"10%",
-        paddingRight:"10%",
+        
         alignItems:"flex-start",
         justifyContent:"center",
-        paddingTop:"10%",
+        padding:"10%",
     },
 
     noEventText:{

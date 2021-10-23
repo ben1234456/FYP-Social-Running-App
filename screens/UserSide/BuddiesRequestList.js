@@ -86,7 +86,7 @@ export default class BuddiesRequestList extends Component {
                 /> 
                 :
                 <View style={styles.noReqView}>
-                    <Text style={styles.noReqText}>No Buddy Found</Text>
+                    <Text style={styles.noReqText}>No Buddy Request Found</Text>
                 </View>
                 }
                 
@@ -177,5 +177,6 @@ export const styles = StyleSheet.create({
     },
     noReqText:{
         fontSize:16,
+        color:"#808080",
     },
 });
