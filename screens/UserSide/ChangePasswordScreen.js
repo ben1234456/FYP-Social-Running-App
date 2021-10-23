@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Alert, Button } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Alert, Button, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class ChangePasswordScreen extends Component {
@@ -101,7 +101,7 @@ export default class ChangePasswordScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                     <View>
                         <Text style={styles.heading}>Change password</Text>
                         <Text style={styles.smallTextUnderTitle}>Your password must be different with the previous password</Text>
@@ -140,7 +140,7 @@ export default class ChangePasswordScreen extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -151,7 +151,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         paddingTop: 0,
-        justifyContent:"center",
+        
     },
     
     heading: {
@@ -160,6 +160,7 @@ export const styles = StyleSheet.create({
         color: '#373737',
         lineHeight: 40,
         textAlign: 'center',
+        marginTop: "5%",
         marginBottom:"5%",
     },
     input: {
@@ -186,6 +187,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         marginTop: "5%",
+        marginBottom: "10%",
         alignItems: "center",
         padding: "5%",
     },

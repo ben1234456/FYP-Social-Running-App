@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding:"5%",
-        paddingTop:"10%",
     },
     infoColumnTitle: {
         flex: 2,
@@ -254,7 +253,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         // marginTop: 50,
         marginLeft:10,
-        marginRight: 40,
     },
 
     btnText: {
@@ -264,7 +262,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     cardView: {
-        marginTop:"5%",
+        margin:"5%",
+        marginBottom: "10%",
 
         borderRadius: 15,
         backgroundColor: 'white',

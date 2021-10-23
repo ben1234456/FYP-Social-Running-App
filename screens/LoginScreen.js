@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, TextInput, Text, Alert, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, TextInput, Text, Alert, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'native-base'
 import Back from '../images/left-arrow.png';
 import Eye from '../images/eye.png';
@@ -189,7 +189,7 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Loading...'}
@@ -224,7 +224,7 @@ export default class LoginScreen extends Component {
                         <Text style={styles.link}>Forgot Your Password? </Text>
                     </Text>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -233,7 +233,6 @@ export const styles = StyleSheet.create({
     container: {
         padding: 40,
         flex: 1,
-        justifyContent: 'center',
         backgroundColor: 'white',
     },
 
