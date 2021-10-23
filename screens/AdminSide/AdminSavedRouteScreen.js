@@ -202,5 +202,7 @@ export const styles = StyleSheet.create({
     },
     listContainer:{
         padding:"5%",
+        marginLeft:"1%",
+        marginRight:"1%",
     },
 });

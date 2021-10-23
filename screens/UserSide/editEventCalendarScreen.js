@@ -26,6 +26,7 @@ export default class editEventCalendarScreen extends Component{
             allDay:"ON",
             userID:"",
             id:props.route.params.id,
+            // id:5,
             
             date:"",
             //remindtime will be data selected
@@ -261,35 +262,7 @@ export default class editEventCalendarScreen extends Component{
                         />
                     </View>
                 </View> 
-                {/* second row */}
-                <View style={styles.row}>
-                    <View style={styles.iconContainer}>
-                        <Icon1 name={"notifications-none"} size={30} color={"grey"} />
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <PickerModal
-                            renderSelectView={(disabled, selected, showModal) =>
-                                <View>
-                                    <TouchableOpacity onPress={showModal}>
-                                        <Text>
-                                            {this.state.remindTime.Name}
-                                        </Text> 
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                            onSelected={this.select}
-                            items={this.state.data}
-                            sortingLanguage={'tr'}
-                            showToTopButton={true}
-                            showAlphabeticalIndex={false}
-                            autoGenerateAlphabeticalIndex={true}
-                            selectPlaceholderText={'Choose one'}
-                            searchPlaceholderText={'Search'}
-                            requireSelection={false}
-                            autoSort={false} 
-                        />
-                    </View>
-                </View> 
+                
                 {/* third row */}
                 <View style={styles.rowLast}>
                     <View style={styles.iconContainer}>
@@ -297,20 +270,7 @@ export default class editEventCalendarScreen extends Component{
                     </View>
 
                     <View style={styles.infoRow}>
-                        <View style={styles.infoRowContainer}>
-                            <View style={styles.infoContainerLeft}>
-                                <Text>
-                                    All-day
-                                </Text>
-                            </View>
-                            <View style={styles.infoContainerRight}>
-                                <TouchableOpacity style={(this.state.allDay=="ON")?styles.toggle:styles.toggled} onPress={this.toggle}>
-                                    <Text style={(this.state.allDay=="ON")?styles.toggleText:styles.toggledText}>
-                                        {this.state.allDay}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+
                         <View style={styles.infoRowContainer}>
                             <View style={styles.infoContainerLeft}>
                                 <Text>
@@ -318,16 +278,13 @@ export default class editEventCalendarScreen extends Component{
                                 </Text>
                             </View>
                             <View style={styles.infoContainerRight1}>
-                                {this.state.allDay=="OFF"
-                                ?
+                                
                                 <TouchableOpacity onPress={() => this.TimePicker.open()}>
                                     <Text>
                                         {this.state.eventTime}
                                     </Text>
                                 </TouchableOpacity>
-                                :
-                                <View></View>
-                                }
+                                
                                 
                             </View>
                         </View>
@@ -380,7 +337,6 @@ export const styles=StyleSheet.create({
     },
     rowLast:{
         flexDirection:"row",
-        height:"40%",
     },
     infoContainer:{
         flex:9,
@@ -390,10 +346,12 @@ export const styles=StyleSheet.create({
     infoRow:{
         flex:9,
         marginLeft:"5%",
+        justifyContent:"center",
         
     },
     infoContainerLeft:{
         justifyContent:"center",
+        alignSelf:"center",
         flex:9,
     },
     infoContainerRight:{
@@ -436,7 +394,7 @@ export const styles=StyleSheet.create({
     },
     infoRowContainer:{
         flexDirection:"row",
-        marginBottom:"5%"
+        
     },
     botBtnContainer:{
         flex:1,

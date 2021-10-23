@@ -102,7 +102,6 @@ export default class ChangePasswordScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.contentContainer}>
                     <View>
                         <Text style={styles.heading}>Change password</Text>
                         <Text style={styles.smallTextUnderTitle}>Your password must be different with the previous password</Text>
@@ -141,7 +140,6 @@ export default class ChangePasswordScreen extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                </View>
             </View>
         );
     }
@@ -153,17 +151,16 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         paddingTop: 0,
+        justifyContent:"center",
     },
-    contentContainer: {
-        flex: 1,
-    },
+    
     heading: {
         fontSize: 30,
         fontWeight: '700',
         color: '#373737',
         lineHeight: 40,
         textAlign: 'center',
-        marginTop: 130,
+        marginBottom:"5%",
     },
     input: {
         backgroundColor: '#ECECEC',

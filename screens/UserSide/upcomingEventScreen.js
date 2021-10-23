@@ -159,9 +159,9 @@ export default class eventDetails extends Component {
                 <ScrollView>
                     
                     <View >
-                        <View style={styles.about}>
-                            <Text style={styles.aboutHeading}>Note</Text>
-                            <Text style={styles.aboutText}>This event is not available to register yet</Text>
+                        <View style={styles.note}>
+                            <Text style={styles.noteHeading}>Note</Text>
+                            <Text style={styles.noteText}>This event is not available to register yet.</Text>
                         </View>
 
                         <View style={styles.top}>
@@ -206,7 +206,6 @@ export default class eventDetails extends Component {
                                 <Text style={styles.eventInfo}>Finished Medal</Text>
                             </View>
                         </View>
-                        <View style={styles.about}>
                             
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>About</Text>
@@ -225,7 +224,6 @@ export default class eventDetails extends Component {
                                 <Text style={styles.aboutHeading}>RUN SUBMISSION</Text>
                                 <Text style={styles.aboutText}>Please kindly submit your result through this mobile application</Text>
                             </View>
-                        </View>
                         
                     </View>
                     <View style={styles.spacing}>
@@ -270,7 +268,7 @@ export const styles = StyleSheet.create({
     },
     infoRow:{
         flexDirection:"row",
-        margin:"10%",
+        padding: "5%",
     },
     eventTitle:{
         textAlign:"left",
@@ -294,16 +292,30 @@ export const styles = StyleSheet.create({
     },
     about:{
         flex:1,
-        margin:"5%",
+        padding:"5%",
     },
-    aboutHeading:{
+    note:{
+        flex:1,
+        padding:"5%",
+        backgroundColor: '#ff0000',
+    },
+    noteHeading:{
         fontWeight:"bold",
         fontSize:20,
-        color:"#373737",
+        color:"white",
     },
-    aboutText:{
+    noteText:{
         fontSize:15,
-        color:"#373737",
+        color:"white",
+    },
+    aboutHeading: {
+        fontWeight: "bold",
+        fontSize: 20,
+        color: "#373737",
+    },
+    aboutText: {
+        fontSize: 15,
+        color: "#373737",
     },
 });
 

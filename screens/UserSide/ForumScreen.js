@@ -59,25 +59,27 @@ export default class ForumScreen extends Component {
             //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
-        //get forum posts' details
-        fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get forum posts')
-            console.log(data)
-            this.setState({
-                posts: data
+        if(this.state.user_id.length!=0){
+            //get forum posts' details
+            fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get forum posts')
+                console.log(data)
+                this.setState({
+                    posts: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        }
+        
         }
 
         getData();
@@ -119,8 +121,8 @@ export default class ForumScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
-        //get forum posts' details
+        if(this.state.user_id.length!=0){
+            //get forum posts' details
         fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
             headers: {
                 Accept: 'application/json',
@@ -138,6 +140,8 @@ export default class ForumScreen extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        }
+        
 
         });
           
@@ -311,8 +315,8 @@ export default class ForumScreen extends Component {
 
     render() {
         return (
-            <View
-                style={styles.container}>
+            <View style={styles.container}>
+                
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>
@@ -449,9 +453,10 @@ export default class ForumScreen extends Component {
                             </View>
                         </View>
                     </Modal>
-                    <View style={{ flexDirection: 'column', alignItems: 'flex-end', flex: 1 }}>
-                        <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} onPress={() => { this.setState({ isVisible: true }) }} />
-                    </View>
+                   
+                </View>
+                <View style={{ flexDirection: 'column', alignItems: 'flex-end',marginBottom:"5%",marginRight:"5%"  }}>
+                    <Ant size={40} name='pluscircle' style={{ color: '#8352F2' }} onPress={() => { this.setState({ isVisible: true }) }} />
                 </View>
             </View>
         );
@@ -462,16 +467,18 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        padding:"5%",
+        paddingTop:"10%",
     },
     contentContainer1: {
-        marginTop: 30,
-        padding: 20,
+        paddingTop:"5%",
+        paddingBottom:"5%",
     },
     rowContainer: {
         flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
+        
     },
     event: {
         flex: 1,
@@ -483,7 +490,7 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: 'white',
         padding: "5%",
-        margin: "5%",
+        margin: "1%",
         //ios
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
@@ -529,6 +536,7 @@ export const styles = StyleSheet.create({
         alignItems: "flex-start",
         justifyContent: "center",
         padding: "2.5%",
+        paddingTop:"5%",
     },
     proInfo: {
         margin: 20

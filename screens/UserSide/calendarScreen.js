@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         padding: "5%",
         marginRight: "3%",
-        marginTop: "5%",
-        marginBottom:"5%",
+        marginTop: "6%",
+        marginBottom:"6%",
     },
     //no activity scheduled
     emptyItem: {

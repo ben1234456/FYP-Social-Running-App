@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding:"5%",
-        paddingTop:"10%",
+        paddingTop:"15%",
     },
     contentContainer: {
         padding: 40,
@@ -237,5 +237,8 @@ const styles = StyleSheet.create({
         flex:1,
         color:"#808080",
         marginTop:"5%",
+    },
+    noEventView:{
+        padding:"5%",
     }
 });

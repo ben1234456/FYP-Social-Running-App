@@ -72,37 +72,37 @@ export default class App extends Component {
         getData();
 
         this.focusListener = this.props.navigation.addListener('focus', () => {
+            if(this.state.user_id.length!=0){
+                const IP = 'https://socialrunningapp.herokuapp.com';
 
-            const IP = 'https://socialrunningapp.herokuapp.com';
+                //get forum posts' details
+                fetch(IP + '/api/users/' + this.state.user_id, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    JSON.stringify(data);
+                    console.log(data);
+                    //change to upper case
+                    var gender = data[0].gender;
+                    var genderText = gender[0].toUpperCase() + gender.substring(1);
 
-            //get forum posts' details
-            fetch(IP + '/api/users/' + this.state.user_id, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                JSON.stringify(data);
-                console.log(data);
-                //change to upper case
-                var gender = data[0].gender;
-                var genderText = gender[0].toUpperCase() + gender.substring(1);
-
-                this.setState({
-                    user_id: data[0].id,
-                    name: data[0].first_name,
-                    email: data[0].email,
-                    gender: genderText,
-                    city: data[0].city,
-                    dob: data[0].dob
+                    this.setState({
+                        user_id: data[0].id,
+                        name: data[0].first_name,
+                        email: data[0].email,
+                        gender: genderText,
+                        city: data[0].city,
+                        dob: data[0].dob
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
+            }
         });
 
     }
@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        padding:"5%",
+        paddingTop:"10%",
     },
     infoColumnTitle: {
         flex: 2,
@@ -206,22 +208,24 @@ const styles = StyleSheet.create({
         color: "#8100e3",
     },
     contentContainer1: {
-        padding: 20,
-        marginTop: 30,
+        paddingTop:"5%",
+        paddingBottom:"5%",
     },
 
     rowContainer: {
         flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
+        
     },
 
     rowContainer2: {
         flex: 0,
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        alignSelf:"center",
+        marginTop:"5%",
+        padding:"5%",
+        
     },
 
     profile: {
@@ -241,15 +245,14 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: '#8352F2',
         borderRadius: 30,
-        marginTop: 50,
-        marginLeft: 40,
+
     },
 
     changePassword: {
         flex: 1,
         backgroundColor: '#FF0000',
         borderRadius: 30,
-        marginTop: 50,
+        // marginTop: 50,
         marginLeft:10,
         marginRight: 40,
     },
@@ -261,7 +264,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     cardView: {
-        margin: 40,
+        marginTop:"5%",
+
         borderRadius: 15,
         backgroundColor: 'white',
 
