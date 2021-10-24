@@ -13,8 +13,6 @@ export default class StartedScene extends Component {
             <View style={styles.container}>
                 <View style={styles.top}>
                     <Image style={styles.image} source={Run} />
-                </View>
-                <View style={styles.bottom}>
                     <Text style={styles.heading}>Let's get started!</Text>
                     <Text style={styles.subHeading}>Enjoy.</Text>
                     <Button block style={styles.submitBtn} onPress={() => this.props.navigation.navigate('register')}>
@@ -46,11 +44,6 @@ export const styles = StyleSheet.create({
 
     top: {
         flex: 1,
-    },
-
-    bottom: {
-        flex: 1,
-        justifyContent: 'flex-end',
     },
 
     heading: {

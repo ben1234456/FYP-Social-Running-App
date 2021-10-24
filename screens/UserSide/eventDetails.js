@@ -328,6 +328,7 @@ export default class eventDetails extends Component {
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     spacing: {
         margin: "10%",

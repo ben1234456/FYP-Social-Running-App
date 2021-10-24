@@ -195,8 +195,8 @@ export default class buddyRequestDetailScreen extends Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.decline}>
-                            <View style={styles.btn} >
-                                <Text style={styles.btnText}>Decline</Text>
+                            <View style={styles.btn2} >
+                                <Text style={styles.btnText2}>Decline</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -302,9 +302,27 @@ const styles = StyleSheet.create({
         paddingLeft:"12.5%",
         backgroundColor: '#8352F2',
     },
+    btn2:{
+        borderRadius:30,
+        alignItems:"center",
+        padding:"5%",
+        flex:1,
+        marginRight:"2.5%",
+        marginLeft:"2.5%",
+        paddingRight:"12.5%",
+        paddingLeft:"12.5%",
+        backgroundColor: 'white',
+        borderColor: '#8352F2',
+        borderWidth: 1,
+    },
     btnText:{
         fontSize:16,
         color: 'white',
+        textAlign: 'center',
+    },
+    btnText2:{
+        fontSize:16,
+        color: '#8352F2',
         textAlign: 'center',
     },
     wholeContainer:{
