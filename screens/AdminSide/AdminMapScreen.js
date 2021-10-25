@@ -216,7 +216,7 @@ export default class AdminMapScreen extends Component {
 
         return (
             <View style={styles.container}>
-                {/* <MapView style={styles.map}
+                <MapView style={styles.map}
                     ref={this.state.reference}
                     provider={PROVIDER_GOOGLE}
                     showsUserLocation
@@ -227,7 +227,7 @@ export default class AdminMapScreen extends Component {
                 >
                     <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
                     
-                </MapView> */}
+                </MapView>
 
                 <View style={styles.columnContainer}>
 
