@@ -75,7 +75,7 @@ export default class App extends Component {
             if(this.state.user_id.length!=0){
                 const IP = 'https://socialrunningapp.herokuapp.com';
 
-                //get forum posts' details
+                //get user
                 fetch(IP + '/api/users/' + this.state.user_id, {
                     headers: {
                         Accept: 'application/json',
