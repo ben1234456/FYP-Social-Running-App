@@ -6,6 +6,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/Ionicons';
 import { StackActions } from '@react-navigation/native';
 
 export default class App extends Component {
@@ -19,7 +20,7 @@ export default class App extends Component {
             city: "",
             dob: "",
         };
-       
+
     }
 
     logout = async () => {
@@ -30,49 +31,49 @@ export default class App extends Component {
             msg,
             '',
             [
-                { text: "Logout Now", style: "default", onPress: () =>  this.props.navigation.dispatch(StackActions.replace('login'))},
+                { text: "Logout Now", style: "default", onPress: () => this.props.navigation.dispatch(StackActions.replace('login')) },
                 { text: "Cancel", style: 'cancel', onPress: () => console.log("Cancel Pressed") }
             ],
-            {cancelable: false},
+            { cancelable: false },
         );
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         //get data from async storage
         const getData = async () => {
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
-                
-                if(userJson !== null) {
+
+                if (userJson !== null) {
                     const user = JSON.parse(userJson);
 
                     //change to upper case
                     var gender = user.gender;
                     var genderText = gender[0].toUpperCase() + gender.substring(1);
-                    
+
                     //update state
                     this.setState({
-                        user_id:user.id,
-                        name:user.first_name,
-                        email:user.email,
-                        gender:genderText,
-                        city:user.city,
-                        dob:user.dob
-                    });  
+                        user_id: user.id,
+                        name: user.first_name,
+                        email: user.email,
+                        gender: genderText,
+                        city: user.city,
+                        dob: user.dob
+                    });
 
                     console.log(this.state.name);
                 }
-    
-            } catch(e) {
+
+            } catch (e) {
                 console.log(e);
             }
         }
-    
+
         getData();
 
         this.focusListener = this.props.navigation.addListener('focus', () => {
-            if(this.state.user_id.length!=0){
+            if (this.state.user_id.length != 0) {
                 const IP = 'https://socialrunningapp.herokuapp.com';
 
                 //get user
@@ -82,26 +83,26 @@ export default class App extends Component {
                         'Content-Type': 'application/json'
                     },
                 })
-                .then(response => response.json())
-                .then(data => {
-                    JSON.stringify(data);
-                    console.log(data);
-                    //change to upper case
-                    var gender = data[0].gender;
-                    var genderText = gender[0].toUpperCase() + gender.substring(1);
+                    .then(response => response.json())
+                    .then(data => {
+                        JSON.stringify(data);
+                        console.log(data);
+                        //change to upper case
+                        var gender = data[0].gender;
+                        var genderText = gender[0].toUpperCase() + gender.substring(1);
 
-                    this.setState({
-                        user_id: data[0].id,
-                        name: data[0].first_name,
-                        email: data[0].email,
-                        gender: genderText,
-                        city: data[0].city,
-                        dob: data[0].dob
+                        this.setState({
+                            user_id: data[0].id,
+                            name: data[0].first_name,
+                            email: data[0].email,
+                            gender: genderText,
+                            city: data[0].city,
+                            dob: data[0].dob
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
                     });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
             }
         });
 
@@ -114,13 +115,32 @@ export default class App extends Component {
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
                         <Text style={styles.profile}>Profile</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
-                            <Font style={styles.image} name="ticket-alt" size={25} color={'#8352F2'} />
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.rowContainer2}>
                     <Image style={styles.proImage} source={profileImage} />
+                </View>
+                <View style={styles.rowContainer}>
+                    <TouchableOpacity style={{marginRight: '3%'}} onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
+                        <View style={{
+                            backgroundColor: '#ECECEC',
+                            borderRadius: 15,
+                            padding: 15,
+                        }}>
+                            <Font style={{ alignSelf: 'center' }} name="ticket-alt" size={25} color={'#8352F2'} />
+                            <Text style={{ color: '#8352F2' }}>E-tickets</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('calendarScreen')}>
+                        <View style={{
+                            backgroundColor: '#ECECEC',
+                            borderRadius: 15,
+                            padding: 15,
+                        }}>
+                            <Icon2 style={{ alignSelf: 'center' }} name="calendar" size={25} color={'#8352F2'} />
+                            <Text style={{ color: '#8352F2' }}>Calendar</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.rowContainer2}>
                     <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('editProfileScreen')}>
@@ -181,7 +201,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding:"5%",
+        padding: "5%",
     },
     infoColumnTitle: {
         flex: 2,
@@ -207,24 +227,24 @@ const styles = StyleSheet.create({
         color: "#8100e3",
     },
     contentContainer1: {
-        paddingTop:"5%",
-        paddingBottom:"5%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
     },
 
     rowContainer: {
         flex: 0,
         flexDirection: 'row',
-        alignItems: 'center',
-        
+        alignSelf: 'center',
+
     },
 
     rowContainer2: {
         flex: 0,
         flexDirection: 'row',
-        alignSelf:"center",
-        marginTop:"5%",
-        padding:"5%",
-        
+        alignSelf: "center",
+        marginTop: "5%",
+        padding: "5%",
+
     },
 
     profile: {
@@ -232,6 +252,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         flex: 1,
+        marginRight: 20,
     },
 
     proImage: {
@@ -241,7 +262,7 @@ const styles = StyleSheet.create({
     },
 
     editProfile: {
-        flex:1,
+        flex: 1,
         backgroundColor: '#8352F2',
         borderRadius: 30,
 
@@ -252,7 +273,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF0000',
         borderRadius: 30,
         // marginTop: 50,
-        marginLeft:10,
+        marginLeft: 10,
     },
 
     btnText: {
@@ -262,7 +283,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     cardView: {
-        margin:"5%",
+        margin: "5%",
         marginBottom: "10%",
 
         borderRadius: 15,

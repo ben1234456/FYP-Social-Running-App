@@ -441,10 +441,10 @@ export default class ForumScreen extends Component {
                             <Divider style={styles.divider} />
                             <View style={{ flexDirection: 'row' }}>
                                 <Icon style={{ margin: 20 }} size={25} color='#8352F2' name='description' />
-                                <View style={styles.input}>
+                                <View style={styles.input2}>
                                     <TextInput
                                         style={{ padding: 10 }}
-                                        placeholder="Write your post here"
+                                        placeholder="Write your post here..."
                                         multiline={true}
                                         onChangeText={data => this.setState({ descriptionHolder: data })}
                                         underlineColorAndroid='transparent'
@@ -558,7 +558,6 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: '#808080'
     },
-
     input: {
         backgroundColor: '#ECECEC',
         borderRadius: 15,
@@ -566,6 +565,16 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
         marginRight: 20,
         padding: 2,
+        flex: 1,
+    },
+    input2: {
+        backgroundColor: '#ECECEC',
+        borderRadius: 15,
+        marginTop: 10,
+        marginBottom: 10,
+        marginRight: 20,
+        padding: 2,
+        height: 200,
         flex: 1,
     },
     inactive: {
