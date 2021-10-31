@@ -5,6 +5,7 @@ import { Actions, Reducer } from 'react-native-router-flux';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import { StackActions } from '@react-navigation/native';
@@ -121,7 +122,7 @@ export default class App extends Component {
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
                 <View style={styles.rowContainer}>
-                    <TouchableOpacity style={{marginRight: '3%'}} onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
+                    <TouchableOpacity style={{ marginRight: '3%' }} onPress={() => this.props.navigation.navigate('Coupon', { 'user_id': this.state.user_id })}>
                         <View style={{
                             backgroundColor: '#ECECEC',
                             borderRadius: 15,
@@ -131,16 +132,30 @@ export default class App extends Component {
                             <Text style={{ color: '#8352F2' }}>E-tickets</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('calendarScreen')}>
+                    <TouchableOpacity style={{ marginRight: '3%' }} onPress={() => this.props.navigation.navigate('calendarScreen')}>
                         <View style={{
                             backgroundColor: '#ECECEC',
                             borderRadius: 15,
-                            padding: 15,
+                            paddingLeft: 12,
+                            paddingRight: 12,
+                            paddingTop: 15,
+                            paddingBottom: 15,
                         }}>
                             <Icon2 style={{ alignSelf: 'center' }} name="calendar" size={25} color={'#8352F2'} />
                             <Text style={{ color: '#8352F2' }}>Calendar</Text>
                         </View>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('BuddiesListScreen')} >
+                        <View style={{
+                            backgroundColor: '#ECECEC',
+                            borderRadius: 15,
+                            padding: 15,
+                        }}>
+                            <MatIcon style={{ alignSelf: 'center' }} size={27} name='people' color='#8352F2' />
+                            <Text style={{ color: '#8352F2' }}>Buddies</Text>
+                        </View>
+                    </TouchableOpacity>
+
                 </View>
                 <View style={styles.rowContainer2}>
                     <Button block style={styles.editProfile} onPress={() => this.props.navigation.navigate('editProfileScreen')}>

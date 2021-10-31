@@ -54,7 +54,7 @@ export default class LoginScreen extends Component {
                 }
             }
 
-            errormsg += "cannot be emtpy";
+            errormsg += "cannot be empty";
 
             Alert.alert(
                 errormsg,
@@ -189,7 +189,7 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Loading...'}
@@ -224,7 +224,7 @@ export default class LoginScreen extends Component {
                         <Text style={styles.link}>Forgot Your Password? </Text>
                     </Text>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 }
@@ -233,16 +233,17 @@ export const styles = StyleSheet.create({
     container: {
         padding: 40,
         flex: 1,
+        justifyContent:'center',
         backgroundColor: 'white',
     },
 
     heading: {
+        marginTop: '30%',
         fontSize: 30,
         fontWeight: '700',
         color: '#373737',
         lineHeight: 40,
         textAlign: 'center',
-        alignItems: 'center'
     },
 
     input: {

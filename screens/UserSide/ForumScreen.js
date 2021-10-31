@@ -320,7 +320,6 @@ export default class ForumScreen extends Component {
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>
-                        <Icon size={25} name='people' color='#808080' onPress={() => this.props.navigation.navigate('BuddiesListScreen')} />
                     </View>
                 </View>
                 {this.state.posts.length != 0
