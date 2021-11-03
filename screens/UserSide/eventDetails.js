@@ -15,7 +15,7 @@ export default class eventDetails extends Component {
         super(props);
         this.state = {
             user_id: "",
-            checked: 'first',
+            checked: '',
             eventid: props.route.params.eventid,
             event_name: "",
             start_date: "",
@@ -25,6 +25,7 @@ export default class eventDetails extends Component {
             event_distance: "",
             desc: "",
             distanceSelected: "",
+            distanceCounter:0,
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
@@ -186,13 +187,15 @@ export default class eventDetails extends Component {
         <Text style={styles.eventInfo}>RM{data.item.fee} ({data.item.distance}km)</Text>
 
     renderDistanceSelection = (data) =>
-    <View style={{ flexDirection: 'row' }}>
-        <Text style={{ marginTop: 8, flex: 1 }}>{data.item.distance}km (RM{data.item.fee})</Text>
-        <RadioButton 
-            value={data.item.distance} 
-            color='#8352F2'
-        />
-    </View>
+        <View style={{ flexDirection: 'row' }}>
+            <Text style={{ marginTop: 8, flex: 1 }}>{data.item.distance}km (RM{data.item.fee})</Text>
+            <RadioButton 
+                value={data.item.distance} 
+                color='#8352F2'
+                status={this.state.checked===data.item.id?"checked":"unchecked"}
+                onPress={()=>this.setState({ checked:data.item.id,distanceSelected:data.item.distance })}
+            />
+        </View>
 
     register = () =>{
 
@@ -298,16 +301,13 @@ export default class eventDetails extends Component {
                             <View style={styles.about}>
                                 <Text style={styles.aboutHeading}>DISTANCE</Text>
                                 <View style={styles.infoColumnInfo}>
-                                    <RadioButton.Group
-                                        onValueChange={newDistance => this.setState({ distanceSelected:newDistance })}
-                                        value={this.state.distanceSelected}
-                                    >
+                                    
                                         <FlatList
                                             data={this.state.event_distance}
                                             keyExtractor={item => item.id.toString()}
                                             renderItem={item => this.renderDistanceSelection(item)}
                                         />
-                                    </RadioButton.Group>
+                                        
                                 </View>
                             </View>
                         </View>

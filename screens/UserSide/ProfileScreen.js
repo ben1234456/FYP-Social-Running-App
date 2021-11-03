@@ -163,7 +163,7 @@ export default class App extends Component {
                     </Button>
 
                     <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('ChangePasswordScreen')}>
-                        <Text style={styles.btnText}>Change password</Text>
+                        <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>Change password</Text>
                     </Button>
 
                 </View>
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: "5%",
+        paddingTop:"10%",
     },
     infoColumnTitle: {
         flex: 2,
@@ -259,6 +260,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: "5%",
         padding: "5%",
+        
 
     },
 
@@ -280,7 +282,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#8352F2',
         borderRadius: 30,
-
+        justifyContent:"center",
+        alignContent:"center",
+        padding:"5%",
+        marginRight:"2%",
     },
 
     changePassword: {
@@ -288,14 +293,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF0000',
         borderRadius: 30,
         // marginTop: 50,
-        marginLeft: 10,
+        justifyContent:"center",
+        alignContent:"center",
+        padding:"5%",
+        marginLeft:"2%",
+
     },
 
     btnText: {
         fontSize: 16,
         color: 'white',
-        padding: 20,
         textAlign: 'center',
+        flexShrink:1,
     },
     cardView: {
         margin: "5%",

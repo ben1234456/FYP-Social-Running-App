@@ -247,13 +247,12 @@ export default class SignUpScreen extends Component {
     render() {
         return (       
             <ScrollView style={styles.container}>
-                <View style={styles.contentContainer}>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Loading...'}
                     textStyle={styles.spinnerTextStyle}
                 />
-                    <View>
+                    <View >
                         <Text style={styles.heading}>Create Account</Text>
                         <View >
                             <TextInput
@@ -268,7 +267,7 @@ export default class SignUpScreen extends Component {
                             <Picker
                                 selectedValue={this.state.gender}
                                 onValueChange={
-                                    (itemValue) => this.setState({ gender: itemValue })
+                                    (itemValue,itemIndex) => this.setState({ gender: itemValue })
                                 }>
            
                                 {/* ()=>{console.log(this.state.genderSelected);} */}
@@ -364,7 +363,6 @@ export default class SignUpScreen extends Component {
                             </Button>
                         </View>
                     </View>
-                </View>
             </ScrollView>
         );
     }
@@ -372,32 +370,16 @@ export default class SignUpScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        padding: 30,
-        display: 'flex',
+        padding: "5%",
         flex: 1,
-        paddingTop:0,
         backgroundColor: 'white',
     },
-
-    contentContainer: {
-        flex: 1,
-        paddingTop:0,
-    },
-
-    image: {
-        marginTop: 15,
-        marginRight: 15,
-        width: 30,
-        height: 30,
-    },
-
+    
     heading: {
         fontSize: 30,
         fontWeight: '700',
         lineHeight: 40,
         textAlign: 'center',
-        marginTop: 35,
-        marginBottom: 15,
         color: '#373737',
     },
 
@@ -438,8 +420,11 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginTop: 50,
-        marginBottom: 45,
+        marginTop:"5%",
+        marginBottom:"5%",
+        padding:"5%",
+        alignContent:"center",
+        justifyContent:"center",
     },
 
     btnText: {
@@ -447,7 +432,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         flex: 1,
-        padding: 20,
+        
     },
 
     

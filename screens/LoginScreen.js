@@ -259,7 +259,10 @@ export const styles = StyleSheet.create({
         backgroundColor: '#8352F2',
         borderRadius: 30,
         display: 'flex',
-        marginTop: 50,
+        marginTop:"5%",
+        padding:"5%",
+        alignContent:"center",
+        justifyContent:"center",
     },
 
     btnText: {
@@ -267,7 +270,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         flex: 1,
-        padding: 20,
+        
     },
 
     signin: {
