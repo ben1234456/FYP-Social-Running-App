@@ -92,7 +92,49 @@ export default class HomeScreen extends Component {
         getData();
 
     }
+    componentDidMount(){
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            const IP = 'https://socialrunningapp.herokuapp.com';
+            //get event details
+            fetch(IP + '/api/events/exclusive/' + this.state.user_id, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get event data')
+                this.setState({
+                    eventdata: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
+            //get upcoming events
+            fetch(IP + '/api/events/comingsoon/all', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success')
+                this.setState({
+                    comingSoonEventData: data
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    
+            });
+    }
 
     renderEvents = (data) =>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('eventDetails', { 'eventid': data.item.id })}>

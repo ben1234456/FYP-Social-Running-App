@@ -290,36 +290,74 @@ export default class addRouteScreen extends Component {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
         
-        const data = {
-            userID: this.state.userID,
-            name:this.state.routeName,
-            start_lat:this.state.start.coordinate.latitude,
-            start_lng:this.state.start.coordinate.longitude,
-            end_lat:this.state.end.coordinate.latitude,
-            end_lng:this.state.end.coordinate.longitude,
-            total_distance:this.state.distance,
-            check1_lat:this.checkSelected(this.state.check1,"lat"),
-            check1_lng:this.checkSelected(this.state.check1,"long"),
-            check2_lat:this.checkSelected(this.state.check2,"lat"),
-            check2_lng:this.checkSelected(this.state.check2,"long"),
-        };
-        fetch( IP + '/api/route', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => {
-                //success
-                console.log(data)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        this.props.navigation.dispatch(StackActions.pop());
+        
+        
+        //validation for empty or unable to get route
+        if(this.state.routeName.length!=0){
+            if(this.state.start!=null || this.state.end!=null){
+                if(this.state.distance!=null && this.state.distance.length!=0){
+                    const data = {
+                        userID: this.state.userID,
+                        name:this.state.routeName,
+                        start_lat:this.state.start.coordinate.latitude,
+                        start_lng:this.state.start.coordinate.longitude,
+                        end_lat:this.state.end.coordinate.latitude,
+                        end_lng:this.state.end.coordinate.longitude,
+                        total_distance:this.state.distance,
+                        check1_lat:this.checkSelected(this.state.check1,"lat"),
+                        check1_lng:this.checkSelected(this.state.check1,"long"),
+                        check2_lat:this.checkSelected(this.state.check2,"lat"),
+                        check2_lng:this.checkSelected(this.state.check2,"long"),
+                    };
+                    console.log(data);
+                    fetch( IP + '/api/route', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            //success
+                            console.log(data)
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    this.props.navigation.dispatch(StackActions.pop());
+                }
+                else{
+                    Alert.alert(
+                        "Unable to get route for point selected. Please select other point for route",
+                        '',
+                        [
+                            { text: "Ok", onPress: () => console.log("OK Pressed") }
+                        ]
+                    );
+                }
+            }
+            else{
+                Alert.alert(
+                    "Please select a starting and ending point for the route",
+                    '',
+                    [
+                        { text: "Ok", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+            }
+        }
+        else{
+            Alert.alert(
+                "Please enter a name for the route",
+                '',
+                [
+                    { text: "Ok", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+        }
+        
 
         
     };

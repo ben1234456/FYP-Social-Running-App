@@ -114,7 +114,6 @@ export default class addEvent extends Component {
                 distance: this.state.distanceArray,
                 fee: this.state.feeArray
             }
-
             
             fetch( IP + '/api/events', {
                 method: 'POST',
@@ -339,6 +338,7 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration date"
                                 date={this.state.regisDate} 
+                                maxDate={this.state.regisDueDate ? moment(this.state.regisDueDate).subtract(1, 'day').format('YYYY-MM-DD') : new Date("2023-12-31")}
                                 minDate={new Date()} 
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
@@ -358,7 +358,7 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.regisDueDate} 
-                                minDate={new Date()} 
+                                minDate={this.state.regisDate ? moment(this.state.regisDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
@@ -377,8 +377,9 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose event start date"
                                 date={this.state.startDate} 
-                                minDate={new Date()} 
-                                confirmBtnText="Confirm" 
+                                minDate={this.state.regisDueDate ? moment(this.state.regisDueDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
+                                maxDate={this.state.endDate ? moment(this.state.endDate).subtract(1, 'day').format('YYYY-MM-DD') : moment(new Date()).add(5, 'year').format('YYYY-MM-DD') }
+                                confirmBtnText="Confirm"
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
                                 format="YYYY-MM-DD" 
@@ -396,7 +397,7 @@ export default class addEvent extends Component {
                             <DatePicker style={styles.inputDate}
                                 placeholder="Choose registration due date"
                                 date={this.state.endDate} 
-                                minDate={new Date()} 
+                                minDate={this.state.startDate ? moment(this.state.startDate).add(1, 'day').format('YYYY-MM-DD') : new Date()}
                                 confirmBtnText="Confirm" 
                                 cancelBtnText="Cancel" 
                                 useNativeDriver='true' 
