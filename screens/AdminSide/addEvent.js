@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import moment from 'moment';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class addEvent extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ export default class addEvent extends Component {
             feeArray: [],
             distanceArray : [],
             height:0,
+            spinner:false,
         }
 
     }
@@ -114,7 +116,8 @@ export default class addEvent extends Component {
                 distance: this.state.distanceArray,
                 fee: this.state.feeArray
             }
-            
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch( IP + '/api/events', {
                 method: 'POST',
                 headers: {
@@ -128,9 +131,8 @@ export default class addEvent extends Component {
                     //success
                     console.log(data)
                     if (data.status == "success") {
-
                         //save the event distance
-                        fetch( baseUrl + '/api/eventdistances', {
+                        fetch( IP + '/api/eventdistances', {
                             method: 'POST',
                             headers: {
                                 Accept: 'application/json',
@@ -139,8 +141,15 @@ export default class addEvent extends Component {
                             body: JSON.stringify(disData),
                         })
                         .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            //change spinner to invisible
+                            this.setState({spinner: false});
+                        })
                         .catch((error) => {
                             console.error('Error:', error);
+                            //change spinner to invisible
+                            this.setState({spinner: false});
                         });
 
                         //Alert the user
@@ -172,6 +181,8 @@ export default class addEvent extends Component {
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
 
         }
@@ -230,6 +241,7 @@ export default class addEvent extends Component {
         distanceArray.splice(index,1);
         feeArray.splice(index,1);
         this.setState({ textInput,distanceArray,feeArray });
+        
     }
 
     //function to add text from TextInputs into single array
@@ -286,6 +298,7 @@ export default class addEvent extends Component {
         return (
 
             <ScrollView style={styles.container}>
+                    <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                     <View>
                     <View style={styles.titleHeading}>
                             <Text style={styles.botTitle}>Event Name</Text>

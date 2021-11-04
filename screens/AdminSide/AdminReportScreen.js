@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Progress from '../../images/progress.png';
 import { ProgressBar } from 'react-native-paper'
 import { Divider } from 'react-native-elements'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 YellowBox.ignoreWarnings([""]);
 
@@ -39,6 +40,7 @@ export default class AdminReportScreen extends Component {
             ],
             eventData:"",
             refresh:true,
+            spinner:false,
         };
 
 
@@ -66,6 +68,8 @@ export default class AdminReportScreen extends Component {
     componentDidMount(){
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
+        //change spinner to visible
+        this.setState({spinner: true});
 
         fetch(IP + '/api/event/joined', {
             headers: {
@@ -90,16 +94,20 @@ export default class AdminReportScreen extends Component {
                     }
                 }
             }
-            
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
             
     }
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.activityContainer}>
                     <View style={styles.contentContainer}>
                         <Text style={styles.statis}>Statistics</Text>

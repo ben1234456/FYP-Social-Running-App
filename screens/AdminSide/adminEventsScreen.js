@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Image, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class EventsScreen extends Component {
 
@@ -11,12 +12,14 @@ export default class EventsScreen extends Component {
         this.state = {
             name: "",
             eventdata: "",
+            spinner:false,
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         //get event details
         fetch(IP + '/api/events', {
             headers: {
@@ -31,9 +34,13 @@ export default class EventsScreen extends Component {
             this.setState({
                 eventdata: data
             });
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
         
@@ -56,7 +63,7 @@ export default class EventsScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <FlatList 
                     data={this.state.eventdata}
                     keyExtractor={item => item.id.toString()}

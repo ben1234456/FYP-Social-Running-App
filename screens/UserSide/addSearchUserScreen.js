@@ -4,7 +4,7 @@ import { SearchBar } from 'react-native-elements';
 import Icon from "react-native-vector-icons/Ionicons";
 import Logo from '../../images/logo.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class addSearchUserScreen extends Component {
     constructor(props) {
@@ -14,6 +14,7 @@ export default class addSearchUserScreen extends Component {
             userID:"",
             userList:"",
             searchWord:"",
+            spinner:false,
         };
         const getData = async () => {
 
@@ -33,6 +34,8 @@ export default class addSearchUserScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
+            //change spinner to visible
+            this.setState({spinner: true});
             //get 10 user
             fetch(IP + '/api/users/list/' + this.state.userID, {
                 headers: {
@@ -47,9 +50,13 @@ export default class addSearchUserScreen extends Component {
                 this.setState({
                     userList: data
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
 
             
@@ -79,6 +86,8 @@ export default class addSearchUserScreen extends Component {
     </TouchableOpacity>
     
     search=(value)=>{
+        //change spinner to visible
+        this.setState({spinner: true});
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
@@ -97,14 +106,19 @@ export default class addSearchUserScreen extends Component {
             this.setState({
                 userList: data
             });
+            //change spinner to invisible
+            this.setState({spinner: false});    
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
     };
     render(){
         return(
             <View style={styles.wholeContainer}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.infoContainer}>
                     <SearchBar
                         placeholder="Search"

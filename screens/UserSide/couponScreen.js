@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class couponScreen extends Component {
     
@@ -13,12 +14,14 @@ export default class couponScreen extends Component {
         this.state = {
             user_id: props.route.params.user_id,   
             event_data:"",
+            spinner:false,
         };
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/events/users/' + this.state.user_id, {
             headers: {
             Accept: 'application/json',
@@ -32,9 +35,13 @@ export default class couponScreen extends Component {
             this.setState({
                 event_data:data
             });
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
     }
@@ -62,6 +69,7 @@ export default class couponScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.background}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.container}>
 
                 {this.state.event_data.length!=0

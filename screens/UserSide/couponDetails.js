@@ -6,6 +6,7 @@ import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class couponDetails extends Component {
     
@@ -21,6 +22,7 @@ export default class couponDetails extends Component {
             event_end: "",     
             progress: "",
             register_at: "",
+            spinner:false,
         };
 
 
@@ -50,6 +52,8 @@ export default class couponDetails extends Component {
         const IP = 'https://socialrunningapp.herokuapp.com';
 
         console.log(this.state.event_id)
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/events/' + this.state.event_id, {
             headers: {
             Accept: 'application/json',
@@ -64,35 +68,44 @@ export default class couponDetails extends Component {
                 event_start: data.start,
                 event_end: data.end,
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            //get registration details
 
-        //get registration details
-
-        fetch(IP + '/api/userevents/' + this.state.registration_id, {
-            headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get registration data')
-            this.setState({
-                progress: data.status,
-                register_at: data.created_at,
+            fetch(IP + '/api/userevents/' + this.state.registration_id, {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get registration data')
+                this.setState({
+                    progress: data.status,
+                    register_at: data.created_at,
+                });
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
+            
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
+
+        
     }
 
     render() {
         return (
             <ScrollView style={styles.background}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View>
                     <View style={styles.top}>
                         <Image style={styles.image} source={Event} />

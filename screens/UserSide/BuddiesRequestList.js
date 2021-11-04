@@ -3,7 +3,7 @@ import { View, Image, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from
 import { Button } from 'native-base'
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class BuddiesRequestList extends Component {
 
@@ -13,6 +13,7 @@ export default class BuddiesRequestList extends Component {
         this.state = {
             data: "",
             userID:"",
+            spinner:false,
         };
         const getData = async () => {
 
@@ -32,6 +33,8 @@ export default class BuddiesRequestList extends Component {
             } catch (e) {
                 console.log(e);
             }
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/buddyrequest/list/'+this.state.userID, {
                 headers: {
                     Accept: 'application/json',
@@ -45,9 +48,13 @@ export default class BuddiesRequestList extends Component {
                 this.setState({
                     data: data
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
             
             
@@ -73,6 +80,7 @@ export default class BuddiesRequestList extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.request}>
                     <Text>Buddies Request: </Text>
                     <Text style={styles.requestNo}>{this.state.data.length}</Text>

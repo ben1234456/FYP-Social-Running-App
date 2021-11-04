@@ -7,6 +7,7 @@ import UpcomingEvent from '../../images/family_marathon.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ant from 'react-native-vector-icons/AntDesign';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class AdminHomeScreen extends Component {
 
@@ -17,6 +18,7 @@ export default class AdminHomeScreen extends Component {
             name: "",
             eventdata: "",
             comingSoonEventData: "",
+            spinner:false,
         };
 
 
@@ -38,7 +40,8 @@ export default class AdminHomeScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/events', {
                 headers: {
                     Accept: 'application/json',
@@ -51,28 +54,35 @@ export default class AdminHomeScreen extends Component {
                     this.setState({
                         eventdata: data
                     });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-
-            //get upcoming events
-            fetch(IP + '/api/events/comingsoon/all', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success')
-                    this.setState({
-                        comingSoonEventData: data
+                    //get upcoming events
+                    fetch(IP + '/api/events/comingsoon/all', {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success')
+                        this.setState({
+                            comingSoonEventData: data
+                        });
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
+
+            
         }
 
         getData();
@@ -129,6 +139,7 @@ export default class AdminHomeScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainerBig}>
                         <Text style={styles.welcome}>Hi,</Text>

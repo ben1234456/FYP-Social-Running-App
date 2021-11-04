@@ -8,6 +8,7 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import profileImage from '../../images/avatar.jpg';
 import moment from 'moment';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class ForumDetailsScreen extends Component {
 
@@ -31,6 +32,7 @@ export default class ForumDetailsScreen extends Component {
             postUserId:"",
             likeID:"",
             editing:false,
+            spinner:false,
         }
 
         //get data from async storage
@@ -52,6 +54,8 @@ export default class ForumDetailsScreen extends Component {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
             if(this.state.user_id.length!=0 && this.state.post_id.length!=0 ){
+                //change spinner to visible
+                this.setState({spinner: true});
                 fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
                     headers: {
                       Accept: 'application/json',
@@ -74,66 +78,69 @@ export default class ForumDetailsScreen extends Component {
                             showLike:true,
                         });
                     }
+                    //get post details
+                    fetch(IP + '/api/forumposts/' + this.state.post_id, {
+                        headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.setState({
+                            title: data.title,
+                            description: data.description,
+                            name: data.name,
+                            datetime: data.datetime,
+                            noLike: data.noLike,
+                            noComment: data.comments,
+                            postUserId:data.user_id,
+                        });
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                        if(data.comments.length!=0){
+                            //change spinner to visible
+                            this.setState({spinner: true});
+                            //get comments
+                            fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
+                                headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Succesfully get comments")
+                                console.log(data)
+                                this.setState({
+                                    comments:data,
+                                });
+                                //change spinner to invisible
+                                this.setState({spinner: false});
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                                //change spinner to invisible
+                                this.setState({spinner: false});
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    });
+
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             }
             
         }
     
-        
-
-        //using localhost on IOS and using 10.0.2.2 on Android
-        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-        const IP = 'https://socialrunningapp.herokuapp.com';
-        if(this.state.post_id.length!=0){
-            //get post details
-        fetch(IP + '/api/forumposts/' + this.state.post_id, {
-            headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-            },
-        })
-    .then(response => response.json())
-    .then(data => {
-        this.setState({
-            title: data.title,
-            description: data.description,
-            name: data.name,
-            datetime: data.datetime,
-            noLike: data.noLike,
-            noComment: data.comments,
-            postUserId:data.user_id,
-        });
-        if(data.comments.length!=0){
-            //get comments
-            fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
-                headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Succesfully get comments")
-                console.log(data)
-                this.setState({
-                    comments:data,
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-                }
-                console.log(data);
-            })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-
-    
-        }
         getData();
     }
 
@@ -151,6 +158,8 @@ export default class ForumDetailsScreen extends Component {
                 description: this.state.description,
             };
             if(this.state.post_id.length!=0){
+                //change spinner to visible
+                this.setState({spinner: true});
                 fetch(IP + '/api/post/list/edit/'+ this.state.post_id, {
                     method: 'PUT',
                     headers: {
@@ -163,9 +172,13 @@ export default class ForumDetailsScreen extends Component {
                 .then(data => {
                     console.log("Succesfully update post")
                     console.log(data)
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});    
                 });
             }
             
@@ -183,24 +196,30 @@ export default class ForumDetailsScreen extends Component {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
         if(this.state.post_id.length!=0){
+            //change spinner to visible
+            this.setState({spinner: true});
             //get comments
-        fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
-            headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Succesfully get comments")
-            console.log(data)
-            this.setState({
-                comments:data,
+            fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Succesfully get comments")
+                console.log(data)
+                this.setState({
+                    comments:data,
+                });
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
         }
         
     }
@@ -222,7 +241,8 @@ export default class ForumDetailsScreen extends Component {
                 user_id: this.state.user_id,
                 post_id: this.state.post_id,
             };
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/postlikes', {
                 method: 'POST',
                 headers: {
@@ -235,9 +255,13 @@ export default class ForumDetailsScreen extends Component {
             .then(data => {
                 console.log("Succesfully save like")
                 console.log(data)
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         } else {
             newState = {
@@ -246,6 +270,8 @@ export default class ForumDetailsScreen extends Component {
                 showLike: true,
             }
             if(this.state.user_id.length!=0 && this.state.post_id.length!=0){
+                //change spinner to visible
+                this.setState({spinner: true});
                 fetch(IP + "/api/post/list/like/"+this.state.user_id+"/"+this.state.post_id, {
                     headers: {
                       Accept: 'application/json',
@@ -267,13 +293,19 @@ export default class ForumDetailsScreen extends Component {
                     .then(data => {
                         console.log("Succesfully delete like")
                         console.log(data)
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     })
                     .catch((error) => {
                         console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             }
             
@@ -330,7 +362,8 @@ export default class ForumDetailsScreen extends Component {
                 post_id: this.state.post_id,
                 comment: this.state.comment
             };
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/postcomments', {
                 method: 'POST',
                 headers: {
@@ -342,15 +375,21 @@ export default class ForumDetailsScreen extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:',data);
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
 
             this.setState({
                 comment:'',
             })
             if(this.state.post_id.length!=0){
+                //change spinner to visible
+                this.setState({spinner: true});
                 //get comments
             fetch(IP + '/api/forumposts/' + this.state.post_id + '/comments', {
                 headers: {
@@ -364,9 +403,13 @@ export default class ForumDetailsScreen extends Component {
                 this.setState({
                     comments:data,
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible   
+                this.setState({spinner: false});
             });
             }
             
@@ -407,7 +450,8 @@ export default class ForumDetailsScreen extends Component {
     deletePost=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + "/api/post/list/user/"+this.state.post_id, {
             method:"DELETE",
             headers: {
@@ -419,9 +463,13 @@ export default class ForumDetailsScreen extends Component {
         .then(data => {
             console.log("Succesfully delete post")
             console.log(data)
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible       
+            this.setState({spinner: false});
         });
         this.props.navigation.dispatch(StackActions.pop());
 
@@ -430,7 +478,7 @@ export default class ForumDetailsScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.proRow}>
                     <View style={styles.profilePicContainer}>
                         <Image style={styles.proColumnName} source={profileImage} />

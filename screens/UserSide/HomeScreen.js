@@ -5,6 +5,7 @@ import Logo from '../../images/logo.png';
 import Event from '../../images/event.png';
 import UpcomingEvent from '../../images/family_marathon.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class HomeScreen extends Component {
 
@@ -26,7 +27,7 @@ export default class HomeScreen extends Component {
             comingSoonEventData: "",
             currenDate: date,
             currentDay: day,
-            
+            spinner:false,
         };
 
         
@@ -49,7 +50,8 @@ export default class HomeScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-
+            //change spinner to visible
+            this.setState({spinner: true});
             //get event details
             fetch(IP + '/api/events/exclusive/' + this.state.user_id, {
                 headers: {
@@ -63,28 +65,35 @@ export default class HomeScreen extends Component {
                 this.setState({
                     eventdata: data
                 });
-            })
+                //get upcoming events
+                fetch(IP + '/api/events/comingsoon/all', {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success')
+                    this.setState({
+                        comingSoonEventData: data
+                    });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                });
+                })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
 
-            //get upcoming events
-            fetch(IP + '/api/events/comingsoon/all', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success')
-                this.setState({
-                    comingSoonEventData: data
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            
 
             
         }
@@ -98,40 +107,53 @@ export default class HomeScreen extends Component {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
             //get event details
-            fetch(IP + '/api/events/exclusive/' + this.state.user_id, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get event data')
-                this.setState({
-                    eventdata: data
+            if(this.state.user_id.length!=0 && this.state.user_id!=null){
+                //change spinner to visible
+                this.setState({spinner: true});
+                fetch(IP + '/api/events/exclusive/' + this.state.user_id, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get event list')
+                    console.log(data)
+                    this.setState({
+                        eventdata: data
+                    });
+                    //get upcoming events
+                    fetch(IP + '/api/events/comingsoon/all', {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success')
+                        this.setState({
+                            comingSoonEventData: data
+                        });
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-            //get upcoming events
-            fetch(IP + '/api/events/comingsoon/all', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success')
-                this.setState({
-                    comingSoonEventData: data
-                });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+    
+                
+            }
+            
     
             });
     }
@@ -167,6 +189,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainerBig}>
                         <Text style={styles.welcome}>Hi,</Text>

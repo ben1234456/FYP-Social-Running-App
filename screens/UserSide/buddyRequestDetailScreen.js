@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class buddyRequestDetailScreen extends Component {
 
@@ -18,6 +19,7 @@ export default class buddyRequestDetailScreen extends Component {
             gender: "",
             city: "",
             dob: "",
+            spinner:false,
         };
 
         //get data from async storage
@@ -39,7 +41,8 @@ export default class buddyRequestDetailScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/users/' + this.state.buddyID, {
                 headers: {
                     Accept: 'application/json',
@@ -53,29 +56,35 @@ export default class buddyRequestDetailScreen extends Component {
                 this.setState({
                     user: data
                 });
+                fetch(IP + '/api/buddyrequest/' + this.state.buddyID +'/'+this.state.userID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get buddy req id')
+                    console.log(data)
+                    this.setState({
+                        id: data.id
+                    });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                });
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
 
-            fetch(IP + '/api/buddyrequest/' + this.state.buddyID +'/'+this.state.userID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get buddy req id')
-                console.log(data)
-                this.setState({
-                    id: data.id
-                });
-                
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            
         }
 
         getData();
@@ -85,8 +94,8 @@ export default class buddyRequestDetailScreen extends Component {
     decline=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-        //console.log("testing"+this.state.id);
-
+        //change spinner to visible
+        this.setState({spinner: true});        
         fetch(IP + '/api/buddyrequest/list/' + this.state.id, {
                 method:"DELETE",
                 headers: {
@@ -99,9 +108,13 @@ export default class buddyRequestDetailScreen extends Component {
         .then(data => {
             console.log('Successfully delete buddy request')
             console.log(data)
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
         this.props.navigation.dispatch(StackActions.pop());
         this.props.navigation.dispatch(StackActions.pop());
@@ -119,7 +132,8 @@ export default class buddyRequestDetailScreen extends Component {
             userID:this.state.userID,
             buddyID:this.state.buddyID,
         };
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/buddy', {
             method: 'POST',
             headers: {
@@ -132,9 +146,13 @@ export default class buddyRequestDetailScreen extends Component {
         
         .then(data => {
             console.log(data);
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });  
         this.decline();
                 
@@ -206,7 +224,8 @@ export default class buddyRequestDetailScreen extends Component {
         return (
             <View style={styles.wholeContainer}> 
 
-            
+            <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
+
             <FlatList horizontal={false}
                 data={this.state.user}
                 keyExtractor={item => item.id.toString()}

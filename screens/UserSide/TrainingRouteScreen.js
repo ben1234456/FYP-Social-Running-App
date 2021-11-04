@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, TouchableOpacity, ScrollView, Text, View ,FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class TrainingRouteScreen extends Component {
     constructor(props) {
@@ -11,6 +11,7 @@ export default class TrainingRouteScreen extends Component {
             userID:"",
             loadedAdminData:"",
             loadedData:"",
+            spinner:false,
         };
         const getData = async () => {
             //using localhost on IOS and using 10.0.2.2 on Android
@@ -29,7 +30,8 @@ export default class TrainingRouteScreen extends Component {
 
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/admin/route/routeList', {
                 headers: {
                     Accept: 'application/json',
@@ -43,27 +45,34 @@ export default class TrainingRouteScreen extends Component {
                 this.setState({
                     loadedAdminData: data
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-            fetch(IP + '/api/route/routeList/'+this.state.userID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get user route list data')
-                console.log(data)
-                this.setState({
-                    loadedData: data
+                fetch(IP + '/api/route/routeList/'+this.state.userID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get user route list data')
+                    console.log(data)
+                    this.setState({
+                        loadedData: data
+                    });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
+            
         }
         getData();
     }
@@ -85,7 +94,8 @@ export default class TrainingRouteScreen extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/admin/route/routeList', {
                 headers: {
                     Accept: 'application/json',
@@ -99,33 +109,41 @@ export default class TrainingRouteScreen extends Component {
                 this.setState({
                     loadedAdminData: data
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-            fetch(IP + '/api/route/routeList/'+this.state.userID, {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get user route list data')
-                console.log(data)
-                this.setState({
-                    loadedData: data
+                fetch(IP + '/api/route/routeList/'+this.state.userID, {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get user route list data')
+                    console.log(data)
+                    this.setState({
+                        loadedData: data
+                    });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
+            
             //Put your Data loading function here instead of my this.loadData()
           });
     }
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.titleContainer}>
                     <Text style={styles.routes}>Free Routes Available</Text>
                 </View>

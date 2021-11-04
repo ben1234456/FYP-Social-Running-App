@@ -7,7 +7,7 @@ import addImage from '../../images/addImage.png';
 import * as ImagePicker from 'expo-image-picker';
 import { StackActions } from '@react-navigation/native';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class editEvent extends Component {
     constructor(props) {
@@ -31,12 +31,14 @@ export default class editEvent extends Component {
             feeArray: [],
             distanceArray : [],
             height:0,
+            spinner:false,
         }
 
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         //get event distances
         fetch(IP + '/api/events/'  + this.state.event_id + '/distance', {
             headers: {
@@ -51,9 +53,13 @@ export default class editEvent extends Component {
                 eventDistance: data
             });
             console.log(this.state.eventDistance)
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
     }
@@ -254,7 +260,8 @@ export default class editEvent extends Component {
             const distanceFeeData = {
                 distanceFee : this.state.eventDistance,
             }
-
+            //change spinner to visible
+            this.setState({spinner: true});
             //get event details
             fetch(IP + '/api/eventdistances/update', {
                 method: 'POST',
@@ -267,49 +274,56 @@ export default class editEvent extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
+                fetch(IP + '/api/events/' + this.state.event_id, {
+                    method: 'PUT',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                    //success
+                    if (data.status == "success") {
+                        //Alert the user
+                        Alert.alert(
+                            data.message,
+                            '',
+                            [
+                                { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', { 'eventid': this.state.event_id }))}
+                            ]
+                        );
+                    }
+    
+                    //fail 
+                    else if (data.status == "fail") {
+                        //alert fail message
+                        Alert.alert(
+                            data.message,
+                            '',
+                            [
+                                { text: "Ok", onPress: () => console.log("OK Pressed") }
+                            ]
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                });  
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
     
             
-            fetch(IP + '/api/events/' + this.state.event_id, {
-                method: 'PUT',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                //success
-                if (data.status == "success") {
-                    //Alert the user
-                    Alert.alert(
-                        data.message,
-                        '',
-                        [
-                            { text: "Ok", onPress: () => this.props.navigation.dispatch(StackActions.replace('adminEventDetailsScreen', { 'eventid': this.state.event_id }))}
-                        ]
-                    );
-                }
-
-                //fail 
-                else if (data.status == "fail") {
-                    //alert fail message
-                    Alert.alert(
-                        data.message,
-                        '',
-                        [
-                            { text: "Ok", onPress: () => console.log("OK Pressed") }
-                        ]
-                    );
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });  
+            
             
         }
 
@@ -399,6 +413,7 @@ export default class editEvent extends Component {
         return (
             
             <ScrollView style={styles.container}>
+                    <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                     <View>
 
                     <View style={styles.titleHeading}>

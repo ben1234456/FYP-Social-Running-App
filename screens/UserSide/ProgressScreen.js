@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 YellowBox.ignoreWarnings([""]);
 
@@ -17,6 +18,7 @@ export default class App extends Component {
             categoryPosition: '',
             categorySelected: '25 March - 01 April 2021',
             activityData:'',
+            spinner:false,
         };
       
     }
@@ -39,7 +41,8 @@ export default class App extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/activity/users/' + this.state.user_id, {
             headers: {
             Accept: 'application/json',
@@ -53,9 +56,13 @@ export default class App extends Component {
             this.setState({
                 activityData:data
             });
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
         }
         getData();
@@ -105,6 +112,7 @@ export default class App extends Component {
         return (
             
             <ScrollView style={styles.container}>
+                    <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                     <View style={styles.rowContainer}>
                         <Text style={styles.activityTitle}>Recent Activities </Text>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('activityHistoryScreen')}>

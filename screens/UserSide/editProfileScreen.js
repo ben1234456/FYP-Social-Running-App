@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';
 import { StackActions } from '@react-navigation/native';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class editProfileScreen extends Component {
 
@@ -24,6 +24,7 @@ export default class editProfileScreen extends Component {
             phoneNum:"",
             cityList:["Labuan","Malacca","Putrajaya","Perlis","Negeri Sembilan","Pahang"],
             checked:"Male",
+            spinner:false,
         };
     
 
@@ -66,7 +67,8 @@ export default class editProfileScreen extends Component {
             email: this.state.email,
             gender: this.state.gender
         };
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/users/' + this.state.id, {
             method: 'PUT',
             headers: {
@@ -79,9 +81,13 @@ export default class editProfileScreen extends Component {
         .then(data => { 
             //console.log('Success:',data.user);
             AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
+            //change spinner to invisible   
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
         this.props.navigation.dispatch(StackActions.pop());
@@ -90,6 +96,7 @@ export default class editProfileScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.profilePic}>
                     <Image style={styles.profileImage} source={profileImage} />
                 </View>

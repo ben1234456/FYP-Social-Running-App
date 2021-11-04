@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, TouchableOpacity, ScrollView, Text, View,FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class AdminSavedRouteScreen extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ export default class AdminSavedRouteScreen extends Component {
         this.state = {
             userID:"",
             loadedData:"",
+            spinner:false,
         };
 
         const getData = async () => {
@@ -29,6 +31,8 @@ export default class AdminSavedRouteScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
+            //change spinner to visible
+            this.setState({spinner: true});
 
             fetch(IP + '/api/admin/route/routeList', {
                 headers: {
@@ -43,9 +47,13 @@ export default class AdminSavedRouteScreen extends Component {
                 this.setState({
                     loadedData: data
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
             
         }
@@ -56,7 +64,8 @@ export default class AdminSavedRouteScreen extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/admin/route/routeList', {
                 headers: {
                     Accept: 'application/json',
@@ -70,9 +79,13 @@ export default class AdminSavedRouteScreen extends Component {
                 this.setState({
                     loadedData: data
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
           });
     }
@@ -93,6 +106,7 @@ export default class AdminSavedRouteScreen extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.rowContainer}>
                     <Text style={styles.routes}>My Routes</Text>
                     <Text style={styles.more} onPress={() => this.props.navigation.navigate('addRouteScreen')}>{"Add new route"}</Text>

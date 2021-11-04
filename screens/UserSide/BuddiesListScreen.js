@@ -10,7 +10,7 @@ import { SearchBar } from 'react-native-elements'
 import { Share } from 'react-native';
 import Logo from '../../images/logo.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class BuddiesListScreen extends Component {
 
@@ -23,6 +23,7 @@ export default class BuddiesListScreen extends Component {
             userList:"",
             searchWord:"",
             testing:0,
+            spinner:false,
         };
         const getData = async () => {
 
@@ -43,6 +44,8 @@ export default class BuddiesListScreen extends Component {
                 console.log(e);
             }
             if(this.state.userID.length!=0){
+                //change spinner to visible
+                this.setState({spinner: true});
                 fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
                     headers: {
                         Accept: 'application/json',
@@ -56,9 +59,13 @@ export default class BuddiesListScreen extends Component {
                     this.setState({
                         userList: data
                     });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             }
             
@@ -75,6 +82,8 @@ export default class BuddiesListScreen extends Component {
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
             if(this.state.userID.length!=0){
+                //change spinner to visible
+                this.setState({spinner: true});
                 fetch(IP + '/api/buddy/buddyList/'+this.state.userID, {
                     headers: {
                         Accept: 'application/json',
@@ -88,9 +97,13 @@ export default class BuddiesListScreen extends Component {
                     this.setState({
                         userList: data
                     });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
             }
             
@@ -181,24 +194,30 @@ export default class BuddiesListScreen extends Component {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
         if(this.state.userID.length!=0){
+            //change spinner to visible
+            this.setState({spinner: true});
             //get 10 user
-        fetch(IP + '/api/buddy/buddyList/' + this.state.userID +"/"+ value, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get user list data')
-            console.log(data)
-            this.setState({
-                userList: data
+            fetch(IP + '/api/buddy/buddyList/' + this.state.userID +"/"+ value, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get user list data')
+                console.log(data)
+                this.setState({
+                    userList: data
+                });
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
         }
         
     };
@@ -207,6 +226,7 @@ export default class BuddiesListScreen extends Component {
 
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <SearchBar
                     placeholder='Search Here...'
                     platform='android'
