@@ -6,8 +6,7 @@ import PickerModal from 'react-native-picker-modal-view';
 import TimePicker from "react-native-24h-timepicker";
 import { StackActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class addEventCalendarScreen extends Component{
     constructor(props){
@@ -25,6 +24,7 @@ export default class addEventCalendarScreen extends Component{
             remindMinute:0,
             allDay:"ON",
             userID:"",
+            spinner:false,
             date:props.route.params.date,
             //remindtime will be data selected
             data:[{
@@ -139,6 +139,8 @@ export default class addEventCalendarScreen extends Component{
     save=()=>{
 
         if (this.validation()){
+            //change spinner to visible
+            this.setState({spinner: true});
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
 
@@ -161,9 +163,13 @@ export default class addEventCalendarScreen extends Component{
             .then(data => {
                 //success
                 console.log(data)
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
 
 
@@ -206,6 +212,8 @@ export default class addEventCalendarScreen extends Component{
                     <Text style={styles.dateText}>{this.state.date}</Text>
                 </View> */}
                 {/* first row */}
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
+
                 <View style={styles.row}>
                     <View style={styles.iconContainer}>
                         <Icon onPress={this.testing} name={"calendar"} size={30} color={"grey"} />

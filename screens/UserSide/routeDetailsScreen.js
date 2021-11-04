@@ -13,6 +13,7 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class routeDetailsScreen extends Component {
 
@@ -36,7 +37,7 @@ export default class routeDetailsScreen extends Component {
             check1: null,
             check2: null,
             def: null,
-
+            spinner:false,
             checkPointArray: [],
 
             reference: React.createRef(),
@@ -70,6 +71,8 @@ export default class routeDetailsScreen extends Component {
             } catch (e) {
                 console.log(e);
             }
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/route/routeList/details/' + this.state.id, {
                 headers: {
                     Accept: 'application/json',
@@ -107,10 +110,13 @@ export default class routeDetailsScreen extends Component {
                     });
                 }
 
-
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         }
 
@@ -351,6 +357,8 @@ export default class routeDetailsScreen extends Component {
                         check2_lat:this.checkSelected(this.state.check2,"lat"),
                         check2_lng:this.checkSelected(this.state.check2,"long"),
                     };
+                    //change spinner to visible
+                    this.setState({spinner: true});
                     fetch(IP + '/api/route/' + this.state.id, {
                         method: 'PUT',
                         headers: {
@@ -363,9 +371,13 @@ export default class routeDetailsScreen extends Component {
                     .then(data => {
                         //success
                         console.log(data)
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     })
                     .catch((error) => {
                         console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     });
                     this.props.navigation.dispatch(StackActions.pop());
                 }
@@ -422,7 +434,9 @@ export default class routeDetailsScreen extends Component {
                         check2_lat:this.checkSelected(this.state.check2,"lat"),
                         check2_lng:this.checkSelected(this.state.check2,"long"),
                     };
-            
+                    //change spinner to visible
+                    this.setState({spinner: true});
+
                     fetch(IP + '/api/route', {
                         method: 'POST',
                         headers: {
@@ -435,9 +449,13 @@ export default class routeDetailsScreen extends Component {
                     .then(data => {
                         //success
                         console.log(data)
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     })
                     .catch((error) => {
                         console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     });
                     this.props.navigation.dispatch(StackActions.pop());
                 }
@@ -478,7 +496,8 @@ export default class routeDetailsScreen extends Component {
     delete = () => {
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/route/' + this.state.id, {
             method: 'DELETE',
             headers: {
@@ -491,9 +510,13 @@ export default class routeDetailsScreen extends Component {
         .then(data => {
             console.log('Successfully delete buddy')
             console.log(data)
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
         this.props.navigation.dispatch(StackActions.pop());
 
@@ -507,7 +530,7 @@ export default class routeDetailsScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.topInfo}>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>

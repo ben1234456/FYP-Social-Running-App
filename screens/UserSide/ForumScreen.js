@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment, { max, relativeTimeThreshold } from 'moment';
 import { Divider } from 'react-native-elements'
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class ForumScreen extends Component {
 
@@ -41,6 +42,7 @@ export default class ForumScreen extends Component {
             fadeAnim: new Animated.Value(0),
             posts: '',
             user_id: '',
+            spinner:false,
         }
 
         const getData = async () => {
@@ -59,7 +61,9 @@ export default class ForumScreen extends Component {
             //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-        if(this.state.user_id.length!=0){
+        if(this.state.user_id.length!=0 && this.state.user_id!=null){
+            //change spinner to visible
+            this.setState({spinner: true});
             //get forum posts' details
             fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
                 headers: {
@@ -69,14 +73,18 @@ export default class ForumScreen extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Successfully get forum posts')
+                console.log('Successfully get forum list')
                 console.log(data)
                 this.setState({
                     posts: data
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         }
         
@@ -110,7 +118,6 @@ export default class ForumScreen extends Component {
     };
 
     componentDidMount() {
-        this.arrayholder = this.state.data
         this.intervalID = setInterval(
             () => this.tick(),
             1000
@@ -121,25 +128,31 @@ export default class ForumScreen extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-        if(this.state.user_id.length!=0){
+        if(this.state.user_id.length!=0 && this.state.user_id!=null){
+            //change spinner to visible
+            this.setState({spinner: true});
             //get forum posts' details
-        fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get forum posts')
-            console.log(data)
-            this.setState({
-                posts: data
+            fetch(IP + '/api/forumposts/list/'+this.state.user_id, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get forum posts list')
+                console.log(data)
+                this.setState({
+                    posts: data
+                });
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
         }
         
 
@@ -225,7 +238,8 @@ export default class ForumScreen extends Component {
                 title: this.state.titleHolder,
                 description: this.state.descriptionHolder,
             };
-
+            //change spinner to visible
+            this.setState({spinner: true});
             //get forum posts' details
             fetch(IP + '/api/forumposts', {
                 method: 'POST',
@@ -240,38 +254,45 @@ export default class ForumScreen extends Component {
                 if (data.status == "success") {
                     console.log("Succesfully saved post");
                 }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-            this.setState({
-                title: '',
-                description: '',
-                isVisible: !this.state.isVisible,
-            })
-
-            //get forum posts' details
-            fetch(IP + '/api/forumposts', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get forum posts')
-                console.log(data)
                 this.setState({
-                    posts: data
+                    title: '',
+                    description: '',
+                    isVisible: !this.state.isVisible,
+                })
+    
+                //get forum posts' details
+                fetch(IP + '/api/forumposts', {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Successfully get forum posts')
+                    console.log(data)
+                    this.setState({
+                        posts: data
+                    });
+                    //change spinner to invisible
+                    this.setState({spinner: false});
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    //change spinner to invisible
+                    this.setState({spinner: false});
                 });
+                
+    
+                this.props.navigation.dispatch(StackActions.replace('forumScreen'));
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
-            
 
-            this.props.navigation.dispatch(StackActions.replace('forumScreen'));
+            
         }
     }
 
@@ -316,7 +337,7 @@ export default class ForumScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.event}>Discussion Forum</Text>

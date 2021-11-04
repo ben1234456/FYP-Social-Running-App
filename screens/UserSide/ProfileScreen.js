@@ -9,6 +9,7 @@ import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class App extends Component {
 
@@ -20,6 +21,7 @@ export default class App extends Component {
             gender: "",
             city: "",
             dob: "",
+            spinner:false,
         };
 
     }
@@ -76,7 +78,8 @@ export default class App extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             if (this.state.user_id.length != 0) {
                 const IP = 'https://socialrunningapp.herokuapp.com';
-
+                //change spinner to visible
+                this.setState({spinner: true});
                 //get user
                 fetch(IP + '/api/users/' + this.state.user_id, {
                     headers: {
@@ -100,9 +103,13 @@ export default class App extends Component {
                             city: data[0].city,
                             dob: data[0].dob
                         });
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     })
                     .catch((error) => {
                         console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
                     });
             }
         });
@@ -112,6 +119,7 @@ export default class App extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />

@@ -9,7 +9,7 @@ import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import haversine from "haversine";
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class startFreeRunScreen extends Component {
 
@@ -22,7 +22,7 @@ export default class startFreeRunScreen extends Component {
 
         this.state = {
             user_ID:"",
-
+            spinner:false,
             date:new Date(),
             hour:"00",
             minute:"00",
@@ -254,6 +254,8 @@ export default class startFreeRunScreen extends Component {
             start_dt: this.state.start_dt,
             end_dt: this.state.end_dt
         };
+        //change spinner to visible
+        this.setState({spinner: true});
 
         fetch(IP + '/api/activity', {
                 method: 'POST',
@@ -266,9 +268,13 @@ export default class startFreeRunScreen extends Component {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
         
         this.props.navigation.navigate('Progress');
@@ -277,6 +283,7 @@ export default class startFreeRunScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <MapView style={styles.map}
                     ref={this.state.reference}
                     provider={PROVIDER_GOOGLE}

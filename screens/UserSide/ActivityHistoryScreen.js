@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Font from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class App extends Component {
 
@@ -18,6 +19,7 @@ export default class App extends Component {
             activitySelected: '',
             activityData:'',
             activityNumber:0,
+            spinner:false,
         };
 
 
@@ -43,7 +45,8 @@ export default class App extends Component {
 
             const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
             const IP = 'https://socialrunningapp.herokuapp.com';
-
+            //change spinner to visible
+            this.setState({spinner: true});
             fetch(IP + '/api/activity/all/users/' + this.state.user_id, {
                 headers: {
                 Accept: 'application/json',
@@ -59,9 +62,13 @@ export default class App extends Component {
                 });
                 
                 console.log(this.state.activityData.length);
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         }
 
@@ -87,6 +94,8 @@ export default class App extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
+
                 <View style={styles.columnContainer}>
                     <View style={styles.picker}>
                         <Picker

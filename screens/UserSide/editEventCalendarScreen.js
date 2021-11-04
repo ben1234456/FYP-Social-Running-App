@@ -6,6 +6,7 @@ import PickerModal from 'react-native-picker-modal-view';
 import TimePicker from "react-native-24h-timepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class editEventCalendarScreen extends Component{
     constructor(props){
@@ -27,7 +28,7 @@ export default class editEventCalendarScreen extends Component{
             userID:"",
             id:props.route.params.id,
             // id:5,
-            
+            spinner:false,
             date:"",
             //remindtime will be data selected
             data:[{
@@ -78,6 +79,8 @@ export default class editEventCalendarScreen extends Component{
             } catch (e) {
                 console.log(e);
             }
+            //change spinner to visible
+            this.setState({spinner: true});
 
             fetch(IP + '/api/calendar/'+this.state.id, {
                 method:"GET",
@@ -108,9 +111,13 @@ export default class editEventCalendarScreen extends Component{
                     eventTime:hourStart+minStart,
                     date:data.date,
                 });
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         }
 
@@ -164,7 +171,8 @@ export default class editEventCalendarScreen extends Component{
     delete=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(IP + '/api/calendar/'+this.state.id, {
             method: 'DELETE',
             headers: {
@@ -176,9 +184,13 @@ export default class editEventCalendarScreen extends Component{
             .then(data => {
                 //success
                 console.log(data)
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         this.props.navigation.dispatch(StackActions.pop());
 
@@ -195,7 +207,9 @@ export default class editEventCalendarScreen extends Component{
             title: this.state.eventName,
             date: this.state.date,
         };
-        
+        //change spinner to visible
+        this.setState({spinner: true});
+
         fetch(IP + '/api/calendar/'+this.state.id, {
             method: 'PUT',
             headers: {
@@ -208,9 +222,13 @@ export default class editEventCalendarScreen extends Component{
             .then(data => {
                 //success
                 console.log(data)
+                //change spinner to invisible
+                this.setState({spinner: false});
             })
             .catch((error) => {
                 console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
             });
         this.props.navigation.dispatch(StackActions.pop());
 
@@ -245,6 +263,7 @@ export default class editEventCalendarScreen extends Component{
         return(
             
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 {/* <View style={styles.dateContainer}>
                     <Text style={styles.dateText}>{this.state.date}</Text>
                 </View> */}

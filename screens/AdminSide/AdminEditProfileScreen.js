@@ -7,6 +7,7 @@ import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-datepicker';
 import { RadioButton } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class AdminEditProfileScreen extends Component {
 
@@ -22,6 +23,7 @@ export default class AdminEditProfileScreen extends Component {
             phoneNum:"",
             cityList:["Labuan","Malacca","Putrajaya","Perlis","Negeri Sembilan","Pahang"],
             checked:"Male",
+            spinner:false,
         };
     
 
@@ -63,6 +65,8 @@ export default class AdminEditProfileScreen extends Component {
 
         const apilink = 'http://' + ip + ':8000/api/users/' + this.state.id ;
         console.log(apilink);
+        //change spinner to visible
+        this.setState({spinner: true});
         fetch(apilink, {
             method: 'PUT',
             headers: {
@@ -75,9 +79,13 @@ export default class AdminEditProfileScreen extends Component {
         .then(data => { 
             console.log('Success:',data.user);
             AsyncStorage.setItem('@userJson',JSON.stringify(data.user));
+            //change spinner to invisible
+            this.setState({spinner: false});
         })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
         this.props.navigation.push('adminapp');
@@ -86,6 +94,7 @@ export default class AdminEditProfileScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.profilePic}>
                     <Image style={styles.profileImage} source={profileImage} />
                 </View>

@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class addRouteScreen extends Component {
 
@@ -31,6 +32,7 @@ export default class addRouteScreen extends Component {
             check1:null,
             check2:null,
             def:null,
+            spinner:false,
             // defaultMarker:{
             //     title:"You are here",
             //     coordinates:{
@@ -310,6 +312,8 @@ export default class addRouteScreen extends Component {
                         check2_lng:this.checkSelected(this.state.check2,"long"),
                     };
                     console.log(data);
+                    //change spinner to visible
+                    this.setState({spinner: true});
                     fetch( IP + '/api/route', {
                         method: 'POST',
                         headers: {
@@ -322,9 +326,13 @@ export default class addRouteScreen extends Component {
                         .then(data => {
                             //success
                             console.log(data)
+                            //change spinner to invisible
+                            this.setState({spinner: false});
                         })
                         .catch((error) => {
                             console.error('Error:', error);
+                            //change spinner to invisible
+                            this.setState({spinner: false});
                         });
                     this.props.navigation.dispatch(StackActions.pop());
                 }
@@ -365,6 +373,7 @@ export default class addRouteScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <View style={styles.topInfo}>
                     <View style={styles.row}>
                         <View style={styles.imgColumn}>

@@ -11,6 +11,7 @@ import Setting from 'react-native-vector-icons/SimpleLineIcons';
 import { Dimensions } from 'react-native';
 import haversine from "haversine";
 import moment from 'moment';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class AdminMapScreen extends Component {
 
@@ -32,7 +33,7 @@ export default class AdminMapScreen extends Component {
             routeCoordinates: [],
             reference: React.createRef(),
             showInfo: 'none',
-
+            spinner:false,
             date: new Date(),
             hour: "00",
             minute: "00",
@@ -152,6 +153,8 @@ export default class AdminMapScreen extends Component {
                 minuteCount: 0,
                 secondCount: 0,
             });
+            //change spinner to visible
+            this.setState({spinner: true});
 
             fetch('http://192.168.0.192:8000/api/activity', {
                 method: 'POST',
@@ -161,6 +164,17 @@ export default class AdminMapScreen extends Component {
                 },
                 body: JSON.stringify(data),
             })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
+            });
 
 
             this.props.navigation.navigate('Progress');
@@ -216,6 +230,7 @@ export default class AdminMapScreen extends Component {
 
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <MapView style={styles.map}
                     ref={this.state.reference}
                     provider={PROVIDER_GOOGLE}

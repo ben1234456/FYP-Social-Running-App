@@ -6,6 +6,7 @@ import Event from '../../images/event.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { createAppContainer } from "react-navigation";
 import { StackActions } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const window = Dimensions.get("window");
 
@@ -21,6 +22,7 @@ export default class eventDetails extends Component {
             registration_start_date:"",   
             registration_end_date:"",
             desc:"",
+            spinner:false,
         };
 
 
@@ -28,7 +30,8 @@ export default class eventDetails extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-
+        //change spinner to visible
+        this.setState({spinner: true});
         //get events' details
         fetch(IP + '/api/events/' + this.state.eventid, {
             headers: {
@@ -47,28 +50,35 @@ export default class eventDetails extends Component {
                 registration_end_date:  data.registration_end,
                 desc:data.description,
             });
-        })
+            //get event distances
+            fetch(IP + '/api/events/'  + this.state.eventid + '/distance', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully get event distances + fee')
+                this.setState({
+                    event_distance: data
+                });
+                //change spinner to invisible
+                this.setState({spinner: false});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({spinner: false});
+            });
+            })
         .catch((error) => {
             console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
         });
 
-        //get event distances
-        fetch(IP + '/api/events/'  + this.state.eventid + '/distance', {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully get event distances + fee')
-            this.setState({
-                event_distance: data
-            });
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        
 
     }
 
@@ -156,6 +166,7 @@ export default class eventDetails extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
                 <ScrollView>
                     
                     <View >
