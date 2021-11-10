@@ -231,14 +231,14 @@ export default class LoginScreen extends Component {
 
 export const styles = StyleSheet.create({
     container: {
-        padding: 40,
+        padding: "5%",
         flex: 1,
         justifyContent:'center',
         backgroundColor: 'white',
     },
 
     heading: {
-        marginTop: '30%',
+        marginTop: '20%',
         fontSize: 30,
         fontWeight: '700',
         color: '#373737',
@@ -251,7 +251,7 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         marginTop: 30,
         display: 'flex',
-        padding: 15,
+        padding: "5%",
         flexDirection: 'row',
     },
 

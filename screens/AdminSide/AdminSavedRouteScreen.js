@@ -124,7 +124,7 @@ export default class AdminSavedRouteScreen extends Component {
                     </View>
                     :
                     <View style={styles.noData}>
-                        <Text style={styles.noDataText}>No routes avaliable now</Text>
+                        <Text style={styles.noDataText}>No routes available now</Text>
                     </View>
                     }
                     
@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
         flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 30,
+        margin: "5%",
     },
     noData:{
         flex:1,
@@ -159,8 +159,8 @@ export const styles = StyleSheet.create({
     },
     cardView: {
         height: 'auto',
-        marginLeft: 30,
-        marginRight: 30,
+        marginLeft: "5%",
+        marginRight: "5%",
         borderRadius: 15,
         backgroundColor: 'white',
 
@@ -215,8 +215,6 @@ export const styles = StyleSheet.create({
         color: '#8352F2',
     },
     listContainer:{
-        padding:"5%",
-        marginLeft:"1%",
-        marginRight:"1%",
+        marginBottom: "5%",
     },
 });

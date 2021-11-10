@@ -24,25 +24,25 @@ export default class resetPasswordScreen extends Component {
             console.log(this.state.email);
 
             const data = {
-                email: this.state.email   
+                email: this.state.email
             };
 
             fetch(IP + '/api/forgot-password', {
-                method: 'POST',   
+                method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-                
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+
             this.props.navigation.navigate('VerificationScreen')
         }
     }
@@ -50,32 +50,26 @@ export default class resetPasswordScreen extends Component {
     render() {
         return (
             <View style={styles.wholeContainer}>
-                <View style={styles.topInfoContainer}>
-                    <View style={styles.topInfo}>
-                        <Image style={styles.img} source={Logo} />
-                        <Text style={styles.bigTitle} >
-                            Forget Password?
-                        </Text>
-                        <Text style={styles.smallTextUnderTitle} >
-                            Enter your email address to reset your password.
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.botInfoContainer}>
-                    <View style={styles.botInfo}>
-                        <TextInput
-                            style={styles.emailInput}
-                            placeholder="Email"
-                            keyboardType='email-address'
-                            onChangeText={(emailInput) => this.setState({ email: emailInput })}
-                            value={this.state.email}
-                        />
-                        <TouchableOpacity onPress={this.sendEmail}>
-                            <View style={styles.botSend}>
-                                <Text style={styles.sendText}>SEND EMAIL</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                <Image style={styles.img} source={Logo} />
+                <Text style={styles.bigTitle} >
+                    Forget Password?
+                </Text>
+                <Text style={styles.smallTextUnderTitle} >
+                    Enter your email address to reset your password.
+                </Text>
+                <View style={styles.botInfo}>
+                    <TextInput
+                        style={styles.emailInput}
+                        placeholder="Email"
+                        keyboardType='email-address'
+                        onChangeText={(emailInput) => this.setState({ email: emailInput })}
+                        value={this.state.email}
+                    />
+                    <TouchableOpacity onPress={this.sendEmail}>
+                        <View style={styles.botSend}>
+                            <Text style={styles.sendText}>SEND EMAIL</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -85,25 +79,15 @@ export const styles = StyleSheet.create({
     wholeContainer: {
         flex: 1,
         backgroundColor: "white",
-        padding: "10%",
-    },
-    botInfoContainer: {
-        flex: 2,
-    },
-    topInfoContainer: {
-        flex: 1,
-
+        padding: "5%",
     },
     img: {
+        marginTop: "20%",
         width: '30%',
         height: undefined,
         aspectRatio: 1,
-    },
-    topInfo: {
-        flex: 1,
-        padding: "5%",
-        alignItems: "center",
-        justifyContent: "flex-end",
+        alignSelf: 'center',
+        justifyContent: 'center'
     },
     bigTitle: {
         fontWeight: "bold",

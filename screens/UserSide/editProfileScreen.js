@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
         width:"auto",
         paddingLeft:"20%",
         paddingRight:"20%",
-        backgroundColor:"#8100e3",
+        backgroundColor:"#8352F2",
     },
     btnText:{
         color:"#ffffff",

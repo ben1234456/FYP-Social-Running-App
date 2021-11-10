@@ -21,7 +21,7 @@ export default class App extends Component {
             gender: "",
             city: "",
             dob: "",
-            spinner:false,
+            spinner: false,
         };
 
     }
@@ -79,7 +79,7 @@ export default class App extends Component {
             if (this.state.user_id.length != 0) {
                 const IP = 'https://socialrunningapp.herokuapp.com';
                 //change spinner to visible
-                this.setState({spinner: true});
+                this.setState({ spinner: true });
                 //get user
                 fetch(IP + '/api/users/' + this.state.user_id, {
                     headers: {
@@ -104,12 +104,12 @@ export default class App extends Component {
                             dob: data[0].dob
                         });
                         //change spinner to invisible
-                        this.setState({spinner: false});
+                        this.setState({ spinner: false });
                     })
                     .catch((error) => {
                         console.error('Error:', error);
                         //change spinner to invisible
-                        this.setState({spinner: false});
+                        this.setState({ spinner: false });
                     });
             }
         });
@@ -119,7 +119,7 @@ export default class App extends Component {
     render() {
         return (
             <ScrollView style={styles.container}>
-                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} />
                 <View style={styles.contentContainer1}>
                     <View style={styles.rowContainer}>
                         <Icon style={styles.image} name="logout" size={25} color={'#8352F2'} onPress={this.logout} />
@@ -171,47 +171,49 @@ export default class App extends Component {
                     </Button>
 
                     <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('ChangePasswordScreen')}>
-                        <Text style={styles.btnText} numberOfLines={1} adjustsFontSizeToFit>Change password</Text>
+                        <Text style={styles.btnText} numberOfLines={2} adjustsFontSizeToFit>Change password</Text>
                     </Button>
 
                 </View>
-                <View style={styles.cardView}>
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.proColumnName}>Name:</Text>
-                        </View>
-                        <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.name}</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.proColumnName}>Gender:</Text>
+                <View style={{ marginBottom: "10%" }}>
+                    <View style={styles.cardView}>
+                        <View style={styles.proRow}>
+                            <View style={styles.proTitle}>
+                                <Text style={styles.proColumnName}>Name:</Text>
+                            </View>
+                            <View style={styles.proInfo}>
+                                <Text style={styles.proDetails}>{this.state.name}</Text>
+                            </View>
                         </View>
 
-                        <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.gender}</Text>
-                        </View>
-                    </View>
+                        <View style={styles.proRow}>
+                            <View style={styles.proTitle}>
+                                <Text style={styles.proColumnName}>Gender:</Text>
+                            </View>
 
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.proColumnName}>State:</Text>
-                        </View>
-
-                        <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.city}</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.proRow}>
-                        <View style={styles.proTitle}>
-                            <Text style={styles.proColumnName}>Date of Birth:</Text>
+                            <View style={styles.proInfo}>
+                                <Text style={styles.proDetails}>{this.state.gender}</Text>
+                            </View>
                         </View>
 
-                        <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{this.state.dob}</Text>
+                        <View style={styles.proRow}>
+                            <View style={styles.proTitle}>
+                                <Text style={styles.proColumnName}>State:</Text>
+                            </View>
+
+                            <View style={styles.proInfo}>
+                                <Text style={styles.proDetails}>{this.state.city}</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.proRow}>
+                            <View style={styles.proTitle}>
+                                <Text style={styles.proColumnName}>Date of Birth:</Text>
+                            </View>
+
+                            <View style={styles.proInfo}>
+                                <Text style={styles.proDetails}>{this.state.dob}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: "5%",
-        paddingTop:"10%",
+        paddingTop: "10%",
     },
     infoColumnTitle: {
         flex: 2,
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: "5%",
         padding: "5%",
-        
+
 
     },
 
@@ -290,10 +292,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#8352F2',
         borderRadius: 30,
-        justifyContent:"center",
-        alignContent:"center",
-        padding:"5%",
-        marginRight:"2%",
+        justifyContent: "center",
+        alignContent: "center",
+        padding: "5%",
+        marginRight: "2%",
     },
 
     changePassword: {
@@ -301,18 +303,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF0000',
         borderRadius: 30,
         // marginTop: 50,
-        justifyContent:"center",
-        alignContent:"center",
-        padding:"5%",
-        marginLeft:"2%",
+        justifyContent: "center",
+        alignContent: "center",
+        padding: "5%",
+        marginLeft: "2%",
 
     },
 
     btnText: {
-        fontSize: 16,
+        fontSize: 14,
         color: 'white',
         textAlign: 'center',
-        flexShrink:1,
+        flexShrink: 1,
     },
     cardView: {
         margin: "5%",

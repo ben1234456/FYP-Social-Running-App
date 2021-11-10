@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     profileInfo:{
         textAlign:"right",
         fontSize:15,
-        color:"#8100e3",
+        color:"#8352F2",
         paddingLeft:"10%",
         paddingRight:"10%",
         flex:6,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
         width:"auto",
         paddingLeft:"20%",
         paddingRight:"20%",
-        backgroundColor:"#8100e3",
+        backgroundColor:"#8252F2",
     },
     btnText:{
         color:"#ffffff",

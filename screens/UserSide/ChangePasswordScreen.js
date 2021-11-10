@@ -146,12 +146,9 @@ export default class ChangePasswordScreen extends Component {
 }
 export const styles = StyleSheet.create({
     container: {
-        padding: 40,
-        display: 'flex',
+        padding: "5%",
         flex: 1,
         backgroundColor: 'white',
-        paddingTop: 0,
-        
     },
     
     heading: {
@@ -160,7 +157,7 @@ export const styles = StyleSheet.create({
         color: '#373737',
         lineHeight: 40,
         textAlign: 'center',
-        marginTop: "5%",
+        marginTop: "10%",
         marginBottom:"5%",
     },
     input: {

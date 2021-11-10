@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, StyleSheet,Platform } from 'react-native';
+import { View, Image, Text, StyleSheet, Platform } from 'react-native';
 import { Button } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import Run from '../images/running.jpg';
@@ -40,23 +40,28 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         backgroundColor: 'white',
+    },
+    imageContainer: {
+        flex: 1,
+        paddingLeft: "5%",
+        paddingRight: "5%",
+    },
+    wordContainer: {
+        flex: 1,
         
-    },
-    imageContainer:{
-        flex:1,
-        padding:"5%",
-    },
-    wordContainer:{
-        flex:1,
-        alignContent:"center",
-        justifyContent:"center",
+        justifyContent: "center",
     },
     image: {
-        width: "100%",
+        // width: "100%",
+        // height: undefined,
+        // aspectRatio: 1,
+        // alignSelf:"center",
+        // justifyContent:"center",
+        flex: 1,
+        width: '130%',
         height: undefined,
-        aspectRatio: 1,
-        alignSelf:"center",
-        justifyContent:"center",
+        resizeMode: 'contain',
+        alignSelf: "center",
     },
 
     top: {
@@ -80,10 +85,10 @@ export const styles = StyleSheet.create({
     submitBtn: {
         backgroundColor: '#8352F2',
         borderRadius: 30,
-        marginTop:"5%",
-        padding:"5%",
-        alignContent:"center",
-        justifyContent:"center",
+        marginTop: "5%",
+        padding: "5%",
+        alignContent: "center",
+        justifyContent: "center",
     },
 
     btnText: {
@@ -93,7 +98,7 @@ export const styles = StyleSheet.create({
 
     signin: {
         textAlign: 'center',
-        marginTop:"2%",
+        marginTop: "2%",
     },
 
     link: {

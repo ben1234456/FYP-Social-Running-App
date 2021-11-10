@@ -252,7 +252,7 @@ export default class SignUpScreen extends Component {
                     textContent={'Loading...'}
                     textStyle={styles.spinnerTextStyle}
                 />
-                    <View >
+                    <View style={{marginTop: "5%", marginBottom: "5%"}}>
                         <Text style={styles.heading}>Create Account</Text>
                         <View >
                             <TextInput
