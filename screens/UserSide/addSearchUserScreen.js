@@ -86,8 +86,7 @@ export default class addSearchUserScreen extends Component {
     </TouchableOpacity>
     
     search=(value)=>{
-        //change spinner to visible
-        this.setState({spinner: true});
+
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
@@ -106,15 +105,14 @@ export default class addSearchUserScreen extends Component {
             this.setState({
                 userList: data
             });
-            //change spinner to invisible
-            this.setState({spinner: false});    
+
         })
         .catch((error) => {
             console.error('Error:', error);
-            //change spinner to invisible
-            this.setState({spinner: false});
+
         });
     };
+
     render(){
         return(
             <View style={styles.wholeContainer}>

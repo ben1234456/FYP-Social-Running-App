@@ -33,49 +33,7 @@ export default class addRouteScreen extends Component {
             check2:null,
             def:null,
             spinner:false,
-            // defaultMarker:{
-            //     title:"You are here",
-            //     coordinates:{
-            //     latitude:0,
-            //     longitude:0,
-            //     }
-            // },
-            // startMarker:{
-            //     title:"Starting point",
-            //     coordinate:{
-            //         latitude:0,
-            //         longitude:0,
-            //     },
-            //     selected:false,
-                
-            // },
-        
-            // endMarker:{
-            //     title:"Ending point",
-            //     coordinate:{
-            //         latitude:0,
-            //         longitude:0,
-            //     },
-            //     selected:false,
-                
-            // },
-            // checkMarker1:{
-            //     title:"Checkpoint 1",
-            //     coordinate:{
-            //         latitude:0,
-            //         longitude:0,
-            //     },    
-            //     selected:false,
-            // },         
-            // checkMarker2:{
-            //     title:"Checkpoint 2",
-            //     coordinate:{
-            //         latitude:0,
-            //         longitude:0,
-            //     },    
-            //     selected:false,
-            // }, 
-
+  
             checkPointArray:[],
 
             startCoor:{
@@ -86,16 +44,14 @@ export default class addRouteScreen extends Component {
                 latitude:0,
                 longitude:0,
             },
-        
-            
+         
             reference:React.createRef(),
             startingPoint:"Start Point",
             endingPoint:"End Point",
             checkPoint1:"First Checkpoint",
             checkPoint2:"Second CheckPoint",
             selection:0,
-
-            
+     
             //sign up and get api key https://developer.here.com/#
             api:"ysrvAnGD9v99umFWd_SWtpu7O68r1jzIrLiDNV9GLKw",
             //get key https://developers.google.com/maps/documentation/directions/get-api-key
@@ -159,12 +115,6 @@ export default class addRouteScreen extends Component {
         this.setState({
             def:{ title:"You are here",coordinate:{latitude: currentLatitude,longitude: currentLongitude}},
         });        
-        // this.setState({ startMarker:{title:"Starting point",coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        // this.setState({ endMarker:{title:"Ending point",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        // this.setState({ checkMarker1:{title:"Checkpoint 1",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        // this.setState({ checkMarker2:{title:"Checkpoint 2",selected:false,coordinate:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}}});
-        // this.setState({ startCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
-        // this.setState({ endCoor:{latitude: currentLocation.coords.latitude,longitude: currentLocation.coords.longitude}});
     };
     
     changeLocation=(point)=>{
@@ -172,14 +122,6 @@ export default class addRouteScreen extends Component {
         //get the latitude and longitude clicked
         let tempoLat=point.nativeEvent.coordinate.latitude || this.state.latitude;
         let tempoLong=point.nativeEvent.coordinate.longitude || this.state.longitude;
-
-        // console.log(tempoLat);
-
-        // this.setState({
-        //     latitude: tempoLat,
-        //     longitude: tempoLong,
-        // });
-
         
         //get the address of the latitude and longitude
         this.getAddress(tempoLat,tempoLong);
@@ -201,7 +143,6 @@ export default class addRouteScreen extends Component {
                         });
                         //this.setState({ checkMarker1:{title:"Checkpoint 1",coordinate:{latitude: latitude,longitude: longitude},selected:true}});
                         //{ title:"Starting point",pinColor:"#0000FF",coordinate:{latitude: latitude,longitude: longitude}};
-
 
                     }
                     if(this.state.selection==1){
@@ -291,9 +232,7 @@ export default class addRouteScreen extends Component {
         
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-        
-        
-        
+          
         //validation for empty or unable to get route
         if(this.state.routeName.length!=0){
             if(this.state.start!=null || this.state.end!=null){
@@ -322,19 +261,19 @@ export default class addRouteScreen extends Component {
                         },
                         body: JSON.stringify(data),
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            //success
-                            console.log(data)
-                            //change spinner to invisible
-                            this.setState({spinner: false});
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                            //change spinner to invisible
-                            this.setState({spinner: false});
-                        });
-                    this.props.navigation.dispatch(StackActions.pop());
+                    .then(response => response.json())
+                    .then(data => {
+                        //success
+                        console.log(data)
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    });
+                this.props.navigation.dispatch(StackActions.pop());
                 }
                 else{
                     Alert.alert(

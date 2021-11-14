@@ -92,16 +92,16 @@ export default class App extends Component {
                         JSON.stringify(data);
                         console.log(data);
                         //change to upper case
-                        var gender = data[0].gender;
+                        var gender = data.gender;
                         var genderText = gender[0].toUpperCase() + gender.substring(1);
 
                         this.setState({
-                            user_id: data[0].id,
-                            name: data[0].first_name,
-                            email: data[0].email,
+                            user_id: data.id,
+                            name: data.first_name,
+                            email: data.email,
                             gender: genderText,
-                            city: data[0].city,
-                            dob: data[0].dob
+                            city: data.city,
+                            dob: data.dob
                         });
                         //change spinner to invisible
                         this.setState({ spinner: false });
@@ -170,7 +170,7 @@ export default class App extends Component {
                         <Text style={styles.btnText}>Edit Profile</Text>
                     </Button>
 
-                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('ChangePasswordScreen')}>
+                    <Button block style={styles.changePassword} onPress={() => this.props.navigation.navigate('ChangePasswordScreen', { 'user_id': this.state.user_id })}>
                         <Text style={styles.btnText} numberOfLines={2} adjustsFontSizeToFit>Change password</Text>
                     </Button>
 

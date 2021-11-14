@@ -184,18 +184,14 @@ export default class BuddiesListScreen extends Component {
                 </View>
             </View>
         </TouchableOpacity>
-       
-        
-    
-        
+           
     search=(value)=>{
         console.log(this.state.userList.length);
         this.setState({searchWord:value});
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
         if(this.state.userID.length!=0){
-            //change spinner to visible
-            this.setState({spinner: true});
+
             //get 10 user
             fetch(IP + '/api/buddy/buddyList/' + this.state.userID +"/"+ value, {
                 headers: {
@@ -210,13 +206,11 @@ export default class BuddiesListScreen extends Component {
                 this.setState({
                     userList: data
                 });
-                //change spinner to invisible
-                this.setState({spinner: false});
+
             })
             .catch((error) => {
                 console.error('Error:', error);
-                //change spinner to invisible
-                this.setState({spinner: false});
+
             });
         }
         

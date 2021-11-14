@@ -352,30 +352,26 @@ export default class ForumScreen extends Component {
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('ForumDetailsScreen', { 'postid': item.id })}>
                                 <View style={styles.cardView}>
                                     <View style={styles.proRow}>
+
                                         <View style={styles.profilePicContainer}>
                                             <Image style={styles.proColumnName} source={profileImage} />
                                         </View>
+
                                         <View style={styles.profileInfoContainer}>
                                             <Text style={styles.title}>{item.name}</Text>
                                             {/* <Text style={styles.proDetails}>{this.state.name}</Text> */}
                                             <Text style={styles.date}>{item.datetime}</Text>
                                         </View>
-                                        {/* <TouchableOpacity>
-                                    <View style={styles.iconContainer}>
-                                        <Icon size={25} name={"edit"} color='#808080' />
+                                        
                                     </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.delete(item.id)}>
-                                    <View style={styles.iconContainer}>
-                                        <Icon2 size={25} name={"delete"} color='#808080' />
-                                    </View>
-                                    </TouchableOpacity> */}
-                                    </View>
+
                                     <View style={styles.proTitle}>
                                         <Text style={styles.title}>{item.title}</Text>
                                         <Text style={styles.description}>{item.description}</Text>
                                     </View>
+
                                     <View style={styles.proRow}>
+
                                         <View style={styles.botIcon}>
                                             {item.liked
                                             ?
@@ -388,6 +384,7 @@ export default class ForumScreen extends Component {
                                                 <Text>{item.noLike}</Text>
                                             </View>
                                         </View>
+
                                         <View style={styles.botIcon}>
                                             <Icon2 size={25} name='comment-outline' color='#808080' />
                                             <View style={styles.iconInfoContainer}>
@@ -395,24 +392,6 @@ export default class ForumScreen extends Component {
                                             </View>
                                         </View>
                                     </View>
-
-                                    {/* <View style={styles.proTitle}>
-                                    <View>
-                                        <ScrollView horizontal={true} style={{ marginRight: 20 }}><Text>{item.comments ? <View><Text style={{ color: '#808080' }}>Comments</Text><Text>{item.comments}</Text></View> : []}</Text></ScrollView>
-                                    </View>
-                                </View> */}
-
-                                    {/* <View style={styles.proTitle}>
-                                    <View style={styles.proRow}>
-                                        <TextInput style={styles.input}
-                                            placeholder="Write a comment"
-                                            onChangeText={comment_input => this.setState({ commentHolder: comment_input })}
-                                            value={item.comment}
-                                            multiline={true}
-                                        />
-                                        <Icon2 size={25} onPress={() => this.send(item.id)} name='send' style={[styles.text, !this.state.commentHolder ? styles.inactive : []]} />
-                                    </View>
-                                </View> */}
                                 </View>
                             </TouchableOpacity>
                         )}

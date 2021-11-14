@@ -109,13 +109,12 @@ export default class startFreeRunScreen extends Component {
     }
 
     //calculate pace (km/hr)
-
     calculatePace=(second,minute,hour,distance)=>{
-        var totalduration = hour + (minute/60) + (second/60/60);
-        var pace = distance / totalduration;
-        console.log(pace);
+        var totalDuration = hour + (minute/60) + (second/60/60);
+        var pace = distance / totalDuration;
+        var roundedPace = Number(pace).toFixed(2);  
         this.setState({
-            avgSpeed: pace,
+            avgSpeed: roundedPace,
         })
     }
 
@@ -195,11 +194,10 @@ export default class startFreeRunScreen extends Component {
             if (totalnewdistance < 0.01) {
                 this.setState({ distanceTravelled: totaldistance + totalnewdistance });
                 this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
-
             }
 
-            // this.setState({ distanceTravelled: totaldistance + totalnewdistance });
-            // this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
+            this.setState({ distanceTravelled: totaldistance + totalnewdistance });
+            this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
 
         }    
 

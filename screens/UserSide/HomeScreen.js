@@ -92,9 +92,6 @@ export default class HomeScreen extends Component {
                 //change spinner to invisible
                 this.setState({spinner: false});
             });
-
-            
-
             
         }
 
