@@ -196,9 +196,6 @@ export default class startFreeRunScreen extends Component {
                 this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
             }
 
-            this.setState({ distanceTravelled: totaldistance + totalnewdistance });
-            this.calculatePace(this.state.second, this.state.minute, this.state.hour, this.state.distanceTravelled);
-
         }    
 
     }
