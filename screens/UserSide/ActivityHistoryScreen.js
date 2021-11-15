@@ -21,10 +21,7 @@ export default class App extends Component {
             activityNumber:0,
             spinner:false,
         };
-
-
-        
-        
+              
     }
     componentDidMount(){
         

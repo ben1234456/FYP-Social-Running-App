@@ -5,10 +5,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons'
-import AdminHomeScreen from './AdminHomeScreen';
-import AdminMapScreen from './AdminMapScreen';
-import AdminReportScreen from './AdminReportScreen';
-import AdminProfileScreen from './AdminProfileScreen';
+import AdminHomeScreen from './adminHomeScreen';
+import AdminMapScreen from './adminMapScreen';
+import AdminReportScreen from './adminReportScreen';
+import AdminProfileScreen from './adminProfileScreen';
 
 const Tab = createBottomTabNavigator();
 

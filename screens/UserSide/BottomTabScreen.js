@@ -4,11 +4,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Feather';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons'
-import HomeScreen from './HomeScreen';
-import ActivityScreen from './ActivityScreen';
-import ProgressScreen from './ProgressScreen';
-import ProfileScreen from './ProfileScreen';
-import ForumScreen from './ForumScreen';
+import HomeScreen from './homeScreen';
+import ActivityScreen from './activityScreen';
+import ProgressScreen from './progressScreen';
+import ProfileScreen from './profileScreen';
+import ForumScreen from './forumScreen';
 import { Animated } from 'react-native';
 
 const Tab = createBottomTabNavigator();

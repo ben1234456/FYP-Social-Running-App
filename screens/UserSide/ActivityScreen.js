@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
-import TopTabNavigator from './TopTabNavigator';
+import TopTabNavigator from './topTabNavigator';
 
 export default class App extends Component {
     
