@@ -97,7 +97,6 @@ export default class BuddiesProfileScreen extends Component {
         getData();
         
     }
-    renderItemComponent = (data) =>
         
     
 
