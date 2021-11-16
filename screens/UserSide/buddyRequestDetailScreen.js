@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert ,FlatList} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, FlatList } from 'react-native';
 import profileImage from '../../images/avatar.jpg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
@@ -12,14 +12,14 @@ export default class buddyRequestDetailScreen extends Component {
         this.state = {
             //selected user id
             buddyID: props.route.params.userID,
-            userID:"",
-            user:"",
+            userID: "",
+            user: "",
             id: "",
             name: "",
             gender: "",
             city: "",
             dob: "",
-            spinner:false,
+            spinner: false,
         };
 
         //get data from async storage
@@ -42,80 +42,80 @@ export default class buddyRequestDetailScreen extends Component {
                 console.log(e);
             }
             //change spinner to visible
-            this.setState({spinner: true});
+            this.setState({ spinner: true });
             fetch(IP + '/api/users/' + this.state.buddyID, {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Successfully get user data')
-                console.log(data)
-                this.setState({
-                    user: data
-                });
-                fetch(IP + '/api/buddyrequest/' + this.state.buddyID +'/'+this.state.userID, {
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Successfully get buddy req id')
+                    console.log('Successfully get user data')
                     console.log(data)
                     this.setState({
-                        id: data.id
+                        user: data
                     });
-                    //change spinner to invisible
-                    this.setState({spinner: false});
+                    fetch(IP + '/api/buddyrequest/' + this.state.buddyID + '/' + this.state.userID, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Successfully get buddy req id')
+                            console.log(data)
+                            this.setState({
+                                id: data.id
+                            });
+                            //change spinner to invisible
+                            this.setState({ spinner: false });
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            //change spinner to invisible
+                            this.setState({ spinner: false });
+                        });
                 })
                 .catch((error) => {
                     console.error('Error:', error);
                     //change spinner to invisible
-                    this.setState({spinner: false});
+                    this.setState({ spinner: false });
                 });
+
+
+        }
+
+        getData();
+
+    }
+
+    decline = () => {
+        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+        const IP = 'https://socialrunningapp.herokuapp.com';
+        //change spinner to visible
+        this.setState({ spinner: true });
+        fetch(IP + '/api/buddyrequest/list/' + this.state.id, {
+            method: "DELETE",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successfully delete buddy request')
+                console.log(data)
+                //change spinner to invisible
+                this.setState({ spinner: false });
             })
             .catch((error) => {
                 console.error('Error:', error);
                 //change spinner to invisible
-                this.setState({spinner: false});
+                this.setState({ spinner: false });
             });
-
-            
-        }
-
-        getData();
-        
-    }
-
-    decline=()=>{
-        const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
-        const IP = 'https://socialrunningapp.herokuapp.com';
-        //change spinner to visible
-        this.setState({spinner: true});        
-        fetch(IP + '/api/buddyrequest/list/' + this.state.id, {
-                method:"DELETE",
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-    
-            })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Successfully delete buddy request')
-            console.log(data)
-            //change spinner to invisible
-            this.setState({spinner: false});
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            //change spinner to invisible
-            this.setState({spinner: false});
-        });
         this.props.navigation.dispatch(StackActions.pop());
         this.props.navigation.dispatch(StackActions.pop());
         this.props.navigation.dispatch(StackActions.replace('BuddiesListScreen'))
@@ -123,17 +123,17 @@ export default class buddyRequestDetailScreen extends Component {
 
     }
 
-    accept=() =>{
+    accept = () => {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
-        
+
         const data = {
-            userID:this.state.userID,
-            buddyID:this.state.buddyID,
+            userID: this.state.userID,
+            buddyID: this.state.buddyID,
         };
         //change spinner to visible
-        this.setState({spinner: true});
+        this.setState({ spinner: true });
         fetch(IP + '/api/buddy', {
             method: 'POST',
             headers: {
@@ -142,25 +142,30 @@ export default class buddyRequestDetailScreen extends Component {
             },
             body: JSON.stringify(data),
         })
-        .then(response =>  response.json())
-        
-        .then(data => {
-            console.log(data);
-            //change spinner to invisible
-            this.setState({spinner: false});
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            //change spinner to invisible
-            this.setState({spinner: false});
-        });  
+            .then(response => response.json())
+
+            .then(data => {
+                console.log(data);
+                //change spinner to invisible
+                this.setState({ spinner: false });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                //change spinner to invisible
+                this.setState({ spinner: false });
+            });
         this.decline();
-                
+
     }
 
-    renderItemComponent = (data) =>
-        
-        <View style={styles.container}>
+
+
+    render() {
+        return (
+            <View style={styles.wholeContainer}>
+
+                <Spinner visible={this.state.spinner} textContent={'Loading...'} />
+                <View style={styles.container}>
                     <View style={styles.rowContainer}>
                         <Image style={styles.proImage} source={profileImage} />
                     </View>
@@ -172,7 +177,7 @@ export default class buddyRequestDetailScreen extends Component {
                                 <Text style={styles.proColumnName}>Name:</Text>
                             </View>
                             <View style={styles.proInfo}>
-                                <Text style={styles.proDetails}>{data.item.first_name}</Text>
+                                <Text style={styles.proDetails}>{this.state.user.first_name}</Text>
                             </View>
                         </View>
 
@@ -182,7 +187,7 @@ export default class buddyRequestDetailScreen extends Component {
                             </View>
 
                             <View style={styles.proInfo}>
-                                <Text style={styles.proDetails}>{data.item.gender}</Text>
+                                <Text style={styles.proDetails}>{this.state.user.gender}</Text>
                             </View>
                         </View>
 
@@ -192,7 +197,7 @@ export default class buddyRequestDetailScreen extends Component {
                             </View>
 
                             <View style={styles.proInfo}>
-                                <Text style={styles.proDetails}>{data.item.city}</Text>
+                                <Text style={styles.proDetails}>{this.state.user.city}</Text>
                             </View>
                         </View>
 
@@ -202,7 +207,7 @@ export default class buddyRequestDetailScreen extends Component {
                             </View>
 
                             <View style={styles.proInfo}>
-                                <Text style={styles.proDetails}>{data.item.dob}</Text>
+                                <Text style={styles.proDetails}>{this.state.user.dob}</Text>
                             </View>
                         </View>
                     </View>
@@ -218,19 +223,8 @@ export default class buddyRequestDetailScreen extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-            </View>
+                </View>
 
-    render() {
-        return (
-            <View style={styles.wholeContainer}> 
-
-            <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
-
-            <FlatList horizontal={false}
-                data={this.state.user}
-                keyExtractor={item => item.id.toString()}
-                renderItem={item => this.renderItemComponent(item)}
-            />  
             </View>
         );
     }
@@ -300,52 +294,54 @@ const styles = StyleSheet.create({
     followPosition: {
         flex: 1,
     },
-    noOfFollower: { 
-        textAlign: 'center' 
+    noOfFollower: {
+        textAlign: 'center'
     },
-    btnContainer:{
-        flex:1,
-        padding:"5%",
-        
-        flexDirection:"row",
-        justifyContent:"center",
+    btnContainer: {
+        flex: 1,
+        padding: "5%",
+
+        flexDirection: "row",
+        justifyContent: "center",
     },
-    btn:{
-        borderRadius:30,
-        alignItems:"center",
-        padding:"5%",
-        flex:1,
-        marginRight:"2.5%",
-        marginLeft:"2.5%",
-        paddingRight:"12.5%",
-        paddingLeft:"12.5%",
+    btn: {
+        borderRadius: 30,
+        padding: "5%",
+        flex: 1,
+        marginRight: "2.5%",
+        marginLeft: "2.5%",
+        paddingRight: "12.5%",
+        paddingLeft: "12.5%",
         backgroundColor: '#8352F2',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    btn2:{
-        borderRadius:30,
-        alignItems:"center",
-        padding:"5%",
-        flex:1,
-        marginRight:"2.5%",
-        marginLeft:"2.5%",
-        paddingRight:"12.5%",
-        paddingLeft:"12.5%",
+    btn2: {
+        borderRadius: 30,
+        padding: "5%",
+        flex: 1,
+        marginRight: "2.5%",
+        marginLeft: "2.5%",
+        paddingRight: "12.5%",
+        paddingLeft: "12.5%",
         backgroundColor: 'white',
         borderColor: '#8352F2',
         borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    btnText:{
-        fontSize:16,
+    btnText: {
+        fontSize: 16,
         color: 'white',
         textAlign: 'center',
     },
-    btnText2:{
-        fontSize:16,
+    btnText2: {
+        fontSize: 16,
         color: '#8352F2',
         textAlign: 'center',
     },
-    wholeContainer:{
-        flex:1,
-        backgroundColor:"white",
+    wholeContainer: {
+        flex: 1,
+        backgroundColor: "white",
     },
 });
