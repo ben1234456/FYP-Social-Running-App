@@ -83,14 +83,14 @@ export default class FreeRunScreen extends Component {
 
                 console.log(routeID);
 
-                if(true){
+                if(routeID != ''){
                     //change spinner to visible
                     this.setState({
                         spinner: true, 
                         route_ID: routeID
                     });
                     console.log('fetch');
-                    fetch(IP + '/api/route/routeList/details/205', {
+                    fetch(IP + '/api/route/routeList/details/' + this.state.route_ID, {
                         headers: {
                             Accept: 'application/json',
                             'Content-Type': 'application/json'
@@ -276,8 +276,11 @@ export default class FreeRunScreen extends Component {
                     {this.state.end &&
                         <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title} />
                     }
-                    {this.state.start && this.state.end &&
-                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+
+                    {this.state.route_ID != ' ' ?
+                    <View>
+                        {this.state.start && this.state.end &&
+                        <MapViewDirections strokeWidth={3} strokeColor="red" origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
                             onReady={result => {
                                 this.getLocation();
                                 this.forceUpdate();
@@ -287,9 +290,12 @@ export default class FreeRunScreen extends Component {
 
                             }}
                         />
-                    }   
-                    
-                    
+                    } 
+                    </View>
+                    :
+                    <View></View>
+                    }
+                      
                 </MapView>
 
                 <View style={styles.columnContainer}>

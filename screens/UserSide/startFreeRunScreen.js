@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, AnimatedRegion, Marker, Polyline } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { Dimensions } from 'react-native';
 import { Button } from 'native-base';
 import * as Location from 'expo-location';
@@ -55,27 +56,132 @@ export default class startFreeRunScreen extends Component {
             reference: React.createRef(),
             avgSpeed: 0,
             count: 0,
-            
+            start: null,
+            end: null,
+            check1: null,
+            check2: null,
+            def: null,
+            spinner:false,
+            checkPointArray: [],
+
+            reference: React.createRef(),
+            startingPoint: "Start Point",
+            endingPoint: "End Point",
+            checkPoint1: "First Checkpoint",
+            checkPoint2: "Second CheckPoint",
+
+            //sign up and get api key https://developer.here.com/#
+            api: "ysrvAnGD9v99umFWd_SWtpu7O68r1jzIrLiDNV9GLKw",
+            //get key https://developers.google.com/maps/documentation/directions/get-api-key
+            //get Google Maps Directions API https://console.cloud.google.com/apis/dashboard?project=social-running-app&folder=&organizationId=
+            googleApi: "AIzaSyB15Wdjt0OdRs09MlU09gENop0nLYtjz_o",
         };
 
         const getData = async () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            const IP = 'https://socialrunningapp.herokuapp.com';
             try {
                 const userJson = await AsyncStorage.getItem('@userJson')
-                if(userJson !== null) {
+                const routeID = await AsyncStorage.getItem('@route')
+                if (userJson !== null) {
                     const user = JSON.parse(userJson);
                     this.setState({
-                        user_ID:user.id,
+                        userID: user.id,
                     });
                 }
 
-            } catch(e) {
-                console.log(e);
-            }
+                if(routeID != ''){
+                    //change spinner to visible
+                    this.setState({
+                        spinner: true, 
+                        route_ID: routeID
+                    });
+                    console.log('fetch');
+                    fetch(IP + '/api/route/routeList/'+this.state.userID, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Successfully get user route data testing')
+                        console.log(data)
+
+                        this.setState({
+                            routeName: data[0].name,
+                            eventName: data[0].title,
+                            ownerId: data[0].userID,
+
+                            start: { title: "Starting point", selected: true, coordinate: { latitude: parseFloat(data[0].start_lat), longitude: parseFloat(data[0].start_lng) } },
+                            end: { title: "Ending point", selected: true, coordinate: { latitude: parseFloat(data[0].end_lat), longitude: parseFloat(data[0].end_lng) } },
+                            loadedData: data,
+                            data: data[0],
+
+                        });
+
+                        if (data[0].check1_lat != null) {
+                            this.setState({
+                                check1: { title: "Checkpoint 1", selected: true, coordinate: { latitude: parseFloat(data[0].check1_lat), longitude: parseFloat(data[0].check1_lng) } },
+                            });
+                        }
+
+                        if (data[0].check2_lat != null) {
+                            this.setState({
+                                check2: { title: "Checkpoint 2", selected: true, coordinate: { latitude: parseFloat(data[0].check2_lat), longitude: parseFloat(data[0].check2_lng) } },
+
+                            });
+                        }
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                        }
+
+                    } catch (e) {
+                        console.log(e);
+                    }
+            ;
         }
 
         getData();
     }
-    
+    //animate to starting point
+    getLocation = async () => {
+        const permissionStatus = await Location.requestForegroundPermissionsAsync();
+
+        if (permissionStatus.status !== "granted") {
+            this.setState({ errorMessage: "Permission to access location was denied" });
+            return;
+        }
+
+        // permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        if (permissionStatus.status !== "granted") {
+            this.setState({ errorMessage: "Permission to access location was denied" });
+            return;
+        }
+
+        let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+        console.log(this.state.errorMessage);
+        this.state.reference.current.animateToRegion({
+
+            latitude: this.state.start.coordinate.latitude,
+            longitude: this.state.start.coordinate.longitude,
+
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        })
+        this.setState({
+            def: { title: "You are here", coordinate: { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude } },
+        });
+    };
     startTimer=()=>{
         if(this.state.stopwatch==true){
             var currentTime=moment(new Date());
@@ -294,6 +400,52 @@ export default class startFreeRunScreen extends Component {
                     }
                 >
                     <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
+                    {this.state.def &&
+                        <Marker coordinate={this.state.def.coordinate} title={this.state.def.title} />
+                    }
+                    {this.state.start &&
+                        <Marker coordinate={this.state.start.coordinate} pinColor={"#0000FF"} title={this.state.start.title} />
+                    }
+                    {this.state.check1 &&
+                        <Marker coordinate={this.state.check1.coordinate} pinColor={"#008000"} title={this.state.check1.title} />
+                    }
+                    {this.state.check2 &&
+                        <Marker coordinate={this.state.check2.coordinate} pinColor={"#ffcc00"} title={this.state.check2.title} />
+                    }
+                    {this.state.end &&
+                        <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title} />
+                    }
+                    {this.state.start && this.state.end &&
+                        <MapViewDirections strokeWidth={3} strokeColor="red" origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                            onReady={result => {
+                                this.getLocation();
+                                this.forceUpdate();
+                            }}
+                            onStart={() => {
+                                this.forceUpdate();
+
+                            }}
+                        />
+                    }
+
+                    {this.state.route_ID != ' ' ?
+                    <View>
+                        {this.state.start && this.state.end &&
+                        <MapViewDirections strokeWidth={3} strokeColor="red" origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                            onReady={result => {
+                                this.getLocation();
+                                this.forceUpdate();
+                            }}
+                            onStart={() => {
+                                this.forceUpdate();
+
+                            }}
+                        />
+                    } 
+                    </View>
+                    :
+                    <View></View>
+                    }       
                     
                 </MapView>
 

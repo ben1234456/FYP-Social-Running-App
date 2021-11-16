@@ -97,7 +97,10 @@ export default class BuddiesProfileScreen extends Component {
         getData();
         
     }
+    renderItemComponent = (data) =>
+        
     
+
     deleteBuddy=()=>{
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
@@ -162,9 +165,11 @@ export default class BuddiesProfileScreen extends Component {
         });  
         this.props.navigation.navigate('addSearchUserScreen');
     }
-    renderItemComponent = (data) =>
-        
-    <View style={styles.container}>
+    render() {
+        return (
+            <View style={styles.wholeContainer}>
+                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
+                <View style={styles.container}>
                 <View style={styles.rowContainer}>
                     <Image style={styles.proImage} source={profileImage} />
                 </View>
@@ -186,7 +191,7 @@ export default class BuddiesProfileScreen extends Component {
                             <Text style={styles.proColumnName}>Name:</Text>
                         </View>
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.first_name}</Text>
+                            <Text style={styles.proDetails}>{this.state.user.first_name}</Text>
                         </View>
                     </View>
 
@@ -196,7 +201,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.gender}</Text>
+                            <Text style={styles.proDetails}>{this.state.user.gender}</Text>
                         </View>
                     </View>
 
@@ -206,7 +211,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.city}</Text>
+                            <Text style={styles.proDetails}>{this.state.user.city}</Text>
                         </View>
                     </View>
 
@@ -216,7 +221,7 @@ export default class BuddiesProfileScreen extends Component {
                         </View>
 
                         <View style={styles.proInfo}>
-                            <Text style={styles.proDetails}>{data.item.dob}</Text>
+                            <Text style={styles.proDetails}>{this.state.user.dob}</Text>
                         </View>
                     </View>
                 </View>
@@ -237,15 +242,6 @@ export default class BuddiesProfileScreen extends Component {
                     }
                 </View>
             </View>
-    render() {
-        return (
-            <View style={styles.wholeContainer}>
-                <Spinner visible={this.state.spinner} textContent={'Loading...'}/>
-                <FlatList horizontal={false}
-                data={this.state.user}
-                keyExtractor={item => item.id.toString()}
-                renderItem={item => this.renderItemComponent(item)}
-            />  
             </View>
             
         );
