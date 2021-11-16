@@ -277,7 +277,7 @@ export default class FreeRunScreen extends Component {
                         <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title} />
                     }
                     {this.state.start && this.state.end &&
-                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                        <MapViewDirections strokeWidth={3} strokeColor="red" origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
                             onReady={result => {
                                 this.getLocation();
                                 this.forceUpdate();
