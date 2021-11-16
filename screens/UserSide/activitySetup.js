@@ -100,14 +100,15 @@ export default class ActivitySetup extends Component {
         this.setState({ routeSelected: routeInput })
 
         try {
-            AsyncStorage.setItem('@route', routeInput)
+            AsyncStorage.setItem('@route', String(routeInput))
             console.log("save")
         } catch (e) {
             // saving error
             console.log("cannot")
         }
 
-        console.log(routeInput);
+        const routeID = await AsyncStorage.getItem('@route')
+
     }
 
     pickerList(){

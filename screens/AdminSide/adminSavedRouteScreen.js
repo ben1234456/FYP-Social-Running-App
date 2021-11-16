@@ -87,7 +87,7 @@ export default class AdminSavedRouteScreen extends Component {
                 //change spinner to invisible
                 this.setState({spinner: false});
             });
-          });
+        });
     }
 
     renderItemComponent = (data) =>        
