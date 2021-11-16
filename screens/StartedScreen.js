@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     wordContainer: {
         flex: 1,
         
-        justifyContent: "center",
+        justifyContent:"flex-start",
     },
     image: {
         // width: "100%",
