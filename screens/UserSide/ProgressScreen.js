@@ -169,39 +169,6 @@ export default class App extends Component {
                         <Text style={styles.noEventText}>Looks like you don't have any activities here! Try to track yourself in the "Activity" tab</Text>
                     </View>
                     }
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.activityTitle}>Summary </Text>
-                    </View>
-                    <View style={styles.dataContainer}>
-                        <TouchableOpacity>
-                            <View style={styles.rowContainer}>
-                                <Icon name="walk"style={styles.icon} size={30} color={'#8352F2'} />
-                                <View style={styles.activityInfo}>
-                                    <Text style={styles.activityDistance}>Total Distance:</Text>
-                                </View>
-                                <Text style={styles.date}>{this.state.totalDistance} KM</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={styles.rowContainer}>
-                                <Icon name="walk"style={styles.icon} size={30} color={'#8352F2'} />
-                                <View style={styles.activityInfo}>
-                                    <Text style={styles.activityDistance}>Total Duration:</Text>
-                                    
-                                </View>
-                                <Text style={styles.date}>{this.state.totalDuration}</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={styles.rowContainer}>
-                                <Icon name="walk"style={styles.icon} size={30} color={'#8352F2'} />
-                                <View style={styles.activityInfo}>
-                                    <Text style={styles.activityDistance}>Average pace:</Text>
-                                </View>
-                                <Text style={styles.date}>{this.state.averagePace}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
                     
             </ScrollView>
         );
