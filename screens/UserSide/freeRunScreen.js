@@ -147,43 +147,32 @@ export default class FreeRunScreen extends Component {
 
     }
 
+    //animate to starting point
     getLocation = async () => {
-
         const permissionStatus = await Location.requestForegroundPermissionsAsync();
 
         if (permissionStatus.status !== "granted") {
             this.setState({ errorMessage: "Permission to access location was denied" });
             return;
         }
-        //permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        // permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        if (permissionStatus.status !== "granted") {
+            this.setState({ errorMessage: "Permission to access location was denied" });
+            return;
+        }
 
         let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
         console.log(this.state.errorMessage);
-        console.log(currentLocation);
-        this.setState({ latitude: currentLocation.coords.latitude });
-        this.setState({ longitude: currentLocation.coords.longitude });
-        const currentLatitude = currentLocation.coords.latitude;
-        const currentLongitude = currentLocation.coords.longitude;
-
-        this.setState({ 
-            prevLat: currentLatitude, 
-            prevLng: currentLongitude,
-            startLat: currentLatitude,
-            startLng: currentLongitude,
-
-        });
-
-
         this.state.reference.current.animateToRegion({
 
-            latitude: currentLatitude,
-            longitude: currentLongitude,
+            latitude: this.state.start.coordinate.latitude,
+            longitude: this.state.start.coordinate.longitude,
 
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
         })
-
         this.setState({
             def: { title: "You are here", coordinate: { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude } },
         });
@@ -272,29 +261,34 @@ export default class FreeRunScreen extends Component {
                         (geolocation) => this.change(geolocation.nativeEvent.coordinate)
                     }
                 >
-                    {this.state.route_ID != '' ?
-                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
-                        onReady={result => {
-                            this.forceUpdate();
-                        }}
-                        onStart={() => {
-                            this.forceUpdate();
-
-                        }}
-                        />
-                    :
-                    <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
-                        onReady={result => {
-                            this.forceUpdate();
-                            this.getLocation();
-                        }}
-                        onStart={() => {
-                            this.forceUpdate();
-                            this.getLocation();
-
-                        }}
-                        />
+                    {this.state.def &&
+                        <Marker coordinate={this.state.def.coordinate} title={this.state.def.title} />
                     }
+                    {this.state.start &&
+                        <Marker coordinate={this.state.start.coordinate} pinColor={"#0000FF"} title={this.state.start.title} />
+                    }
+                    {this.state.check1 &&
+                        <Marker coordinate={this.state.check1.coordinate} pinColor={"#008000"} title={this.state.check1.title} />
+                    }
+                    {this.state.check2 &&
+                        <Marker coordinate={this.state.check2.coordinate} pinColor={"#ffcc00"} title={this.state.check2.title} />
+                    }
+                    {this.state.end &&
+                        <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title} />
+                    }
+                    {this.state.start && this.state.end &&
+                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                            onReady={result => {
+                                this.getLocation();
+                                this.forceUpdate();
+                            }}
+                            onStart={() => {
+                                this.forceUpdate();
+
+                            }}
+                        />
+                    }   
+                    
                     
                 </MapView>
 
