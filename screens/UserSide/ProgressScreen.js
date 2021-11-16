@@ -19,6 +19,9 @@ export default class App extends Component {
             categorySelected: '25 March - 01 April 2021',
             activityData:'',
             spinner:false,
+            totalDuration: ' ',
+            totalDistance: ' ',
+            averagePace: 0,
         };
       
     }
@@ -41,6 +44,7 @@ export default class App extends Component {
         //using localhost on IOS and using 10.0.2.2 on Android
         const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
         const IP = 'https://socialrunningapp.herokuapp.com';
+
         //change spinner to visible
         this.setState({spinner: true});
         fetch(IP + '/api/activity/users/' + this.state.user_id, {
@@ -64,12 +68,38 @@ export default class App extends Component {
             //change spinner to invisible
             this.setState({spinner: false});
         });
+
+        //get summary 
+        fetch(IP + '/api/activities/all/' + this.state.user_id, {
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.setState({
+                totalDistance: data.total_distance,
+                totalDuration: data.total_duration,
+                averagePace: data.average_pace
+            });
+            //change spinner to invisible
+            this.setState({spinner: false});
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            //change spinner to invisible
+            this.setState({spinner: false});
+        });
+
         }
+
         getData();
+
         this.focusListener = this.props.navigation.addListener('focus', () => {
             getData();
             //Put your Data loading function here instead of my this.loadData()
-          });
+        });
     }
 
     renderActivities = (data) => 
@@ -128,6 +158,11 @@ export default class App extends Component {
                         keyExtractor={item => item.id.toString()}
                         renderItem={item => this.renderActivities(item)}
                         /> 
+                        
+                        <Text>Summary</Text> 
+                        <Text>Total Distance: {this.state.totalDistance} KM</Text>
+                        <Text>Total Duration: {this.state.totalDuration}</Text>
+                        <Text>Average pace: {this.state.averagePace}</Text>
                     </View>
                     :
                     <View style={styles.noEventView}>
