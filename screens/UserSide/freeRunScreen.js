@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { Button } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, AnimatedRegion, Marker, Polyline } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 //import Geolocation from 'react-native-geolocation-service';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import * as Location from 'expo-location';
@@ -34,38 +35,115 @@ export default class FreeRunScreen extends Component {
             routeCoordinates: [],
             reference: React.createRef(),
             showInfo: 'none',
-
+            route_ID: '',
             date:new Date(),
-            hour:"00",
-            minute:"00",
-            second:"00",
-            hourCount:0,
-            minuteCount:0,
-            secondCount:0,
-            stopwatch:false,
-            startPause:"START",
 
-            //stopwatch
-            stopwatchStart: false,
-            stopwatchReset: false,
-            runtime: "",
+            latitude: 0,
+            longitude: 0,
+            totaldistance: 0,
+            ownerId: "",
+            start: null,
+            end: null,
+            check1: null,
+            check2: null,
+            def: null,
+            spinner:false,
+            checkPointArray: [],
 
-            //calculate time
-            startsec: "",
-            startminute: "",
-            starthour: "",
-            endsec: "",
-            endminute: "",
-            endhour: "",
-            startTimestamp: "",
-            endTimestamp: "",
-
+            reference: React.createRef(),
+            startingPoint: "Start Point",
+            endingPoint: "End Point",
+            checkPoint1: "First Checkpoint",
+            checkPoint2: "Second CheckPoint",
+            selection: 0,
+            
             //button state
             button: "Start",
+
+            //sign up and get api key https://developer.here.com/#
+            api: "ysrvAnGD9v99umFWd_SWtpu7O68r1jzIrLiDNV9GLKw",
+            //get key https://developers.google.com/maps/documentation/directions/get-api-key
+            //get Google Maps Directions API https://console.cloud.google.com/apis/dashboard?project=social-running-app&folder=&organizationId=
+            googleApi: "AIzaSyB15Wdjt0OdRs09MlU09gENop0nLYtjz_o",
         };
 
-        
+        const getData = async () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            const IP = 'https://socialrunningapp.herokuapp.com';
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                const routeID = await AsyncStorage.getItem('@route')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
 
+                console.log(routeID);
+
+                if(true){
+                    //change spinner to visible
+                    this.setState({
+                        spinner: true, 
+                        route_ID: routeID
+                    });
+                    console.log('fetch');
+                    fetch(IP + '/api/route/routeList/details/205', {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Successfully get user route data testing')
+                        console.log(data)
+
+                        this.setState({
+                            routeName: data[0].name,
+                            eventName: data[0].title,
+                            ownerId: data[0].userID,
+
+                            start: { title: "Starting point", selected: true, coordinate: { latitude: parseFloat(data[0].start_lat), longitude: parseFloat(data[0].start_lng) } },
+                            end: { title: "Ending point", selected: true, coordinate: { latitude: parseFloat(data[0].end_lat), longitude: parseFloat(data[0].end_lng) } },
+                            loadedData: data,
+                            data: data[0],
+
+                        });
+
+                        if (data[0].check1_lat != null) {
+                            this.setState({
+                                check1: { title: "Checkpoint 1", selected: true, coordinate: { latitude: parseFloat(data[0].check1_lat), longitude: parseFloat(data[0].check1_lng) } },
+                            });
+                        }
+
+                        if (data[0].check2_lat != null) {
+                            this.setState({
+                                check2: { title: "Checkpoint 2", selected: true, coordinate: { latitude: parseFloat(data[0].check2_lat), longitude: parseFloat(data[0].check2_lng) } },
+
+                            });
+                        }
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                        }
+
+                    } catch (e) {
+                        console.log(e);
+                    }
+            ;
+        }
+
+        getData();
+    
 
     }
 
@@ -105,13 +183,17 @@ export default class FreeRunScreen extends Component {
             longitudeDelta: 0.005,
 
         })
+
+        this.setState({
+            def: { title: "You are here", coordinate: { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude } },
+        });
     };
 
     startRun = async () => {
        
         try {
           const activityType = await AsyncStorage.getItem('@activityType')
-          if(activityType !== null) {
+          if(activityType != null) {
             this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng, 'activityType':activityType})
           }
 
@@ -127,6 +209,8 @@ export default class FreeRunScreen extends Component {
           // error reading value
         }
     } 
+
+    
 
     componentDidMount() {
         this.getLocation();
@@ -188,7 +272,29 @@ export default class FreeRunScreen extends Component {
                         (geolocation) => this.change(geolocation.nativeEvent.coordinate)
                     }
                 >
-                    <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
+                    {this.state.route_ID != '' ?
+                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                        onReady={result => {
+                            this.forceUpdate();
+                        }}
+                        onStart={() => {
+                            this.forceUpdate();
+
+                        }}
+                        />
+                    :
+                    <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                        onReady={result => {
+                            this.forceUpdate();
+                            this.getLocation();
+                        }}
+                        onStart={() => {
+                            this.forceUpdate();
+                            this.getLocation();
+
+                        }}
+                        />
+                    }
                     
                 </MapView>
 
