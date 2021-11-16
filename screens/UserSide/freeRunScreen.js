@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { Button } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, AnimatedRegion, Marker, Polyline } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 //import Geolocation from 'react-native-geolocation-service';
 //import { request, PERMISSIONS } from 'react-native-permissions';
 import * as Location from 'expo-location';
@@ -34,84 +35,154 @@ export default class FreeRunScreen extends Component {
             routeCoordinates: [],
             reference: React.createRef(),
             showInfo: 'none',
-
+            route_ID: '',
             date:new Date(),
-            hour:"00",
-            minute:"00",
-            second:"00",
-            hourCount:0,
-            minuteCount:0,
-            secondCount:0,
-            stopwatch:false,
-            startPause:"START",
 
-            //stopwatch
-            stopwatchStart: false,
-            stopwatchReset: false,
-            runtime: "",
+            latitude: 0,
+            longitude: 0,
+            totaldistance: 0,
+            ownerId: "",
+            start: null,
+            end: null,
+            check1: null,
+            check2: null,
+            def: null,
+            spinner:false,
+            checkPointArray: [],
 
-            //calculate time
-            startsec: "",
-            startminute: "",
-            starthour: "",
-            endsec: "",
-            endminute: "",
-            endhour: "",
-            startTimestamp: "",
-            endTimestamp: "",
-
+            reference: React.createRef(),
+            startingPoint: "Start Point",
+            endingPoint: "End Point",
+            checkPoint1: "First Checkpoint",
+            checkPoint2: "Second CheckPoint",
+            selection: 0,
+            
             //button state
             button: "Start",
+
+            //sign up and get api key https://developer.here.com/#
+            api: "ysrvAnGD9v99umFWd_SWtpu7O68r1jzIrLiDNV9GLKw",
+            //get key https://developers.google.com/maps/documentation/directions/get-api-key
+            //get Google Maps Directions API https://console.cloud.google.com/apis/dashboard?project=social-running-app&folder=&organizationId=
+            googleApi: "AIzaSyB15Wdjt0OdRs09MlU09gENop0nLYtjz_o",
         };
 
-        
+        const getData = async () => {
+            //using localhost on IOS and using 10.0.2.2 on Android
+            const baseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost';
+            const IP = 'https://socialrunningapp.herokuapp.com';
+            try {
+                const userJson = await AsyncStorage.getItem('@userJson')
+                const routeID = await AsyncStorage.getItem('@route')
+                if (userJson !== null) {
+                    const user = JSON.parse(userJson);
+                    this.setState({
+                        userID: user.id,
+                    });
+                }
 
+                console.log(routeID);
+
+                if(true){
+                    //change spinner to visible
+                    this.setState({
+                        spinner: true, 
+                        route_ID: routeID
+                    });
+                    console.log('fetch');
+                    fetch(IP + '/api/route/routeList/details/205', {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Successfully get user route data testing')
+                        console.log(data)
+
+                        this.setState({
+                            routeName: data[0].name,
+                            eventName: data[0].title,
+                            ownerId: data[0].userID,
+
+                            start: { title: "Starting point", selected: true, coordinate: { latitude: parseFloat(data[0].start_lat), longitude: parseFloat(data[0].start_lng) } },
+                            end: { title: "Ending point", selected: true, coordinate: { latitude: parseFloat(data[0].end_lat), longitude: parseFloat(data[0].end_lng) } },
+                            loadedData: data,
+                            data: data[0],
+
+                        });
+
+                        if (data[0].check1_lat != null) {
+                            this.setState({
+                                check1: { title: "Checkpoint 1", selected: true, coordinate: { latitude: parseFloat(data[0].check1_lat), longitude: parseFloat(data[0].check1_lng) } },
+                            });
+                        }
+
+                        if (data[0].check2_lat != null) {
+                            this.setState({
+                                check2: { title: "Checkpoint 2", selected: true, coordinate: { latitude: parseFloat(data[0].check2_lat), longitude: parseFloat(data[0].check2_lng) } },
+
+                            });
+                        }
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        //change spinner to invisible
+                        this.setState({spinner: false});
+                    })
+                        }
+
+                    } catch (e) {
+                        console.log(e);
+                    }
+            ;
+        }
+
+        getData();
+    
 
     }
 
+    //animate to starting point
     getLocation = async () => {
-
         const permissionStatus = await Location.requestForegroundPermissionsAsync();
 
         if (permissionStatus.status !== "granted") {
             this.setState({ errorMessage: "Permission to access location was denied" });
             return;
         }
-        //permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        // permissionStatus=await Location.requestBackgroundPermissionsAsync();
+
+        if (permissionStatus.status !== "granted") {
+            this.setState({ errorMessage: "Permission to access location was denied" });
+            return;
+        }
 
         let currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
         console.log(this.state.errorMessage);
-        console.log(currentLocation);
-        this.setState({ latitude: currentLocation.coords.latitude });
-        this.setState({ longitude: currentLocation.coords.longitude });
-        const currentLatitude = currentLocation.coords.latitude;
-        const currentLongitude = currentLocation.coords.longitude;
-
-        this.setState({ 
-            prevLat: currentLatitude, 
-            prevLng: currentLongitude,
-            startLat: currentLatitude,
-            startLng: currentLongitude,
-
-        });
-
-
         this.state.reference.current.animateToRegion({
 
-            latitude: currentLatitude,
-            longitude: currentLongitude,
+            latitude: this.state.start.coordinate.latitude,
+            longitude: this.state.start.coordinate.longitude,
 
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
         })
+        this.setState({
+            def: { title: "You are here", coordinate: { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude } },
+        });
     };
 
     startRun = async () => {
        
         try {
           const activityType = await AsyncStorage.getItem('@activityType')
-          if(activityType !== null) {
+          if(activityType != null) {
             this.props.navigation.navigate('startFreeRunScreen',{'lat':this.state.startLat, 'lng':this.state.startLng, 'activityType':activityType})
           }
 
@@ -127,6 +198,8 @@ export default class FreeRunScreen extends Component {
           // error reading value
         }
     } 
+
+    
 
     componentDidMount() {
         this.getLocation();
@@ -188,7 +261,34 @@ export default class FreeRunScreen extends Component {
                         (geolocation) => this.change(geolocation.nativeEvent.coordinate)
                     }
                 >
-                    <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={"#add8e6"} />
+                    {this.state.def &&
+                        <Marker coordinate={this.state.def.coordinate} title={this.state.def.title} />
+                    }
+                    {this.state.start &&
+                        <Marker coordinate={this.state.start.coordinate} pinColor={"#0000FF"} title={this.state.start.title} />
+                    }
+                    {this.state.check1 &&
+                        <Marker coordinate={this.state.check1.coordinate} pinColor={"#008000"} title={this.state.check1.title} />
+                    }
+                    {this.state.check2 &&
+                        <Marker coordinate={this.state.check2.coordinate} pinColor={"#ffcc00"} title={this.state.check2.title} />
+                    }
+                    {this.state.end &&
+                        <Marker coordinate={this.state.end.coordinate} pinColor={"#800080"} title={this.state.end.title} />
+                    }
+                    {this.state.start && this.state.end &&
+                        <MapViewDirections origin={this.state.start.coordinate} destination={this.state.end.coordinate} waypoints={this.state.checkPointArray} apikey={this.state.googleApi}
+                            onReady={result => {
+                                this.getLocation();
+                                this.forceUpdate();
+                            }}
+                            onStart={() => {
+                                this.forceUpdate();
+
+                            }}
+                        />
+                    }   
+                    
                     
                 </MapView>
 

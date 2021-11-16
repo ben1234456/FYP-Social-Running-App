@@ -92,12 +92,28 @@ export default class ActivitySetup extends Component {
             // saving error
         }
 
+        console.log(activityTypeInput)
+
+    }
+
+    setRoute = async (routeInput) => {
+        this.setState({ routeSelected: routeInput })
+
+        try {
+            AsyncStorage.setItem('@route', routeInput)
+            console.log("save")
+        } catch (e) {
+            // saving error
+            console.log("cannot")
+        }
+
+        console.log(routeInput);
     }
 
     pickerList(){
         if(this.state.loadedData.length!=0){
             return this.state.loadedData.map((route) => 
-                <Picker.Item label={route.name} value={route.name} color='#373737' />
+                <Picker.Item label={route.name} value={route.id} color='#373737' />
             )
         }
         else{
@@ -141,12 +157,8 @@ export default class ActivitySetup extends Component {
                             <View style={styles.picker}>
                                 <Picker
                                     selectedValue={this.state.routeSelected}
-                                    onValueChange={(itemValue) => this.setState({ routeSelected: itemValue })}>
+                                    onValueChange={(itemValue) => this.setRoute(itemValue)}>
                                     {this.pickerList()}
-                                    {/* <Picker.Item label="Route1" value="Route1" color='#373737' />
-                                    <Picker.Item label="Route2" value="Route2" color='#373737' />
-                                    <Picker.Item label="Route3" value="Route3" color='#373737' />
-                                    <Picker.Item label="Route4" value="Route4" color='#373737' /> */}
                                 </Picker>
                             </View>
                         </View>

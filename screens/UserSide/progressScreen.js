@@ -159,10 +159,39 @@ export default class App extends Component {
                         renderItem={item => this.renderActivities(item)}
                         /> 
                         
-                        <Text>Summary</Text> 
-                        <Text>Total Distance: {this.state.totalDistance} KM</Text>
-                        <Text>Total Duration: {this.state.totalDuration}</Text>
-                        <Text>Average pace: {this.state.averagePace}</Text>
+                        <View style={styles.rowContainer}>
+                        <Text style={styles.activityTitle}>Summary </Text>
+                    </View>
+                    <View style={styles.dataContainer}>
+                        <TouchableOpacity>
+                            <View style={styles.rowContainer}>
+                                <Icon name="flag" style={styles.icon} size={30} color={'#8352F2'} />
+                                <View style={styles.activityInfo}>
+                                    <Text style={styles.activityDistance}>Total Distance:</Text>
+                                </View>
+                                <Text style={styles.date}>{this.state.totalDistance} KM</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.rowContainer}>
+                                <Icon name="clock" style={styles.icon} size={30} color={'#8352F2'} />
+                                <View style={styles.activityInfo}>
+                                    <Text style={styles.activityDistance}>Total Duration:</Text>
+                                    
+                                </View>
+                                <Text style={styles.date}>{this.state.totalDuration}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.rowContainer}>
+                                <Icon name="speedometer" style={styles.icon} size={30} color={'#8352F2'} />
+                                <View style={styles.activityInfo}>
+                                    <Text style={styles.activityDistance}>Average pace:</Text>
+                                </View>
+                                <Text style={styles.date}>{this.state.averagePace} KM/h</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                     </View>
                     :
                     <View style={styles.noEventView}>
