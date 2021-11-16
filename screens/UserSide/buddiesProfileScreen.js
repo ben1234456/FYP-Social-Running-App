@@ -92,7 +92,6 @@ export default class BuddiesProfileScreen extends Component {
                 });
             }
             
-            console.log("e" + this.state.user);
         }
 
         getData();
