@@ -110,9 +110,14 @@ export default class startFreeRunScreen extends Component {
 
     //calculate pace (km/hr)
     calculatePace=(second,minute,hour,distance)=>{
-        var totalDuration = hour + (minute/60) + (second/60/60);
-        var pace = distance / totalDuration;
-        var roundedPace = Number(pace).toFixed(2);  
+        
+        var totalDuration = parseFloat(hour) + (parseFloat(minute)/60) + (parseFloat(second)/60/60);
+
+        if (totalDuration > 0){
+            var pace = parseFloat(distance) / totalDuration;
+            var roundedPace = Number(pace).toFixed(2);  
+        }
+
         this.setState({
             avgSpeed: roundedPace,
         })
